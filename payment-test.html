@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Payment Test</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 500px;
+      margin: 50px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 0;
+      color: #222;
+    }
+
+    .details {
+      text-align: left;
+      background: #f1f3f5;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 20px 0;
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      margin: 10px 0;
+      border: 0;
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .success-btn {
+      background: #087f23;
+    }
+
+    .failed-btn {
+      background: #c00000;
+    }
+
+    .history-btn {
+      background: #333;
+    }
+
+    .new-btn {
+      background: #1976d2;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>Payment Test</h1>
+
+    <p>Demo Payment Verification</p>
+
+    <div id="details" class="details">
+      Loading...
+    </div>
+
+    <button
+      class="btn success-btn"
+      onclick="updatePayment('Success')">
+      Mark Payment Successful
+    </button>
+
+    <button
+      class="btn failed-btn"
+      onclick="updatePayment('Failed')">
+      Mark Payment Failed
+    </button>
+
+    <a href="history.html" class="btn history-btn">
+      Payment History
+    </a>
+
+    <a href="payment.html" class="btn new-btn">
+      New Payment
+    </a>
+
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const paymentId = params.get("id");
+
+    const details = document.getElementById("details");
+
+    async function loadPayment() {
+
+      if (!paymentId) {
+        details.innerHTML =
+          "<b>Payment ID नहीं मिला।</b>";
+        return;
+      }
+
+      try {
+
+        const response = await fetch("/api/payments");
+
+        if (!response.ok) {
+          throw new Error("API error");
+        }
+
+        const payments = await response.json();
+
+        const payment = payments.find(
+          p => String(p.id) === String(paymentId)
+        );
+
+        if (!payment) {
+          details.innerHTML =
+            "<b>Payment नहीं मिला।</b>";
+          return;
+        }
+
+        details.innerHTML =
+          "<p><b>Payment ID:</b> " +
+          payment.id +
+          "</p>" +
+
+          "<p><b>Customer:</b> " +
+          payment.name +
+          "</p>" +
+
+          "<p><b>Amount:</b> ₹" +
+          payment.amount +
+          "</p>" +
+
+          "<p><b>Status:</b> " +
+          payment.status +
+          "</p>" +
+
+          "<p><b>Date:</b> " +
+          payment.date +
+          "</p>";
+
+      } catch (error) {
+
+        console.error(error);
+
+        details.innerHTML =
+          "<b>Backend connection error.</b><br>" +
+          "Check करें कि server चल रहा है।";
+      }
+    }
+
+
+    async function updatePayment(status) {
+
+      if (!paymentId) {
+        alert("Payment ID नहीं मिला।");
+        return;
+      }
+
+      try {
+
+        const response = await fetch(
+          "/api/payment/" + paymentId,
+          {
+            method: "PUT",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              status: status
+            })
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          alert(
+            data.message || "Status update failed"
+          );
+          return;
+        }
+
+        alert(
+          "Payment status updated: " + status
+        );
+
+        loadPayment();
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "Backend से connection नहीं हुआ।"
+        );
+      }
+    }
+
+    loadPayment();
+  </script>
+
+</body>
+</html>
