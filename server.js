@@ -1,673 +1,295 @@
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
-const fs = require("fs");
-const crypto = require("crypto");
+const { createClient } = require("@supabase/supabase-js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// =====================================
+// SUPABASE CONFIG
+// =====================================
+
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+  console.error("");
+  console.error("SUPABASE environment variables missing.");
+  console.error("Check your .env file.");
+  console.error("");
+  process.exit(1);
+}
+
+const supabase = createClient(
+  SUPABASE_URL,
+  SUPABASE_SERVICE_ROLE_KEY
+);
+
+// =====================================
+// MIDDLEWARE
+// =====================================
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static(__dirname));
 
-const paymentsFile = path.join(__dirname, "payments.json");
-const customersFile = path.join(__dirname, "customers.json");
-
-
-/* FILES CREATE */
-
-if (!fs.existsSync(paymentsFile)) {
-  fs.writeFileSync(
-    paymentsFile,
-    "[]",
-    "utf8"
-  );
-}
-
-if (!fs.existsSync(customersFile)) {
-  fs.writeFileSync(
-    customersFile,
-    "[]",
-    "utf8"
-  );
-}
-
-
-/* CUSTOMER FUNCTIONS */
-
-function getCustomers() {
-
-  try {
-
-    const data =
-      fs.readFileSync(
-        customersFile,
-        "utf8"
-      );
-
-    return JSON.parse(
-      data || "[]"
-    );
-
-  } catch (error) {
-
-    console.log(
-      "Customer file error:",
-      error.message
-    );
-
-    return [];
-
-  }
-}
-
-
-function saveCustomers(customers) {
-
-  fs.writeFileSync(
-    customersFile,
-    JSON.stringify(
-      customers,
-      null,
-      2
-    ),
-    "utf8"
-  );
-
-}
-
-
-/* TEST */
+// =====================================
+// BASIC TEST
+// =====================================
 
 app.get("/api/test", (req, res) => {
-
   res.json({
     success: true,
     message: "Backend is working"
   });
-
 });
 
+// =====================================
+// SUPABASE TEST
+// =====================================
 
-/* CREATE CUSTOMER PAYMENT LINK */
+app.get("/api/supabase-test", async (req, res) => {
+  try {
+    const { error } = await supabase
+      .from("customer_links")
+      .select("id")
+      .limit(1);
 
-app.post(
-  "/api/customer-link",
-  (req, res) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
 
-    const name =
-      String(
-        req.body.name || ""
-      ).trim();
+    res.json({
+      success: true,
+      message: "Supabase is connected"
+    });
 
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
 
-    const amount =
-      Number(
-        req.body.amount
-      );
+// =====================================
+// CREATE CUSTOMER PAYMENT LINK
+// =====================================
 
+app.post("/api/customer-link", async (req, res) => {
+  try {
+    const name = String(req.body.name || "").trim();
+    const amount = Number(req.body.amount);
 
     if (!name) {
-
       return res.status(400).json({
         success: false,
-        message:
-          "Customer name is required"
+        message: "Customer name is required"
       });
-
     }
-
 
     if (!amount || amount <= 0) {
-
       return res.status(400).json({
         success: false,
-        message:
-          "Valid amount is required"
+        message: "Valid amount is required"
       });
-
     }
 
-
-    const customers =
-      getCustomers();
-
-
-    /*
-      UNIQUE ID
-    */
-
-    const id =
-      crypto.randomUUID();
-
-
-    const customer = {
-
-      id: id,
-
-      name: name,
-
-      amount: amount,
-
-      createdAt:
-        new Date().toISOString()
-
-    };
-
-
-    customers.push(
-      customer
-    );
-
-
-    saveCustomers(
-      customers
-    );
-
-
-    res.json({
-
-      success: true,
-
-      message:
-        "Payment link created",
-
-      customer: customer
-
-    });
-
-  }
-);
-
-
-/* GET ALL CUSTOMERS */
-
-app.get(
-  "/api/customer-links",
-  (req, res) => {
-
-    const customers =
-      getCustomers();
-
-    res.json(
-      customers
-    );
-
-  }
-);
-
-
-/* GET ONE CUSTOMER */
-
-app.get(
-  "/api/customer-link/:id",
-  (req, res) => {
-
-    const id =
-      String(
-        req.params.id
-      );
-
-
-    const customers =
-      getCustomers();
-
-
-    const customer =
-      customers.find(
-        function(item) {
-
-          return String(
-            item.id
-          ) === id;
-
+    const { data, error } = await supabase
+      .from("customer_links")
+      .insert([
+        {
+          name: name,
+          amount: amount
         }
-      );
+      ])
+      .select()
+      .single();
 
+    if (error) {
+      console.error("Customer insert error:", error);
 
-    if (!customer) {
-
-      return res.status(404).json({
-
+      return res.status(500).json({
         success: false,
-
-        message:
-          "Customer not found"
-
+        message: error.message
       });
-
     }
 
-
     res.json({
-
       success: true,
-
-      customer: customer
-
+      message: "Payment link created",
+      customer: data
     });
 
-  }
-);
+  } catch (error) {
+    console.error("Create customer error:", error);
 
-
-/* DELETE CUSTOMER */
-
-app.delete(
-  "/api/customer-link/:id",
-  (req, res) => {
-
-    const id =
-      String(
-        req.params.id
-      );
-
-
-    const customers =
-      getCustomers();
-
-
-    const newCustomers =
-      customers.filter(
-        function(item) {
-
-          return String(
-            item.id
-          ) !== id;
-
-        }
-      );
-
-
-    if (
-      newCustomers.length ===
-      customers.length
-    ) {
-
-      return res.status(404).json({
-
-        success: false,
-
-        message:
-          "Customer not found"
-
-      });
-
-    }
-
-
-    saveCustomers(
-      newCustomers
-    );
-
-
-    res.json({
-
-      success: true,
-
-      message:
-        "Customer deleted"
-
+    res.status(500).json({
+      success: false,
+      message: "Server error"
     });
-
   }
-);
+});
 
+// =====================================
+// GET ALL CUSTOMERS
+// =====================================
 
-/* PAYMENT FUNCTIONS */
-
-function getPayments() {
-
+app.get("/api/customer-links", async (req, res) => {
   try {
+    const { data, error } = await supabase
+      .from("customer_links")
+      .select("*")
+      .order("created_at", {
+        ascending: false
+      });
 
-    const data =
-      fs.readFileSync(
-        paymentsFile,
-        "utf8"
-      );
+    if (error) {
+      console.error("Customer list error:", error);
 
-    return JSON.parse(
-      data || "[]"
-    );
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
 
-  } catch {
+    res.json(data || []);
 
-    return [];
+  } catch (error) {
+    console.error("Customer list error:", error);
 
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
   }
+});
 
-}
+// =====================================
+// GET ONE CUSTOMER BY UNIQUE ID
+// =====================================
 
+app.get("/api/customer-link/:id", async (req, res) => {
+  try {
+    const id = String(req.params.id);
 
-function savePayments(payments) {
+    const { data, error } = await supabase
+      .from("customer_links")
+      .select("*")
+      .eq("id", id)
+      .single();
 
-  fs.writeFileSync(
-    paymentsFile,
-    JSON.stringify(
-      payments,
-      null,
-      2
-    ),
-    "utf8"
-  );
+    if (error || !data) {
+      return res.status(404).json({
+        success: false,
+        message: "Customer not found"
+      });
+    }
 
-}
+    res.json({
+      success: true,
+      customer: data
+    });
 
+  } catch (error) {
+    console.error("Get customer error:", error);
 
-/* CREATE PAYMENT */
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+  }
+});
 
-app.post(
-  "/api/payment",
-  (req, res) => {
+// =====================================
+// DELETE CUSTOMER
+// =====================================
 
-    const name =
-      String(
-        req.body.name || ""
-      ).trim();
+app.delete("/api/customer-link/:id", async (req, res) => {
+  try {
+    const id = String(req.params.id);
 
+    const { error } = await supabase
+      .from("customer_links")
+      .delete()
+      .eq("id", id);
 
-    const amount =
-      Number(
-        req.body.amount
-      );
+    if (error) {
+      console.error("Delete customer error:", error);
 
+      return res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
 
-    if (
-      !name ||
-      !amount ||
-      amount <= 0
-    ) {
+    res.json({
+      success: true,
+      message: "Customer deleted"
+    });
 
+  } catch (error) {
+    console.error("Delete customer error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+  }
+});
+
+// =====================================
+// PAYMENTS
+// =====================================
+
+app.post("/api/payment", async (req, res) => {
+  try {
+    const name = String(req.body.name || "").trim();
+    const amount = Number(req.body.amount);
+
+    if (!name || !amount || amount <= 0) {
       return res.status(400).json({
-
         success: false,
-
-        message:
-          "Invalid payment data"
-
+        message: "Invalid payment data"
       });
-
     }
-
-
-    const payments =
-      getPayments();
-
-
-    const payment = {
-
-      id: Date.now(),
-
-      name: name,
-
-      amount: amount,
-
-      status: "Pending",
-
-      date:
-        new Date()
-          .toLocaleString("en-IN")
-
-    };
-
-
-    payments.push(
-      payment
-    );
-
-
-    savePayments(
-      payments
-    );
-
 
     res.json({
-
       success: true,
-
-      message:
-        "Payment request received",
-
-      payment: payment
-
+      message: "Payment request received",
+      payment: {
+        id: Date.now(),
+        name: name,
+        amount: amount,
+        status: "Pending",
+        date: new Date().toLocaleString("en-IN")
+      }
     });
 
-  }
-);
-
-
-/* GET PAYMENTS */
-
-app.get(
-  "/api/payments",
-  (req, res) => {
-
-    res.json(
-      getPayments()
-    );
-
-  }
-);
-
-
-/* GET PAYMENT */
-
-app.get(
-  "/api/payment/:id",
-  (req, res) => {
-
-    const id =
-      String(
-        req.params.id
-      );
-
-
-    const payment =
-      getPayments().find(
-        function(item) {
-
-          return String(
-            item.id
-          ) === id;
-
-        }
-      );
-
-
-    if (!payment) {
-
-      return res.status(404).json({
-
-        success: false,
-
-        message:
-          "Payment not found"
-
-      });
-
-    }
-
-
-    res.json({
-
-      success: true,
-
-      payment: payment
-
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error"
     });
-
   }
-);
-
-
-/* UPDATE PAYMENT */
-
-app.put(
-  "/api/payment/:id",
-  (req, res) => {
-
-    const id =
-      String(
-        req.params.id
-      );
-
-
-    const status =
-      req.body.status;
-
-
-    if (
-      status !== "Pending" &&
-      status !== "Success" &&
-      status !== "Failed"
-    ) {
-
-      return res.status(400).json({
-
-        success: false,
-
-        message:
-          "Invalid payment status"
-
-      });
-
-    }
-
-
-    const payments =
-      getPayments();
-
-
-    const payment =
-      payments.find(
-        function(item) {
-
-          return String(
-            item.id
-          ) === id;
-
-        }
-      );
-
-
-    if (!payment) {
-
-      return res.status(404).json({
-
-        success: false,
-
-        message:
-          "Payment not found"
-
-      });
-
-    }
-
-
-    payment.status =
-      status;
-
-
-    savePayments(
-      payments
-    );
-
-
-    res.json({
-
-      success: true,
-
-      payment: payment
-
-    });
-
-  }
-);
-
-
-/* DELETE PAYMENT */
-
-app.delete(
-  "/api/payment/:id",
-  (req, res) => {
-
-    const id =
-      String(
-        req.params.id
-      );
-
-
-    const payments =
-      getPayments();
-
-
-    const newPayments =
-      payments.filter(
-        function(item) {
-
-          return String(
-            item.id
-          ) !== id;
-
-        }
-      );
-
-
-    if (
-      newPayments.length ===
-      payments.length
-    ) {
-
-      return res.status(404).json({
-
-        success: false,
-
-        message:
-          "Payment not found"
-
-      });
-
-    }
-
-
-    savePayments(
-      newPayments
-    );
-
-
-    res.json({
-
-      success: true,
-
-      message:
-        "Payment deleted"
-
-    });
-
-  }
-);
-
-
-/* START SERVER */
-
-app.listen(
-  PORT,
-  () => {
-
-    console.log("");
-    console.log(
-      "================================"
-    );
-    console.log(
-      "SERVER STARTED"
-    );
-    console.log(
-      "PORT:",
-      PORT
-    );
-    console.log(
-      "================================"
-    );
-    console.log("");
-
-  }
-);
+});
+
+// =====================================
+// START SERVER
+// =====================================
+
+app.listen(PORT, () => {
+  console.log("");
+  console.log("================================");
+  console.log("SERVER STARTED");
+  console.log("PORT:", PORT);
+  console.log("SUPABASE: CONNECTED");
+  console.log("================================");
+  console.log("");
+});
