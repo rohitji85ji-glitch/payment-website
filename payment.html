@@ -21,10 +21,10 @@
       width: 92%;
       max-width: 450px;
       margin: 40px auto;
-      background: #fff;
+      background: #ffffff;
       padding: 25px;
       border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
       text-align: center;
     }
 
@@ -74,10 +74,6 @@
 
     .btn:hover {
       opacity: 0.9;
-    }
-
-    .open-upi {
-      background: #1467d8;
     }
 
     .close-btn {
@@ -135,6 +131,7 @@
       border-radius: 10px;
       background: #f1f1f1;
       font-weight: bold;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -147,6 +144,7 @@
 
     <p>Make payment using UPI</p>
 
+    <!-- PAYMENT DETAILS -->
     <div class="info-box">
 
       <div class="info-row">
@@ -161,22 +159,21 @@
 
     </div>
 
-    <button
-      class="btn"
-      onclick="continuePayment()"
-    >
+
+    <!-- CONTINUE BUTTON -->
+    <button class="btn" onclick="continuePayment()">
       Continue Payment
     </button>
 
 
+    <!-- QR PAYMENT BOX -->
     <div id="qrBox" class="qr-box">
 
       <h2>Scan & Pay</h2>
 
-      <div
-        id="amountText"
-        class="amount"
-      ></div>
+      <div id="amountText" class="amount"></div>
+
+      <br>
 
       <img
         id="qrCode"
@@ -185,56 +182,51 @@
 
       <div
         id="upiText"
-        class="upi"
-      ></div>
-
-
-      <button
-        class="btn open-upi"
-        onclick="openUPIApp()"
-      >
-        Open UPI App
-      </button>
+        class="upi">
+      </div>
 
 
       <p class="payment-message">
         Please complete your payment within 2 minutes.
       </p>
 
+
       <p id="timer" class="timer">
         QR Code will close automatically in 2:00
       </p>
 
+
       <p class="note">
-        अगर UPI App नहीं खुलता है, तो ऊपर दिए गए QR Code को
-        अपने UPI App से scan करके payment करें।
-        Payment अपने UPI App में खुद approve करें।
+        अपने UPI App में QR Code scan करके payment करें।
+        Payment को अपने UPI App में खुद approve करें।
+        UPI PIN/OTP केवल अपने UPI App में ही डालें।
       </p>
 
 
+      <!-- CLOSE ONLY -->
       <button
         class="btn close-btn"
-        onclick="paymentFinished()"
-      >
-        Payment Done / Close QR
+        onclick="paymentFinished()">
+        Close QR
       </button>
 
     </div>
 
 
+    <!-- STATUS -->
     <div
       id="status"
-      class="status"
-    ></div>
+      class="status">
+    </div>
 
   </div>
 
 
   <script>
 
-    /* =========================
-       ADMIN SETTINGS DATA
-    ========================= */
+    /*
+      ADMIN SETTINGS से DATA
+    */
 
     const customerName =
       localStorage.getItem("customerName");
@@ -249,55 +241,66 @@
       localStorage.getItem("defaultAmount");
 
 
-    let qrTimer;
+    /*
+      TIMER
+    */
+
+    let qrTimer = null;
 
     let remainingSeconds = 120;
 
 
-    /* =========================
-       CUSTOMER NAME
-    ========================= */
+    /*
+      CUSTOMER NAME
+    */
 
-    document.getElementById("customerName")
-      .textContent =
+    document.getElementById("customerName").textContent =
       customerName || "Customer";
 
 
-    /* =========================
-       SITE NAME
-    ========================= */
+    /*
+      SITE NAME
+    */
 
     if (siteName) {
 
-      document.getElementById("siteName")
-        .textContent = siteName;
+      document.getElementById("siteName").textContent =
+        siteName;
 
     }
 
 
-    /* =========================
-       AMOUNT
-    ========================= */
+    /*
+      AMOUNT
+    */
 
     if (savedAmount) {
 
-      document.getElementById("amount")
-        .textContent =
-        "₹" +
-        Number(savedAmount).toFixed(2);
+      const amount = Number(savedAmount);
+
+      if (amount > 0) {
+
+        document.getElementById("amount").textContent =
+          "₹" + amount.toFixed(2);
+
+      } else {
+
+        document.getElementById("amount").textContent =
+          "Amount not set";
+
+      }
 
     } else {
 
-      document.getElementById("amount")
-        .textContent =
+      document.getElementById("amount").textContent =
         "Amount not set";
 
     }
 
 
-    /* =========================
-       CREATE UPI LINK
-    ========================= */
+    /*
+      CREATE UPI PAYMENT LINK
+    */
 
     function createUPILink() {
 
@@ -320,13 +323,9 @@
         "?pa=" +
         encodeURIComponent(upiId) +
         "&pn=" +
-        encodeURIComponent(
-          siteName || "Payment"
-        ) +
+        encodeURIComponent(siteName || "Payment") +
         "&am=" +
-        encodeURIComponent(
-          amount.toFixed(2)
-        ) +
+        encodeURIComponent(amount.toFixed(2)) +
         "&cu=INR";
 
 
@@ -335,12 +334,15 @@
     }
 
 
-    /* =========================
-       CONTINUE PAYMENT
-       सिर्फ QR दिखाएगा
-    ========================= */
+    /*
+      CONTINUE PAYMENT
+    */
 
     function continuePayment() {
+
+      /*
+        CUSTOMER CHECK
+      */
 
       if (!customerName) {
 
@@ -352,6 +354,10 @@
 
       }
 
+
+      /*
+        AMOUNT CHECK
+      */
 
       const amount =
         Number(savedAmount);
@@ -368,6 +374,10 @@
       }
 
 
+      /*
+        UPI CHECK
+      */
+
       if (!upiId) {
 
         alert(
@@ -379,6 +389,10 @@
       }
 
 
+      /*
+        CREATE UPI LINK
+      */
+
       const upiLink =
         createUPILink();
 
@@ -394,111 +408,56 @@
       }
 
 
-      /* QR Code */
+      /*
+        QR CODE
+      */
 
       const qrUrl =
-        "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
+        "https://api.qrserver.com/v1/create-qr-code/" +
+        "?size=300x300&data=" +
         encodeURIComponent(upiLink);
 
 
-      document.getElementById("qrCode")
-        .src = qrUrl;
+      document.getElementById("qrCode").src =
+        qrUrl;
 
 
-      document.getElementById("upiText")
-        .textContent =
+      document.getElementById("upiText").textContent =
         "UPI ID: " + upiId;
 
 
-      document.getElementById("amountText")
-        .textContent =
-        "Pay ₹" +
-        amount.toFixed(2);
+      document.getElementById("amountText").textContent =
+        "Pay ₹" + amount.toFixed(2);
 
 
-      document.getElementById("qrBox")
-        .style.display =
+      /*
+        SHOW QR
+      */
+
+      document.getElementById("qrBox").style.display =
         "block";
 
 
-      document.getElementById("status")
-        .style.display =
+      /*
+        HIDE OLD STATUS
+      */
+
+      document.getElementById("status").style.display =
         "none";
 
+
+      /*
+        START TIMER
+      */
 
       startQRTimer();
 
     }
 
 
-    /* =========================
-       OPEN UPI APP
-       Android Intent
-    ========================= */
-
-    function openUPIApp() {
-
-      const upiLink =
-        createUPILink();
-
-
-      if (!upiLink) {
-
-        alert(
-          "Payment settings are not configured."
-        );
-
-        return;
-
-      }
-
-
-      /*
-        Android Chrome के लिए intent URL
-      */
-
-      if (
-        /Android/i.test(
-          navigator.userAgent
-        )
-      ) {
-
-        const query =
-          upiLink.substring(
-            upiLink.indexOf("?") + 1
-          );
-
-
-        const intentUrl =
-          "intent://pay?" +
-          query +
-          "#Intent;" +
-          "scheme=upi;" +
-          "end";
-
-
-        window.location.href =
-          intentUrl;
-
-
-        return;
-
-      }
-
-
-      /*
-        iPhone / दूसरे devices
-      */
-
-      window.location.href =
-        upiLink;
-
-    }
-
-
-    /* =========================
-       TIMER
-    ========================= */
+    /*
+      START 2 MINUTE TIMER
+    */
 
     function startQRTimer() {
 
@@ -530,9 +489,9 @@
     }
 
 
-    /* =========================
-       UPDATE TIMER
-    ========================= */
+    /*
+      UPDATE TIMER
+    */
 
     function updateTimer() {
 
@@ -546,28 +505,25 @@
         remainingSeconds % 60;
 
 
-      document.getElementById("timer")
-        .textContent =
+      document.getElementById("timer").textContent =
         "QR Code will close automatically in " +
         minutes +
         ":" +
-        String(seconds)
-          .padStart(2, "0");
+        String(seconds).padStart(2, "0");
 
     }
 
 
-    /* =========================
-       CLOSE QR
-    ========================= */
+    /*
+      CLOSE QR
+    */
 
     function paymentFinished() {
 
       clearInterval(qrTimer);
 
 
-      document.getElementById("qrBox")
-        .style.display =
+      document.getElementById("qrBox").style.display =
         "none";
 
 
@@ -576,7 +532,7 @@
 
 
       status.textContent =
-        "QR Code has been closed. Payment status has not been automatically verified.";
+        "QR Code closed. Payment status is not automatically verified.";
 
 
       status.style.display =
