@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Make Payment</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>UPI Payment</title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -17,486 +25,765 @@
     }
 
     .container {
-      width: 92%;
-      max-width: 450px;
-      margin: 40px auto;
-      background: #fff;
+      width: 94%;
+      max-width: 600px;
+      margin: 30px auto;
+    }
+
+    .box {
+      background: white;
       padding: 25px;
-      border-radius: 15px;
+      border-radius: 18px;
       box-shadow: 0 5px 20px rgba(0,0,0,.10);
-      text-align: center;
     }
 
     h1 {
-      margin: 0 0 10px;
+      text-align: center;
+      margin-top: 0;
     }
 
     .subtitle {
-      color: #666;
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 25px;
+      color: #555;
     }
 
-    .info-box {
-      margin-top: 20px;
-      padding: 18px;
-      background: #f7f7f7;
-      border-radius: 12px;
-      text-align: left;
+    .details {
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      padding: 20px;
     }
 
-    .info-row {
-      margin: 10px 0;
-      font-size: 17px;
+    .row {
+      margin-bottom: 16px;
+      font-size: 18px;
     }
 
     .amount {
       color: #087f23;
-      font-size: 22px;
+      font-size: 28px;
       font-weight: bold;
+      margin-top: 6px;
     }
 
-    .btn {
-      width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      border: 0;
+    .upi {
+      background: #f5f5f5;
+      padding: 12px;
       border-radius: 8px;
+      word-break: break-all;
+      margin-top: 6px;
+    }
+
+    .pay-btn {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      border: 0;
+      border-radius: 10px;
       background: #087f23;
       color: white;
-      font-size: 17px;
+      font-size: 18px;
       cursor: pointer;
     }
 
-    .btn:disabled {
-      background: #999;
-      cursor: not-allowed;
+    .pay-btn:active {
+      transform: scale(.98);
     }
 
     .qr-box {
       display: none;
+      text-align: center;
       margin-top: 25px;
-      padding: 20px;
-      background: #f7f7f7;
-      border: 1px solid #ddd;
-      border-radius: 12px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
     }
 
-    #qrCode {
-      width: 240px;
+    .qr-box img {
+      width: 250px;
       max-width: 100%;
-      background: white;
-      padding: 10px;
+      border: 1px solid #ddd;
       border-radius: 10px;
-    }
-
-    .upi {
-      margin-top: 12px;
-      font-weight: bold;
-      word-break: break-all;
     }
 
     .timer {
-      color: #c00000;
+      margin-top: 15px;
       font-weight: bold;
-    }
-
-    .note {
-      color: #666;
-      font-size: 13px;
-      line-height: 1.5;
+      color: #d32f2f;
     }
 
     .close-btn {
+      margin-top: 15px;
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 8px;
       background: #555;
-    }
-
-    .status {
-      display: none;
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 10px;
-      background: #f1f1f1;
-      font-weight: bold;
+      color: white;
+      cursor: pointer;
     }
 
     .loading {
-      margin-top: 20px;
-      color: #555;
+      text-align: center;
+      padding: 30px;
     }
 
     .error {
       color: #c62828;
+      text-align: center;
       font-weight: bold;
+      padding: 20px;
     }
+
+    .note {
+      margin-top: 18px;
+      padding: 12px;
+      background: #fff8e1;
+      border-radius: 8px;
+      color: #795548;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
 <div class="container">
 
-  <h1 id="siteName">Make Payment</h1>
+  <div class="box">
 
-  <p class="subtitle">Make payment using UPI</p>
+    <h1>Reliance Finance</h1>
 
-  <div id="loading" class="loading">
-    Loading payment details...
-  </div>
-
-  <div class="info-box">
-
-    <div class="info-row">
-      <strong>Customer:</strong>
-      <span id="customerName">Loading...</span>
+    <div class="subtitle">
+      Make payment using UPI
     </div>
 
-    <div class="info-row">
-      <strong>Amount:</strong>
-      <span id="amount" class="amount">Loading...</span>
+
+    <!-- LOADING -->
+
+    <div
+      id="loading"
+      class="loading"
+    >
+      Loading payment details...
     </div>
 
+
+    <!-- PAYMENT CONTENT -->
+
+    <div
+      id="paymentContent"
+      style="display:none;"
+    >
+
+      <div class="details">
+
+
+        <!-- CUSTOMER -->
+
+        <div class="row">
+
+          <strong>
+            Customer:
+          </strong>
+
+          <div id="customerName">
+          </div>
+
+        </div>
+
+
+        <!-- AMOUNT -->
+
+        <div class="row">
+
+          <strong>
+            Amount:
+          </strong>
+
+          <div
+            id="amount"
+            class="amount"
+          >
+          </div>
+
+        </div>
+
+
+        <!-- UPI ID -->
+
+        <div class="row">
+
+          <strong>
+            UPI ID:
+          </strong>
+
+          <div
+            id="upiId"
+            class="upi"
+          >
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+      <!-- CONTINUE PAYMENT -->
+
+      <button
+        class="pay-btn"
+        onclick="continuePayment()"
+      >
+        Continue Payment
+      </button>
+
+
+      <!-- QR BACKUP -->
+
+      <div
+        id="qrBox"
+        class="qr-box"
+      >
+
+        <h3>
+          Scan QR Code to Pay
+        </h3>
+
+        <img
+          id="qrImage"
+          alt="UPI QR Code"
+        >
+
+        <div
+          id="timer"
+          class="timer"
+        >
+        </div>
+
+        <button
+          class="close-btn"
+          onclick="closeQR()"
+        >
+          Close QR
+        </button>
+
+      </div>
+
+
+      <div class="note">
+
+        Continue Payment आपके फोन में उपलब्ध UPI
+        payment app खोलने की कोशिश करेगा।
+        अगर app नहीं खुलता है तो नीचे QR code
+        backup के रूप में इस्तेमाल कर सकते हैं।
+
+      </div>
+
+
+    </div>
+
+
+    <!-- ERROR -->
+
+    <div
+      id="error"
+      class="error"
+      style="display:none;"
+    >
+    </div>
+
+
   </div>
-
-  <button
-    id="continueBtn"
-    class="btn"
-    onclick="continuePayment()"
-    disabled>
-    Continue Payment
-  </button>
-
-  <div id="qrBox" class="qr-box">
-
-    <h2>Scan & Pay</h2>
-
-    <div id="amountText" class="amount"></div>
-
-    <br>
-
-    <img id="qrCode" alt="UPI QR Code">
-
-    <div id="upiText" class="upi"></div>
-
-    <p id="timer" class="timer">
-      QR Code will close automatically in 2:00
-    </p>
-
-    <p class="note">
-      QR Code को अपने UPI App से scan करके payment करें।
-      Payment अपने UPI App में खुद approve करें।
-      UPI PIN/OTP केवल अपने UPI App में ही डालें।
-    </p>
-
-    <button
-      class="btn close-btn"
-      onclick="paymentFinished()">
-      Close QR
-    </button>
-
-  </div>
-
-  <div id="status" class="status"></div>
 
 </div>
 
+
 <script>
 
-/* ==========================================
-   अपनी अधिकृत UPI ID यहां डालें
-   ========================================== */
 
-const UPI_ID = "YOUR_UPI_ID";
+// ==========================================
+// VARIABLES
+// ==========================================
 
+let customerData = null;
 
-let customerName = "";
-let amount = 0;
-let customerId = "";
-let qrTimer = null;
+let upiId = "";
+
+let timerInterval = null;
+
 let remainingSeconds = 120;
 
 
-/* ==========================================
-   URL से Customer ID
-   ========================================== */
+// ==========================================
+// CUSTOMER ID FROM URL
+// ==========================================
 
-const urlParams =
-  new URLSearchParams(window.location.search);
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
 
-customerId =
-  urlParams.get("id");
+
+const customerId =
+  params.get("id");
 
 
-/* ==========================================
-   Customer Details
-   ========================================== */
+// ==========================================
+// LOAD PAYMENT DATA
+// ==========================================
 
-async function loadCustomer() {
-
-  if (!customerId) {
-
-    showError(
-      "Payment link में customer ID नहीं है."
-    );
-
-    return;
-  }
+async function loadPaymentData() {
 
   try {
 
-    const response = await fetch(
-      "/api/customer-link/" +
-      encodeURIComponent(customerId),
-      {
-        cache: "no-store"
-      }
-    );
 
-    const data =
-      await response.json();
+    // Customer ID check
 
-    if (!response.ok) {
+    if (!customerId) {
 
       throw new Error(
-        data.message ||
-        "Customer not found"
+        "Payment link ID missing"
       );
+
     }
 
-    const customer =
-      data.customer;
 
-    customerName =
-      String(customer.name || "");
+    // ======================================
+    // CUSTOMER DATA
+    // ======================================
 
-    amount =
-      Number(customer.amount || 0);
+    const customerResponse =
+      await fetch(
+        "/api/customer-link/" +
+        encodeURIComponent(
+          customerId
+        ),
+        {
+          cache: "no-store"
+        }
+      );
+
+
+    const customerResult =
+      await customerResponse.json();
+
+
+    if (
+      !customerResponse.ok ||
+      !customerResult.success
+    ) {
+
+      throw new Error(
+        "Customer not found"
+      );
+
+    }
+
+
+    customerData =
+      customerResult.customer;
+
+
+    // ======================================
+    // UPI SETTINGS
+    // ======================================
+
+    const settingsResponse =
+      await fetch(
+        "/api/settings",
+        {
+          cache: "no-store"
+        }
+      );
+
+
+    const settingsResult =
+      await settingsResponse.json();
+
+
+    if (
+      !settingsResponse.ok ||
+      !settingsResult.success
+    ) {
+
+      throw new Error(
+        "UPI settings load नहीं हुई"
+      );
+
+    }
+
+
+    upiId =
+      String(
+        settingsResult.upi_id || ""
+      ).trim();
+
+
+    if (!upiId) {
+
+      throw new Error(
+        "Admin Panel में UPI ID अभी set नहीं है"
+      );
+
+    }
+
+
+    // ======================================
+    // SHOW CUSTOMER
+    // ======================================
 
     document.getElementById(
       "customerName"
     ).textContent =
-      customerName;
+      customerData.name;
+
+
+    // ======================================
+    // SHOW AMOUNT
+    // ======================================
 
     document.getElementById(
       "amount"
     ).textContent =
-      "₹" + amount.toFixed(2);
+      "₹" +
+      Number(
+        customerData.amount
+      ).toFixed(2);
+
+
+    // ======================================
+    // SHOW UPI ID
+    // ======================================
 
     document.getElementById(
-      "siteName"
+      "upiId"
     ).textContent =
-      "Reliance finance";
+      upiId;
+
+
+    // ======================================
+    // HIDE LOADING
+    // ======================================
 
     document.getElementById(
       "loading"
     ).style.display =
       "none";
 
+
+    // ======================================
+    // SHOW CONTENT
+    // ======================================
+
     document.getElementById(
-      "continueBtn"
-    ).disabled =
-      !(customerName && amount > 0);
+      "paymentContent"
+    ).style.display =
+      "block";
+
 
   } catch (error) {
 
-    console.error(error);
-
-    showError(
-      "Customer payment details नहीं मिलीं."
+    console.error(
+      "Payment load error:",
+      error
     );
+
+
+    document.getElementById(
+      "loading"
+    ).style.display =
+      "none";
+
+
+    const errorBox =
+      document.getElementById(
+        "error"
+      );
+
+
+    errorBox.textContent =
+      error.message ||
+      "Payment details load नहीं हुए";
+
+
+    errorBox.style.display =
+      "block";
+
   }
+
 }
 
 
-/* ==========================================
-   Error
-   ========================================== */
+// ==========================================
+// CREATE UPI URL
+// ==========================================
 
-function showError(message) {
+function createUPIUrl() {
 
-  const loading =
-    document.getElementById("loading");
+  const amount =
+    Number(
+      customerData.amount
+    ).toFixed(2);
 
-  loading.textContent =
-    message;
-
-  loading.className =
-    "loading error";
-}
-
-
-/* ==========================================
-   UPI Link
-   ========================================== */
-
-function createUPILink() {
-
-  if (
-    !UPI_ID ||
-    UPI_ID === "YOUR_UPI_ID"
-  ) {
-
-    return null;
-  }
-
-  if (
-    !amount ||
-    amount <= 0
-  ) {
-
-    return null;
-  }
 
   const transactionId =
-    "PAY" + Date.now();
+    "PAY" +
+    Date.now();
 
-  return (
+
+  const upiUrl =
     "upi://pay" +
+
     "?pa=" +
-    encodeURIComponent(UPI_ID) +
+    encodeURIComponent(
+      upiId
+    ) +
+
     "&pn=" +
-    encodeURIComponent("Reliance finance") +
+    encodeURIComponent(
+      "Reliance Finance"
+    ) +
+
     "&am=" +
-    encodeURIComponent(amount.toFixed(2)) +
+    encodeURIComponent(
+      amount
+    ) +
+
     "&cu=INR" +
+
     "&tr=" +
-    encodeURIComponent(transactionId)
-  );
+    encodeURIComponent(
+      transactionId
+    );
+
+
+  return upiUrl;
+
 }
 
 
-/* ==========================================
-   Continue Payment
-   ========================================== */
+// ==========================================
+// CONTINUE PAYMENT
+// ==========================================
 
 function continuePayment() {
 
-  const upiLink =
-    createUPILink();
-
-  if (!upiLink) {
+  if (!customerData) {
 
     alert(
-      "Payment.html में अपनी UPI ID set करें."
+      "Customer details अभी तैयार नहीं हैं।"
     );
 
     return;
+
   }
+
+
+  if (!upiId) {
+
+    alert(
+      "UPI ID उपलब्ध नहीं है।"
+    );
+
+    return;
+
+  }
+
+
+  const upiUrl =
+    createUPIUrl();
+
+
+  /*
+    Android में UPI application खोलने की कोशिश।
+    उपलब्ध UPI apps के अनुसार Android chooser
+    दिखा सकता है।
+  */
+
+  window.location.href =
+    upiUrl;
+
+
+  /*
+    अगर UPI app नहीं खुलता है तो कुछ समय बाद
+    QR backup दिखाएँ।
+  */
+
+  setTimeout(function() {
+
+    showQRCode();
+
+  }, 1800);
+
+}
+
+
+// ==========================================
+// SHOW QR CODE
+// ==========================================
+
+function showQRCode() {
+
+  if (
+    !customerData ||
+    !upiId
+  ) {
+
+    return;
+
+  }
+
+
+  const upiUrl =
+    createUPIUrl();
+
 
   const qrUrl =
     "https://api.qrserver.com/v1/create-qr-code/" +
+
     "?size=300x300&data=" +
-    encodeURIComponent(upiLink);
+
+    encodeURIComponent(
+      upiUrl
+    );
+
 
   document.getElementById(
-    "qrCode"
+    "qrImage"
   ).src =
     qrUrl;
 
-  document.getElementById(
-    "upiText"
-  ).textContent =
-    "UPI ID: " + UPI_ID;
-
-  document.getElementById(
-    "amountText"
-  ).textContent =
-    "Pay ₹" + amount.toFixed(2);
 
   document.getElementById(
     "qrBox"
   ).style.display =
     "block";
 
-  document.getElementById(
-    "status"
-  ).style.display =
-    "none";
 
-  startQRTimer();
+  startTimer();
+
 }
 
 
-/* ==========================================
-   QR Timer
-   ========================================== */
+// ==========================================
+// START QR TIMER
+// ==========================================
 
-function startQRTimer() {
+function startTimer() {
 
-  clearInterval(qrTimer);
+  clearInterval(
+    timerInterval
+  );
 
-  remainingSeconds = 120;
+
+  remainingSeconds =
+    120;
+
 
   updateTimer();
 
-  qrTimer = setInterval(function() {
 
-    remainingSeconds--;
+  timerInterval =
+    setInterval(
+      function() {
 
-    updateTimer();
+        remainingSeconds--;
 
-    if (remainingSeconds <= 0) {
 
-      clearInterval(qrTimer);
+        updateTimer();
 
-      paymentFinished();
-    }
 
-  }, 1000);
+        if (
+          remainingSeconds <= 0
+        ) {
+
+          clearInterval(
+            timerInterval
+          );
+
+
+          document.getElementById(
+            "qrBox"
+          ).style.display =
+            "none";
+
+        }
+
+      },
+      1000
+    );
+
 }
 
 
-/* ==========================================
-   Timer
-   ========================================== */
+// ==========================================
+// UPDATE TIMER
+// ==========================================
 
 function updateTimer() {
 
   const minutes =
-    Math.floor(remainingSeconds / 60);
+    Math.floor(
+      remainingSeconds / 60
+    );
+
 
   const seconds =
     remainingSeconds % 60;
 
+
   document.getElementById(
     "timer"
   ).textContent =
-    "QR Code will close automatically in " +
+
+    "QR expires in " +
+
     minutes +
+
     ":" +
-    String(seconds).padStart(2, "0");
+
+    String(
+      seconds
+    ).padStart(
+      2,
+      "0"
+    );
+
 }
 
 
-/* ==========================================
-   Close QR
-   ========================================== */
+// ==========================================
+// CLOSE QR
+// ==========================================
 
-function paymentFinished() {
+function closeQR() {
 
-  clearInterval(qrTimer);
+  clearInterval(
+    timerInterval
+  );
+
 
   document.getElementById(
     "qrBox"
   ).style.display =
     "none";
 
-  const status =
-    document.getElementById("status");
-
-  status.textContent =
-    "QR Code closed. Payment status has not been automatically verified.";
-
-  status.style.display =
-    "block";
 }
 
 
-/* ==========================================
-   START
-   ========================================== */
+// ==========================================
+// START
+// ==========================================
 
-loadCustomer();
+loadPaymentData();
 
 </script>
 
 </body>
+
 </html>

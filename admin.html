@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Admin Panel</title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -36,6 +43,10 @@
       margin-top: 0;
     }
 
+    h2 {
+      margin-top: 0;
+    }
+
     label {
       display: block;
       margin-top: 15px;
@@ -57,6 +68,14 @@
       padding: 12px 15px;
       cursor: pointer;
       font-size: 15px;
+    }
+
+    .save-btn {
+      width: 100%;
+      margin-top: 20px;
+      background: #1467d8;
+      color: white;
+      font-size: 17px;
     }
 
     .create-btn {
@@ -135,18 +154,83 @@
       color: #777;
       padding: 20px;
     }
+
+    .upi-info {
+      margin-top: 10px;
+      color: #555;
+      font-size: 14px;
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
 <div class="container">
 
+
+  <!-- =========================
+       ADMIN
+  ========================== -->
+
   <div class="box">
 
     <h1>Admin Panel</h1>
 
-    <label>Customer Name</label>
+  </div>
+
+
+  <!-- =========================
+       UPI SETTINGS
+  ========================== -->
+
+  <div class="box">
+
+    <h2>UPI Payment Settings</h2>
+
+    <label>
+      UPI ID
+    </label>
+
+    <input
+      type="text"
+      id="upiId"
+      placeholder="example@upi"
+      autocomplete="off"
+    >
+
+    <div class="upi-info">
+      Yahan apni authorized UPI ID set karein.
+    </div>
+
+    <button
+      class="save-btn"
+      onclick="saveUpiId()"
+    >
+      Save UPI ID
+    </button>
+
+    <div
+      id="upiMessage"
+      class="message"
+    ></div>
+
+  </div>
+
+
+  <!-- =========================
+       CREATE CUSTOMER
+  ========================== -->
+
+  <div class="box">
+
+    <h2>Create Payment Link</h2>
+
+    <label>
+      Customer Name
+    </label>
 
     <input
       type="text"
@@ -154,7 +238,9 @@
       placeholder="Example: Suresh Kumar"
     >
 
-    <label>Amount ₹</label>
+    <label>
+      Amount ₹
+    </label>
 
     <input
       type="number"
@@ -165,34 +251,205 @@
 
     <button
       class="create-btn"
-      onclick="createCustomer()">
+      onclick="createCustomer()"
+    >
       Generate Payment Link
     </button>
 
     <div
       id="message"
-      class="message">
-    </div>
+      class="message"
+    ></div>
 
   </div>
 
+
+  <!-- =========================
+       CUSTOMER LIST
+  ========================== -->
 
   <div class="box">
 
     <h2>Customers</h2>
 
     <div id="customerList">
+
       <div class="empty">
         Loading customers...
       </div>
+
     </div>
 
   </div>
+
 
 </div>
 
 
 <script>
+
+
+// ==========================================
+// LOAD UPI ID
+// ==========================================
+
+async function loadUpiId() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/settings",
+        {
+          cache: "no-store"
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (data.success) {
+
+      document.getElementById(
+        "upiId"
+      ).value = data.upi_id || "";
+
+    }
+
+  } catch (error) {
+
+    console.log(
+      "UPI settings load failed"
+    );
+
+  }
+
+}
+
+
+// ==========================================
+// SAVE UPI ID
+// ==========================================
+
+async function saveUpiId() {
+
+  const upiId =
+    document
+      .getElementById("upiId")
+      .value
+      .trim();
+
+
+  if (!upiId) {
+
+    showUpiMessage(
+      "UPI ID डालें",
+      false
+    );
+
+    return;
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/settings",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            upi_id: upiId
+          })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      showUpiMessage(
+        data.message ||
+        "UPI ID save नहीं हुई",
+        false
+      );
+
+      return;
+    }
+
+
+    showUpiMessage(
+      "UPI ID successfully saved",
+      true
+    );
+
+
+  } catch (error) {
+
+    showUpiMessage(
+      "Server से connection नहीं हुआ",
+      false
+    );
+
+  }
+
+}
+
+
+// ==========================================
+// UPI MESSAGE
+// ==========================================
+
+function showUpiMessage(
+  text,
+  success
+) {
+
+  const message =
+    document.getElementById(
+      "upiMessage"
+    );
+
+
+  message.textContent =
+    text;
+
+
+  message.className =
+    "message " +
+    (
+      success
+        ? "success"
+        : "error"
+    );
+
+
+  message.style.display =
+    "block";
+
+
+  setTimeout(function() {
+
+    message.style.display =
+      "none";
+
+  }, 2500);
+
+}
+
+
+// ==========================================
+// CREATE CUSTOMER
+// ==========================================
 
 async function createCustomer() {
 
@@ -201,6 +458,7 @@ async function createCustomer() {
       .getElementById("customerName")
       .value
       .trim();
+
 
   const amount =
     Number(
@@ -269,13 +527,14 @@ async function createCustomer() {
     }
 
 
-    document
-      .getElementById("customerName")
-      .value = "";
+    document.getElementById(
+      "customerName"
+    ).value = "";
 
-    document
-      .getElementById("amount")
-      .value = "";
+
+    document.getElementById(
+      "amount"
+    ).value = "";
 
 
     showMessage(
@@ -298,6 +557,10 @@ async function createCustomer() {
 
 }
 
+
+// ==========================================
+// LOAD CUSTOMERS
+// ==========================================
 
 async function loadCustomers() {
 
@@ -343,7 +606,10 @@ async function loadCustomers() {
       .forEach(function(customer) {
 
         const div =
-          document.createElement("div");
+          document.createElement(
+            "div"
+          );
+
 
         div.className =
           "customer";
@@ -360,11 +626,15 @@ async function loadCustomers() {
         div.innerHTML = `
 
           <div class="customer-name">
-            ${escapeHTML(customer.name)}
+            ${escapeHTML(
+              customer.name
+            )}
           </div>
 
           <div class="customer-amount">
-            ₹${Number(customer.amount).toFixed(2)}
+            ₹${Number(
+              customer.amount
+            ).toFixed(2)}
           </div>
 
           <div class="link-box">
@@ -376,7 +646,8 @@ async function loadCustomers() {
 
             <button
               class="copy-btn"
-              onclick="copyLink('${link}')">
+              onclick="copyLink('${link}')"
+            >
               Copy
             </button>
 
@@ -384,7 +655,8 @@ async function loadCustomers() {
 
           <button
             class="delete-btn"
-            onclick="deleteCustomer('${customer.id}')">
+            onclick="deleteCustomer('${customer.id}')"
+          >
             Delete
           </button>
 
@@ -408,6 +680,10 @@ async function loadCustomers() {
 }
 
 
+// ==========================================
+// DELETE CUSTOMER
+// ==========================================
+
 async function deleteCustomer(id) {
 
   const confirmDelete =
@@ -417,6 +693,7 @@ async function deleteCustomer(id) {
 
 
   if (!confirmDelete) {
+
     return;
   }
 
@@ -470,6 +747,10 @@ async function deleteCustomer(id) {
 }
 
 
+// ==========================================
+// COPY PAYMENT LINK
+// ==========================================
+
 async function copyLink(link) {
 
   try {
@@ -497,7 +778,14 @@ async function copyLink(link) {
 }
 
 
-function showMessage(text, success) {
+// ==========================================
+// NORMAL MESSAGE
+// ==========================================
+
+function showMessage(
+  text,
+  success
+) {
 
   const message =
     document.getElementById(
@@ -511,9 +799,11 @@ function showMessage(text, success) {
 
   message.className =
     "message " +
-    (success
-      ? "success"
-      : "error");
+    (
+      success
+        ? "success"
+        : "error"
+    );
 
 
   message.style.display =
@@ -530,26 +820,53 @@ function showMessage(text, success) {
 }
 
 
+// ==========================================
+// HTML SECURITY
+// ==========================================
+
 function escapeHTML(value) {
 
   return String(value)
 
-    .replace(/&/g, "&amp;")
+    .replace(
+      /&/g,
+      "&amp;"
+    )
 
-    .replace(/</g, "&lt;")
+    .replace(
+      /</g,
+      "&lt;"
+    )
 
-    .replace(/>/g, "&gt;")
+    .replace(
+      />/g,
+      "&gt;"
+    )
 
-    .replace(/"/g, "&quot;")
+    .replace(
+      /"/g,
+      "&quot;"
+    )
 
-    .replace(/'/g, "&#039;");
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
+// ==========================================
+// START
+// ==========================================
+
+loadUpiId();
+
 loadCustomers();
+
 
 </script>
 
 </body>
+
 </html>
