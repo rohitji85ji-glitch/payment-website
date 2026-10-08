@@ -3,41 +3,552 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login</title>
-  <link rel="stylesheet" href="style.css">
+
+  <title>Admin Panel</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f5f7;
+    }
+
+    .container {
+      width: 94%;
+      max-width: 700px;
+      margin: 30px auto;
+    }
+
+    .box {
+      background: white;
+      padding: 22px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.10);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      margin-top: 7px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 15px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .create-btn {
+      width: 100%;
+      margin-top: 20px;
+      background: #087f23;
+      color: white;
+      font-size: 17px;
+    }
+
+    .customer {
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+    }
+
+    .customer-name {
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    .customer-amount {
+      color: #087f23;
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 7px;
+    }
+
+    .link-box {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .link-box input {
+      margin: 0;
+      min-width: 0;
+      flex: 1;
+      font-size: 13px;
+    }
+
+    .copy-btn {
+      background: #1467d8;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .delete-btn {
+      margin-top: 10px;
+      background: #d32f2f;
+      color: white;
+    }
+
+    .message {
+      display: none;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .success {
+      background: #e8f5e9;
+      color: #087f23;
+    }
+
+    .error {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 20px;
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="container">
 
-  <h1>Admin Login</h1>
-  <p>Enter Admin Password</p>
+  <div class="box">
 
-  <input
-    type="password"
-    id="password"
-    placeholder="Admin Password"
-  >
+    <h1>Admin Panel</h1>
 
-  <button class="btn" onclick="login()">Login</button>
+    <label>Customer Name</label>
 
-  <p id="message"></p>
+    <input
+      type="text"
+      id="customerName"
+      placeholder="Example: Suresh Kumar"
+    >
+
+    <label>Amount ₹</label>
+
+    <input
+      type="number"
+      id="amount"
+      placeholder="Example: 500"
+      min="1"
+    >
+
+    <button
+      class="create-btn"
+      onclick="createCustomer()">
+      Generate Payment Link
+    </button>
+
+    <div
+      id="message"
+      class="message">
+    </div>
+
+  </div>
+
+
+  <div class="box">
+
+    <h2>Customers</h2>
+
+    <div id="customerList">
+      <div class="empty">
+        Loading customers...
+      </div>
+    </div>
+
+  </div>
 
 </div>
 
+
 <script>
-function login() {
 
-  const password = document.getElementById("password").value;
+async function createCustomer() {
 
-  if (password === "123456") {
-    window.location.href = "admin-settings.html";
-  } else {
-    document.getElementById("message").innerText =
-      "Wrong Password";
+  const name =
+    document
+      .getElementById("customerName")
+      .value
+      .trim();
+
+  const amount =
+    Number(
+      document
+        .getElementById("amount")
+        .value
+    );
+
+
+  if (!name) {
+
+    showMessage(
+      "Customer name डालें",
+      false
+    );
+
+    return;
   }
+
+
+  if (!amount || amount <= 0) {
+
+    showMessage(
+      "Valid amount डालें",
+      false
+    );
+
+    return;
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/customer-link",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            name: name,
+            amount: amount
+          })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      showMessage(
+        data.message ||
+        "Link create नहीं हुआ",
+        false
+      );
+
+      return;
+    }
+
+
+    document
+      .getElementById("customerName")
+      .value = "";
+
+    document
+      .getElementById("amount")
+      .value = "";
+
+
+    showMessage(
+      "Payment link created successfully",
+      true
+    );
+
+
+    loadCustomers();
+
+
+  } catch (error) {
+
+    showMessage(
+      "Server से connection नहीं हुआ",
+      false
+    );
+
+  }
+
 }
+
+
+async function loadCustomers() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/customer-links",
+        {
+          cache: "no-store"
+        }
+      );
+
+
+    const customers =
+      await response.json();
+
+
+    const list =
+      document.getElementById(
+        "customerList"
+      );
+
+
+    if (
+      !Array.isArray(customers) ||
+      customers.length === 0
+    ) {
+
+      list.innerHTML =
+        '<div class="empty">No customers yet</div>';
+
+      return;
+    }
+
+
+    list.innerHTML = "";
+
+
+    customers
+      .slice()
+      .reverse()
+      .forEach(function(customer) {
+
+        const div =
+          document.createElement("div");
+
+        div.className =
+          "customer";
+
+
+        const link =
+          location.origin +
+          "/payment.html?id=" +
+          encodeURIComponent(
+            customer.id
+          );
+
+
+        div.innerHTML = `
+
+          <div class="customer-name">
+            ${escapeHTML(customer.name)}
+          </div>
+
+          <div class="customer-amount">
+            ₹${Number(customer.amount).toFixed(2)}
+          </div>
+
+          <div class="link-box">
+
+            <input
+              value="${link}"
+              readonly
+            >
+
+            <button
+              class="copy-btn"
+              onclick="copyLink('${link}')">
+              Copy
+            </button>
+
+          </div>
+
+          <button
+            class="delete-btn"
+            onclick="deleteCustomer('${customer.id}')">
+            Delete
+          </button>
+
+        `;
+
+
+        list.appendChild(div);
+
+      });
+
+
+  } catch (error) {
+
+    document.getElementById(
+      "customerList"
+    ).innerHTML =
+      '<div class="empty">Customers load नहीं हुए</div>';
+
+  }
+
+}
+
+
+async function deleteCustomer(id) {
+
+  const confirmDelete =
+    confirm(
+      "क्या आप इस customer को delete करना चाहते हैं?"
+    );
+
+
+  if (!confirmDelete) {
+    return;
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/customer-link/" +
+        encodeURIComponent(id),
+        {
+          method: "DELETE"
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      showMessage(
+        data.message ||
+        "Delete failed",
+        false
+      );
+
+      return;
+    }
+
+
+    showMessage(
+      "Customer deleted",
+      true
+    );
+
+
+    loadCustomers();
+
+
+  } catch (error) {
+
+    showMessage(
+      "Server error",
+      false
+    );
+
+  }
+
+}
+
+
+async function copyLink(link) {
+
+  try {
+
+    await navigator.clipboard.writeText(
+      link
+    );
+
+
+    showMessage(
+      "Payment link copied",
+      true
+    );
+
+
+  } catch (error) {
+
+    prompt(
+      "Payment link copy करें:",
+      link
+    );
+
+  }
+
+}
+
+
+function showMessage(text, success) {
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+
+  message.textContent =
+    text;
+
+
+  message.className =
+    "message " +
+    (success
+      ? "success"
+      : "error");
+
+
+  message.style.display =
+    "block";
+
+
+  setTimeout(function() {
+
+    message.style.display =
+      "none";
+
+  }, 2500);
+
+}
+
+
+function escapeHTML(value) {
+
+  return String(value)
+
+    .replace(/&/g, "&amp;")
+
+    .replace(/</g, "&lt;")
+
+    .replace(/>/g, "&gt;")
+
+    .replace(/"/g, "&quot;")
+
+    .replace(/'/g, "&#039;");
+
+}
+
+
+loadCustomers();
+
 </script>
 
 </body>
