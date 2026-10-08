@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Settings</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f5f7;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 700px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.10);
+    }
+
+    h1,
+    h2 {
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 18px;
+      margin-bottom: 7px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 13px;
+      margin-top: 20px;
+      border: 0;
+      border-radius: 8px;
+      background: #087f23;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .back-btn {
+      background: #555;
+    }
+
+    #message {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    .qr-box {
+      text-align: center;
+      margin-top: 25px;
+      padding: 20px;
+      background: #f7f7f7;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+    }
+
+    #qrCode {
+      width: 230px;
+      max-width: 100%;
+      margin: 15px auto;
+      display: none;
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .payment {
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 12px;
+    }
+
+    .payment p {
+      margin: 7px 0;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Admin Settings</h1>
+
+  <label for="siteName">
+    Website Name
+  </label>
+
+  <input
+    type="text"
+    id="siteName"
+    placeholder="Website Name"
+  >
+
+
+  <label for="upiId">
+    UPI ID
+  </label>
+
+  <input
+    type="text"
+    id="upiId"
+    placeholder="example@upi"
+  >
+
+
+  <label for="defaultAmount">
+    Default Amount
+  </label>
+
+  <input
+    type="number"
+    id="defaultAmount"
+    placeholder="100"
+    min="1"
+  >
+
+
+  <div class="qr-box">
+
+    <h2>UPI QR Code</h2>
+
+    <p>
+      UPI ID डालने पर QR Code अपने-आप बनेगा
+    </p>
+
+    <img
+      id="qrCode"
+      alt="UPI QR Code"
+    >
+
+    <p id="qrText"></p>
+
+  </div>
+
+
+  <button
+    class="btn"
+    onclick="saveSettings()">
+    Save Settings
+  </button>
+
+  <p id="message"></p>
+
+
+  <h2>Payment History</h2>
+
+  <div id="payments">
+    Loading...
+  </div>
+
+
+  <button
+    class="btn back-btn"
+    onclick="location.href='index.html'">
+    Back to Home
+  </button>
+
+</div>
+
+
+<script>
+
+const siteName =
+  document.getElementById("siteName");
+
+const upiId =
+  document.getElementById("upiId");
+
+const defaultAmount =
+  document.getElementById("defaultAmount");
+
+const qrCode =
+  document.getElementById("qrCode");
+
+const qrText =
+  document.getElementById("qrText");
+
+const message =
+  document.getElementById("message");
+
+
+/* Saved Settings Load */
+
+siteName.value =
+  localStorage.getItem("siteName") || "";
+
+upiId.value =
+  localStorage.getItem("upiId") || "";
+
+defaultAmount.value =
+  localStorage.getItem("defaultAmount") || "";
+
+
+/* QR Generate */
+
+function generateQR() {
+
+  const id =
+    upiId.value.trim();
+
+  if (!id) {
+
+    qrCode.style.display = "none";
+    qrText.textContent = "";
+
+    return;
+  }
+
+  const upiLink =
+    "upi://pay?pa=" +
+    encodeURIComponent(id) +
+    "&pn=" +
+    encodeURIComponent(
+      siteName.value.trim() || "Payment"
+    ) +
+    "&cu=INR";
+
+
+  /*
+    QR image किसी external QR service
+    से generate हो रही है।
+  */
+
+  qrCode.src =
+    "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
+    encodeURIComponent(upiLink);
+
+  qrCode.style.display =
+    "block";
+
+  qrText.textContent =
+    "UPI ID: " + id;
+}
+
+
+/* UPI ID बदलते ही QR update */
+
+upiId.addEventListener(
+  "input",
+  generateQR
+);
+
+
+/* Save Settings */
+
+function saveSettings() {
+
+  const name =
+    siteName.value.trim();
+
+  const id =
+    upiId.value.trim();
+
+  const amount =
+    defaultAmount.value.trim();
+
+
+  if (!name) {
+
+    alert("Website Name डालें");
+
+    return;
+  }
+
+
+  if (!id) {
+
+    alert("UPI ID डालें");
+
+    return;
+  }
+
+
+  localStorage.setItem(
+    "siteName",
+    name
+  );
+
+  localStorage.setItem(
+    "upiId",
+    id
+  );
+
+  localStorage.setItem(
+    "defaultAmount",
+    amount
+  );
+
+
+  generateQR();
+
+
+  message.textContent =
+    "Settings और UPI QR successfully saved.";
+
+  message.style.color =
+    "green";
+}
+
+
+/* Page खुलते ही QR बनाओ */
+
+generateQR();
+
+
+/* Payment History */
+
+async function loadPayments() {
+
+  const box =
+    document.getElementById("payments");
+
+  try {
+
+    const response =
+      await fetch("/api/payments");
+
+    if (!response.ok) {
+      throw new Error("API error");
+    }
+
+    const payments =
+      await response.json();
+
+
+    if (!payments.length) {
+
+      box.innerHTML =
+        '<p class="empty">अभी कोई payment नहीं है।</p>';
+
+      return;
+    }
+
+
+    box.innerHTML = "";
+
+
+    payments
+      .slice()
+      .reverse()
+      .forEach(function(payment) {
+
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "payment";
+
+
+        item.innerHTML =
+
+          "<p><b>Payment ID:</b> " +
+          payment.id +
+          "</p>" +
+
+          "<p><b>Customer:</b> " +
+          payment.name +
+          "</p>" +
+
+          "<p><b>Amount:</b> ₹" +
+          payment.amount +
+          "</p>" +
+
+          "<p><b>Status:</b> " +
+          payment.status +
+          "</p>" +
+
+          "<p><b>Date:</b> " +
+          payment.date +
+          "</p>";
+
+
+        box.appendChild(item);
+      });
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    box.innerHTML =
+      '<p class="empty">Backend connection नहीं हुआ।</p>';
+  }
+}
+
+
+loadPayments();
+
+</script>
+
+</body>
+</html>

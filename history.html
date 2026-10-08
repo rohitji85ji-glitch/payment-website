@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment History</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Payment History</h1>
+
+  <div id="history" class="history-box">
+    Loading payments...
+  </div>
+
+  <br>
+
+  <a href="payment.html" class="btn">
+    New Payment
+  </a>
+
+  <br><br>
+
+  <a href="admin-settings.html" class="btn">
+    Admin Dashboard
+  </a>
+
+  <br><br>
+
+  <a href="index.html" class="btn">
+    Home
+  </a>
+
+</div>
+
+
+<script>
+
+async function loadPayments() {
+
+  const historyBox =
+    document.getElementById("history");
+
+  try {
+
+    const response =
+      await fetch("/api/payments");
+
+    if (!response.ok) {
+      throw new Error("Server error");
+    }
+
+    const payments =
+      await response.json();
+
+
+    if (payments.length === 0) {
+
+      historyBox.innerHTML =
+        "<p>No payment records found.</p>";
+
+      return;
+    }
+
+
+    historyBox.innerHTML = "";
+
+
+    payments
+      .slice()
+      .reverse()
+      .forEach((payment, index) => {
+
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "history-item";
+
+
+        item.innerHTML = `
+
+          <h3>
+            Payment #${payments.length - index}
+          </h3>
+
+          <p>
+            <b>Customer:</b>
+            ${payment.name || "-"}
+          </p>
+
+          <p>
+            <b>Amount:</b>
+            ₹${payment.amount || 0}
+          </p>
+
+          <p>
+            <b>Date:</b>
+            ${payment.date || "-"}
+          </p>
+
+          <p>
+            <b>Status:</b>
+            ${payment.status || "Pending"}
+          </p>
+
+          <hr>
+
+        `;
+
+
+        historyBox.appendChild(item);
+
+      });
+
+
+  } catch (error) {
+
+    historyBox.innerHTML =
+      "<p>Backend connection failed.</p>";
+
+    console.error(error);
+
+  }
+
+}
+
+
+loadPayments();
+
+</script>
+
+</body>
+</html>

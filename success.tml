@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Success</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>✅ Payment Successful</h1>
+
+    <p id="details"></p>
+
+    <a href="index.html" class="btn">Back to Home</a>
+  </div>
+
+  <script>
+    const name = localStorage.getItem("paymentName");
+    const amount = localStorage.getItem("paymentAmount");
+
+    document.getElementById("details").innerText =
+      "Name: " + name + " | Amount: ₹" + amount;
+  </script>
+
+</body>
+</html>

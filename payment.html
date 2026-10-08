@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>UPI Payment</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f5f7;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 450px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      color: #222;
+    }
+
+    h2 {
+      margin-top: 5px;
+    }
+
+    p {
+      color: #555;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      border: 0;
+      border-radius: 8px;
+      background: #087f23;
+      color: white;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .close-btn {
+      background: #555;
+    }
+
+    .qr-box {
+      display: none;
+      margin-top: 25px;
+      padding: 20px;
+      background: #f7f7f7;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+    }
+
+    #qrCode {
+      width: 240px;
+      max-width: 100%;
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .upi {
+      font-weight: bold;
+      margin-top: 12px;
+      word-break: break-all;
+    }
+
+    .amount-text {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 10px 0;
+      color: #087f23;
+    }
+
+    .payment-message {
+      color: #333;
+      font-size: 15px;
+      font-weight: bold;
+      line-height: 1.5;
+      margin: 15px 0 8px;
+    }
+
+    .timer {
+      color: #c00000;
+      font-weight: bold;
+      font-size: 17px;
+      margin-top: 8px;
+    }
+
+    .note {
+      color: #666;
+      font-size: 13px;
+      margin-top: 15px;
+    }
+
+    .status {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #f1f1f1;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1 id="siteName">Make Payment</h1>
+
+    <p>Make payment using UPI</p>
+
+    <input
+      type="text"
+      id="name"
+      placeholder="Your Name"
+    >
+
+    <input
+      type="number"
+      id="amount"
+      placeholder="Amount ₹"
+      min="1"
+    >
+
+    <button class="btn" onclick="showQR()">
+      Continue Payment
+    </button>
+
+
+    <!-- QR SECTION -->
+    <div id="qrBox" class="qr-box">
+
+      <h2>Scan & Pay</h2>
+
+      <div id="amountText" class="amount-text"></div>
+
+      <img
+        id="qrCode"
+        alt="UPI QR Code"
+      >
+
+      <div id="upiText" class="upi"></div>
+
+      <p class="payment-message">
+        Please complete your payment within 2 minutes.
+      </p>
+
+      <p id="timer" class="timer">
+        QR Code will close automatically in 2:00
+      </p>
+
+      <p class="note">
+        Scan the QR code using your UPI app
+        and approve the payment yourself.
+      </p>
+
+      <button
+        class="btn close-btn"
+        onclick="paymentFinished()"
+      >
+        Payment Done / Close QR
+      </button>
+
+    </div>
+
+
+    <div id="status" class="status"></div>
+
+  </div>
+
+
+  <script>
+
+    const siteName =
+      localStorage.getItem("siteName");
+
+    const upiId =
+      localStorage.getItem("upiId");
+
+    const savedAmount =
+      localStorage.getItem("defaultAmount");
+
+    let qrTimer;
+
+    let remainingSeconds = 120;
+
+
+    // WEBSITE NAME
+    if (siteName) {
+      document.getElementById("siteName")
+        .textContent = siteName;
+    }
+
+
+    // DEFAULT AMOUNT
+    if (savedAmount) {
+      document.getElementById("amount")
+        .value = savedAmount;
+    }
+
+
+    // CONTINUE PAYMENT
+    function showQR() {
+
+      const name =
+        document.getElementById("name")
+          .value.trim();
+
+      const amount =
+        Number(
+          document.getElementById("amount")
+            .value
+        );
+
+
+      if (!name) {
+        alert("Please enter your name.");
+        return;
+      }
+
+
+      if (!amount || amount <= 0) {
+        alert("Please enter a valid amount.");
+        return;
+      }
+
+
+      if (!upiId) {
+        alert(
+          "Please add the UPI ID in Admin Settings first."
+        );
+        return;
+      }
+
+
+      // UPI PAYMENT LINK
+      const upiLink =
+        "upi://pay" +
+        "?pa=" +
+        encodeURIComponent(upiId) +
+        "&pn=" +
+        encodeURIComponent(
+          siteName || "Payment"
+        ) +
+        "&am=" +
+        encodeURIComponent(
+          amount.toFixed(2)
+        ) +
+        "&cu=INR";
+
+
+      // QR CODE
+      const qrUrl =
+        "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
+        encodeURIComponent(upiLink);
+
+
+      document.getElementById("qrCode")
+        .src = qrUrl;
+
+      document.getElementById("upiText")
+        .textContent =
+        "UPI ID: " + upiId;
+
+      document.getElementById("amountText")
+        .textContent =
+        "Pay ₹" + amount.toFixed(2);
+
+
+      // SHOW QR
+      document.getElementById("qrBox")
+        .style.display = "block";
+
+      document.getElementById("status")
+        .style.display = "none";
+
+
+      // START TIMER
+      startQRTimer();
+
+
+      // OPEN UPI APP ON MOBILE
+      if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+
+        setTimeout(function() {
+
+          window.location.href = upiLink;
+
+        }, 300);
+
+      }
+
+    }
+
+
+    // START 2 MINUTE TIMER
+    function startQRTimer() {
+
+      clearInterval(qrTimer);
+
+      remainingSeconds = 120;
+
+      updateTimer();
+
+
+      qrTimer = setInterval(function() {
+
+        remainingSeconds--;
+
+        updateTimer();
+
+
+        if (remainingSeconds <= 0) {
+
+          clearInterval(qrTimer);
+
+          paymentFinished();
+
+        }
+
+      }, 1000);
+
+    }
+
+
+    // UPDATE TIMER
+    function updateTimer() {
+
+      const minutes =
+        Math.floor(
+          remainingSeconds / 60
+        );
+
+      const seconds =
+        remainingSeconds % 60;
+
+
+      document.getElementById("timer")
+        .textContent =
+        "QR Code will close automatically in " +
+        minutes +
+        ":" +
+        String(seconds).padStart(2, "0");
+
+    }
+
+
+    // CLOSE QR
+    function paymentFinished() {
+
+      clearInterval(qrTimer);
+
+      document.getElementById("qrBox")
+        .style.display = "none";
+
+
+      const status =
+        document.getElementById("status");
+
+
+      status.textContent =
+        "QR Code has been closed. Payment status has not been automatically verified.";
+
+      status.style.display = "block";
+
+    }
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Admin Login</h1>
+  <p>Enter Admin Password</p>
+
+  <input
+    type="password"
+    id="password"
+    placeholder="Admin Password"
+  >
+
+  <button class="btn" onclick="login()">Login</button>
+
+  <p id="message"></p>
+
+</div>
+
+<script>
+function login() {
+
+  const password = document.getElementById("password").value;
+
+  if (password === "123456") {
+    window.location.href = "admin-settings.html";
+  } else {
+    document.getElementById("message").innerText =
+      "Wrong Password";
+  }
+}
+</script>
+
+</body>
+</html>
