@@ -3,33 +3,115 @@ const path = require("path");
 const fs = require("fs");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// JSON request पढ़ने के लिए
 app.use(express.json());
-
-// Website की HTML, CSS, JS files चलाने के लिए
 app.use(express.static(__dirname));
 
-// ------------------------------------
-// PAYMENT DATA FILE
-// ------------------------------------
-
 const paymentsFile = path.join(__dirname, "payments.json");
+const settingsFile = path.join(__dirname, "settings.json");
 
-// अगर payments.json नहीं है तो अपने आप बनेगा
 if (!fs.existsSync(paymentsFile)) {
+  fs.writeFileSync(paymentsFile, "[]", "utf8");
+}
+
+if (!fs.existsSync(settingsFile)) {
   fs.writeFileSync(
-    paymentsFile,
-    JSON.stringify([], null, 2),
+    settingsFile,
+    JSON.stringify({
+      customerName: "",
+      defaultAmount: "",
+      upiId: "",
+      siteName: "Make Payment"
+    }, null, 2),
     "utf8"
   );
 }
 
+/* SETTINGS */
 
-// ------------------------------------
-// DATA READ
-// ------------------------------------
+app.get("/api/settings", (req, res) => {
+  try {
+    const data = fs.readFileSync(settingsFile, "utf8");
+    res.json(JSON.parse(data || "{}"));
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Settings read error"
+    });
+  }
+});
+
+app.post("/api/settings", (req, res) => {
+  const customerName = String(
+    req.body.customerName || ""
+  ).trim();
+
+  const defaultAmount = Number(
+    req.body.defaultAmount
+  );
+
+  const upiId = String(
+    req.body.upiId || ""
+  ).trim();
+
+  const siteName = String(
+    req.body.siteName || "Make Payment"
+  ).trim();
+
+  if (!customerName) {
+    return res.status(400).json({
+      success: false,
+      message: "Customer name is required"
+    });
+  }
+
+  if (!defaultAmount || defaultAmount <= 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Valid amount is required"
+    });
+  }
+
+  if (!upiId) {
+    return res.status(400).json({
+      success: false,
+      message: "UPI ID is required"
+    });
+  }
+
+  const settings = {
+    customerName,
+    defaultAmount,
+    upiId,
+    siteName
+  };
+
+  fs.writeFileSync(
+    settingsFile,
+    JSON.stringify(settings, null, 2),
+    "utf8"
+  );
+
+  res.json({
+    success: true,
+    message: "Settings saved successfully",
+    settings
+  });
+});
+
+
+/* TEST */
+
+app.get("/api/test", (req, res) => {
+  res.json({
+    success: true,
+    message: "Backend is working"
+  });
+});
+
+
+/* PAYMENTS */
 
 function getPayments() {
   try {
@@ -39,22 +121,12 @@ function getPayments() {
     );
 
     return JSON.parse(data || "[]");
-
-  } catch (error) {
-
-    console.log("payments.json read error:", error.message);
-
+  } catch {
     return [];
   }
 }
 
-
-// ------------------------------------
-// DATA SAVE
-// ------------------------------------
-
 function savePayments(payments) {
-
   fs.writeFileSync(
     paymentsFile,
     JSON.stringify(payments, null, 2),
@@ -63,252 +135,138 @@ function savePayments(payments) {
 }
 
 
-// ------------------------------------
-// TEST API
-// ------------------------------------
-
-app.get("/api/test", (req, res) => {
-
-  res.json({
-    success: true,
-    message: "Backend is working"
-  });
-
-});
-
-
-// ------------------------------------
-// CREATE PAYMENT
-// ------------------------------------
-
 app.post("/api/payment", (req, res) => {
+  const name = String(
+    req.body.name || ""
+  ).trim();
 
-  const name = String(req.body.name || "").trim();
-  const amount = Number(req.body.amount);
+  const amount = Number(
+    req.body.amount
+  );
 
-
-  // Validation
   if (!name || !amount || amount <= 0) {
-
     return res.status(400).json({
       success: false,
       message: "Invalid payment data"
     });
-
   }
-
 
   const payments = getPayments();
 
-
   const payment = {
-
     id: Date.now(),
-
-    name: name,
-
-    amount: amount,
-
+    name,
+    amount,
     status: "Pending",
-
     date: new Date().toLocaleString("en-IN")
-
   };
-
 
   payments.push(payment);
 
   savePayments(payments);
 
-
   res.json({
-
     success: true,
-
     message: "Payment request received",
-
-    payment: payment
-
+    payment
   });
-
 });
 
-
-// ------------------------------------
-// GET ALL PAYMENTS
-// ------------------------------------
 
 app.get("/api/payments", (req, res) => {
-
-  const payments = getPayments();
-
-  res.json(payments);
-
+  res.json(getPayments());
 });
 
 
-// ------------------------------------
-// GET SINGLE PAYMENT
-// ------------------------------------
-
 app.get("/api/payment/:id", (req, res) => {
-
   const id = String(req.params.id);
 
-  const payments = getPayments();
-
-
-  const payment = payments.find(
+  const payment = getPayments().find(
     p => String(p.id) === id
   );
 
-
   if (!payment) {
-
     return res.status(404).json({
-
       success: false,
-
       message: "Payment not found"
-
     });
-
   }
 
-
   res.json({
-
     success: true,
-
-    payment: payment
-
+    payment
   });
-
 });
 
 
-// ------------------------------------
-// UPDATE PAYMENT STATUS
-// ------------------------------------
-
 app.put("/api/payment/:id", (req, res) => {
-
   const id = String(req.params.id);
-
   const status = req.body.status;
 
-
-  // केवल ये तीन status allowed हैं
   if (
     status !== "Pending" &&
     status !== "Success" &&
     status !== "Failed"
   ) {
-
     return res.status(400).json({
-
       success: false,
-
       message: "Invalid payment status"
-
     });
-
   }
 
-
   const payments = getPayments();
-
 
   const payment = payments.find(
     p => String(p.id) === id
   );
 
-
   if (!payment) {
-
     return res.status(404).json({
-
       success: false,
-
       message: "Payment not found"
-
     });
-
   }
-
 
   payment.status = status;
 
   savePayments(payments);
 
-
   res.json({
-
     success: true,
-
-    message: "Payment status updated",
-
-    payment: payment
-
+    payment
   });
-
 });
 
 
-// ------------------------------------
-// DELETE PAYMENT
-// ------------------------------------
-
 app.delete("/api/payment/:id", (req, res) => {
-
   const id = String(req.params.id);
 
   const payments = getPayments();
-
 
   const newPayments = payments.filter(
     p => String(p.id) !== id
   );
 
-
   if (newPayments.length === payments.length) {
-
     return res.status(404).json({
-
       success: false,
-
       message: "Payment not found"
-
     });
-
   }
-
 
   savePayments(newPayments);
 
-
   res.json({
-
     success: true,
-
     message: "Payment deleted"
-
   });
-
 });
 
 
-// ------------------------------------
-// SERVER START
-// ------------------------------------
-
 app.listen(PORT, () => {
-
   console.log("");
   console.log("================================");
   console.log("SERVER STARTED");
-  console.log("http://localhost:" + PORT);
+  console.log("PORT:", PORT);
   console.log("================================");
-  console.log("");
-
 });

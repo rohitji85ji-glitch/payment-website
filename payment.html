@@ -20,16 +20,16 @@
       width: 92%;
       max-width: 450px;
       margin: 40px auto;
-      background: #fff;
+      background: white;
       padding: 25px;
       border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,.10);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.10);
       text-align: center;
     }
 
     h1 {
-      color: #222;
       margin-bottom: 10px;
+      color: #222;
     }
 
     .info-box {
@@ -63,6 +63,10 @@
       cursor: pointer;
     }
 
+    .btn:active {
+      transform: scale(0.98);
+    }
+
     .qr-box {
       display: none;
       margin-top: 25px;
@@ -81,8 +85,8 @@
     }
 
     .upi {
-      font-weight: bold;
       margin-top: 12px;
+      font-weight: bold;
       word-break: break-all;
     }
 
@@ -112,6 +116,11 @@
       font-weight: bold;
       line-height: 1.5;
     }
+
+    .loading {
+      color: #555;
+      margin-top: 20px;
+    }
   </style>
 </head>
 
@@ -123,23 +132,34 @@
 
   <p>Make payment using UPI</p>
 
+  <div id="loading" class="loading">
+    Loading payment details...
+  </div>
+
   <div class="info-box">
 
     <div class="info-row">
       <strong>Customer:</strong>
-      <span id="customerName"></span>
+      <span id="customerName">Loading...</span>
     </div>
 
     <div class="info-row">
       <strong>Amount:</strong>
-      <span id="amount" class="amount"></span>
+      <span id="amount" class="amount">Loading...</span>
     </div>
 
   </div>
 
-  <button class="btn" onclick="continuePayment()">
-    Pay by Any UPI App
+  <button
+    id="continueBtn"
+    class="btn"
+    onclick="continuePayment()"
+    disabled>
+    Continue Payment
   </button>
+
+
+  <!-- QR -->
 
   <div id="qrBox" class="qr-box">
 
@@ -149,184 +169,291 @@
 
     <br>
 
-    <img id="qrCode" alt="UPI QR Code">
+    <img
+      id="qrCode"
+      alt="UPI QR Code">
 
-    <div id="upiText" class="upi"></div>
+    <div
+      id="upiText"
+      class="upi">
+    </div>
 
     <p class="timer" id="timer">
       QR Code will close automatically in 2:00
     </p>
 
     <p class="note">
-      अगर UPI app नहीं खुलता है, तो QR Code को
-      अपने UPI App से scan करके payment करें।
-      UPI PIN/OTP केवल अपने UPI App में डालें।
+      QR Code को अपने UPI App से scan करके
+      payment करें।
+      Payment अपने UPI App में खुद approve करें।
+      UPI PIN/OTP केवल अपने UPI App में ही डालें।
     </p>
 
-    <button class="btn close-btn" onclick="paymentFinished()">
+    <button
+      class="btn close-btn"
+      onclick="paymentFinished()">
       Close QR
     </button>
 
   </div>
 
-  <div id="status" class="status"></div>
+
+  <div
+    id="status"
+    class="status">
+  </div>
 
 </div>
 
 
 <script>
 
-const customerName =
-  localStorage.getItem("customerName");
-
-const siteName =
-  localStorage.getItem("siteName");
-
-const upiId =
-  localStorage.getItem("upiId");
-
-const savedAmount =
-  localStorage.getItem("defaultAmount");
+let customerName = "";
+let siteName = "Make Payment";
+let upiId = "";
+let savedAmount = "";
 
 let qrTimer = null;
 let remainingSeconds = 120;
 
 
-document.getElementById("customerName").textContent =
-  customerName || "Customer";
+/*
+  SERVER से SETTINGS लाना
+*/
+
+async function loadSettings() {
+
+  try {
+
+    const response =
+      await fetch("/api/settings", {
+        cache: "no-store"
+      });
 
 
-if (siteName) {
-  document.getElementById("siteName").textContent =
-    siteName;
+    if (!response.ok) {
+      throw new Error("Settings not found");
+    }
+
+
+    const data =
+      await response.json();
+
+
+    customerName =
+      data.customerName || "";
+
+    siteName =
+      data.siteName || "Make Payment";
+
+    upiId =
+      data.upiId || "";
+
+    savedAmount =
+      data.defaultAmount || "";
+
+
+    /*
+      CUSTOMER
+    */
+
+    document.getElementById(
+      "customerName"
+    ).textContent =
+      customerName || "Customer";
+
+
+    /*
+      SITE NAME
+    */
+
+    document.getElementById(
+      "siteName"
+    ).textContent =
+      siteName;
+
+
+    /*
+      AMOUNT
+    */
+
+    const amount =
+      Number(savedAmount);
+
+
+    if (amount > 0) {
+
+      document.getElementById(
+        "amount"
+      ).textContent =
+        "₹" + amount.toFixed(2);
+
+    } else {
+
+      document.getElementById(
+        "amount"
+      ).textContent =
+        "Amount not set";
+
+    }
+
+
+    /*
+      LOADING HIDE
+    */
+
+    document.getElementById(
+      "loading"
+    ).style.display =
+      "none";
+
+
+    /*
+      BUTTON ENABLE
+    */
+
+    if (
+      customerName &&
+      amount > 0 &&
+      upiId
+    ) {
+
+      document.getElementById(
+        "continueBtn"
+      ).disabled = false;
+
+    }
+
+
+  } catch (error) {
+
+    document.getElementById(
+      "loading"
+    ).textContent =
+      "Payment settings load नहीं हुईं।";
+
+
+    document.getElementById(
+      "customerName"
+    ).textContent =
+      "Not available";
+
+
+    document.getElementById(
+      "amount"
+    ).textContent =
+      "Not available";
+
+  }
+
 }
 
 
-const amount =
-  Number(savedAmount);
-
-
-if (amount > 0) {
-
-  document.getElementById("amount").textContent =
-    "₹" + amount.toFixed(2);
-
-} else {
-
-  document.getElementById("amount").textContent =
-    "Amount not set";
-
-}
-
-
-/* CREATE UPI LINK */
+/*
+  UPI LINK
+*/
 
 function createUPILink() {
 
-  if (!upiId || !amount || amount <= 0) {
+  const amount =
+    Number(savedAmount);
+
+
+  if (!upiId) {
     return null;
   }
+
+
+  if (!amount || amount <= 0) {
+    return null;
+  }
+
 
   const transactionId =
     "PAY" + Date.now();
 
-  return (
+
+  const upiLink =
     "upi://pay" +
-    "?pa=" + encodeURIComponent(upiId) +
-    "&pn=" + encodeURIComponent(siteName || "Payment") +
-    "&am=" + encodeURIComponent(amount.toFixed(2)) +
+    "?pa=" +
+    encodeURIComponent(upiId) +
+    "&pn=" +
+    encodeURIComponent(siteName) +
+    "&am=" +
+    encodeURIComponent(
+      amount.toFixed(2)
+    ) +
     "&cu=INR" +
-    "&tr=" + encodeURIComponent(transactionId)
-  );
+    "&tr=" +
+    encodeURIComponent(transactionId);
+
+
+  return upiLink;
+
 }
 
 
-/* CONTINUE PAYMENT */
+/*
+  CONTINUE PAYMENT
+*/
 
 function continuePayment() {
 
+  const amount =
+    Number(savedAmount);
+
+
   if (!customerName) {
-    alert("Customer name is not set.");
+
+    alert(
+      "Customer details are not available."
+    );
+
     return;
+
   }
+
 
   if (!amount || amount <= 0) {
-    alert("Amount is not set.");
+
+    alert(
+      "Amount is not available."
+    );
+
     return;
+
   }
+
 
   if (!upiId) {
-    alert("UPI ID is not set.");
+
+    alert(
+      "UPI ID is not available."
+    );
+
     return;
+
   }
+
 
   const upiLink =
     createUPILink();
 
+
   if (!upiLink) {
-    alert("Payment settings are not configured.");
+
+    alert(
+      "Payment settings are not configured."
+    );
+
     return;
+
   }
 
 
   /*
-    ANDROID UPI INTENT
+    QR CODE
   */
-
-  if (/Android/i.test(navigator.userAgent)) {
-
-    const query =
-      upiLink.substring(
-        upiLink.indexOf("?") + 1
-      );
-
-    const intentUrl =
-      "intent://pay?" +
-      query +
-      "#Intent;" +
-      "scheme=upi;" +
-      "action=android.intent.action.VIEW;" +
-      "end";
-
-    window.location.href =
-      intentUrl;
-
-
-    /*
-      अगर UPI app नहीं खुला,
-      तो थोड़ी देर बाद QR दिखाएँ।
-    */
-
-    setTimeout(function() {
-
-      showQRCode();
-
-    }, 1800);
-
-    return;
-  }
-
-
-  /*
-    NON-ANDROID
-  */
-
-  window.location.href =
-    upiLink;
-
-}
-
-
-/* SHOW QR */
-
-function showQRCode() {
-
-  const upiLink =
-    createUPILink();
-
-  if (!upiLink) {
-    return;
-  }
 
   const qrUrl =
     "https://api.qrserver.com/v1/create-qr-code/" +
@@ -334,23 +461,33 @@ function showQRCode() {
     encodeURIComponent(upiLink);
 
 
-  document.getElementById("qrCode").src =
+  document.getElementById(
+    "qrCode"
+  ).src =
     qrUrl;
 
 
-  document.getElementById("upiText").textContent =
+  document.getElementById(
+    "upiText"
+  ).textContent =
     "UPI ID: " + upiId;
 
 
-  document.getElementById("amountText").textContent =
+  document.getElementById(
+    "amountText"
+  ).textContent =
     "Pay ₹" + amount.toFixed(2);
 
 
-  document.getElementById("qrBox").style.display =
+  document.getElementById(
+    "qrBox"
+  ).style.display =
     "block";
 
 
-  document.getElementById("status").style.display =
+  document.getElementById(
+    "status"
+  ).style.display =
     "none";
 
 
@@ -359,7 +496,9 @@ function showQRCode() {
 }
 
 
-/* TIMER */
+/*
+  TIMER START
+*/
 
 function startQRTimer() {
 
@@ -370,37 +509,46 @@ function startQRTimer() {
   updateTimer();
 
 
-  qrTimer = setInterval(function() {
+  qrTimer =
+    setInterval(function() {
 
-    remainingSeconds--;
+      remainingSeconds--;
 
-    updateTimer();
+      updateTimer();
 
-    if (remainingSeconds <= 0) {
 
-      clearInterval(qrTimer);
+      if (remainingSeconds <= 0) {
 
-      paymentFinished();
+        clearInterval(qrTimer);
 
-    }
+        paymentFinished();
 
-  }, 1000);
+      }
+
+    }, 1000);
 
 }
 
 
-/* UPDATE TIMER */
+/*
+  TIMER UPDATE
+*/
 
 function updateTimer() {
 
   const minutes =
-    Math.floor(remainingSeconds / 60);
+    Math.floor(
+      remainingSeconds / 60
+    );
+
 
   const seconds =
     remainingSeconds % 60;
 
 
-  document.getElementById("timer").textContent =
+  document.getElementById(
+    "timer"
+  ).textContent =
     "QR Code will close automatically in " +
     minutes +
     ":" +
@@ -409,25 +557,42 @@ function updateTimer() {
 }
 
 
-/* CLOSE QR */
+/*
+  CLOSE QR
+*/
 
 function paymentFinished() {
 
   clearInterval(qrTimer);
 
-  document.getElementById("qrBox").style.display =
+
+  document.getElementById(
+    "qrBox"
+  ).style.display =
     "none";
 
+
   const status =
-    document.getElementById("status");
+    document.getElementById(
+      "status"
+    );
+
 
   status.textContent =
     "QR Code closed. Payment status has not been automatically verified.";
+
 
   status.style.display =
     "block";
 
 }
+
+
+/*
+  PAGE LOAD
+*/
+
+loadSettings();
 
 </script>
 

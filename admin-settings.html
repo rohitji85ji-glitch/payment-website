@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Admin Settings</title>
 
   <style>
@@ -23,7 +24,7 @@
       background: white;
       padding: 25px;
       border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+      box-shadow: 0 5px 20px rgba(0,0,0,.10);
     }
 
     h1 {
@@ -58,19 +59,23 @@
       cursor: pointer;
     }
 
-    button:hover {
-      opacity: 0.9;
-    }
-
     .message {
       display: none;
       margin-top: 15px;
       padding: 12px;
       border-radius: 8px;
-      background: #e8f5e9;
-      color: #087f23;
       text-align: center;
       font-weight: bold;
+    }
+
+    .success {
+      background: #e8f5e9;
+      color: #087f23;
+    }
+
+    .error {
+      background: #ffebee;
+      color: #c62828;
     }
 
     .payment-link {
@@ -86,138 +91,244 @@
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <h1>Admin Settings</h1>
+  <h1>Admin Settings</h1>
 
-    <label>Customer Name</label>
+  <label>Customer Name</label>
+  <input
+    type="text"
+    id="customerName"
+    placeholder="Enter Customer Name"
+  >
 
-    <input
-      type="text"
-      id="customerName"
-      placeholder="Enter Customer Name"
-    >
+  <label>Amount ₹</label>
+  <input
+    type="number"
+    id="defaultAmount"
+    placeholder="Enter Amount"
+    min="1"
+  >
 
-    <label>Amount ₹</label>
+  <label>UPI ID</label>
+  <input
+    type="text"
+    id="upiId"
+    placeholder="example@upi"
+  >
 
-    <input
-      type="number"
-      id="defaultAmount"
-      placeholder="Enter Amount"
-      min="1"
-    >
+  <label>Site Name</label>
+  <input
+    type="text"
+    id="siteName"
+    placeholder="Payment"
+  >
 
-    <label>UPI ID</label>
+  <button onclick="saveSettings()">
+    Save Settings
+  </button>
 
-    <input
-      type="text"
-      id="upiId"
-      placeholder="example@upi"
-    >
+  <div id="message" class="message"></div>
 
-    <label>Site Name</label>
+  <a
+    class="payment-link"
+    href="payment.html">
+    Open Payment Page
+  </a>
 
-    <input
-      type="text"
-      id="siteName"
-      placeholder="Payment"
-    >
+</div>
 
-    <button onclick="saveSettings()">
-      Save Settings
-    </button>
 
-    <div id="message" class="message">
-      Settings Saved Successfully
-    </div>
+<script>
 
-    <a
-      class="payment-link"
-      href="payment.html"
-    >
-      Open Payment Page
-    </a>
+async function loadSettings() {
 
-  </div>
+  try {
 
-  <script>
+    const response =
+      await fetch("/api/settings");
 
-    // पहले से saved data दिखाना
-    document.getElementById("customerName").value =
-      localStorage.getItem("customerName") || "";
+    const data =
+      await response.json();
 
-    document.getElementById("defaultAmount").value =
-      localStorage.getItem("defaultAmount") || "";
 
-    document.getElementById("upiId").value =
-      localStorage.getItem("upiId") || "";
+    document.getElementById(
+      "customerName"
+    ).value =
+      data.customerName || "";
 
-    document.getElementById("siteName").value =
-      localStorage.getItem("siteName") || "";
 
-    function saveSettings() {
+    document.getElementById(
+      "defaultAmount"
+    ).value =
+      data.defaultAmount || "";
 
-      const customerName =
-        document.getElementById("customerName")
-          .value.trim();
 
-      const amount =
-        document.getElementById("defaultAmount")
-          .value;
+    document.getElementById(
+      "upiId"
+    ).value =
+      data.upiId || "";
 
-      const upiId =
-        document.getElementById("upiId")
-          .value.trim();
 
-      const siteName =
-        document.getElementById("siteName")
-          .value.trim();
+    document.getElementById(
+      "siteName"
+    ).value =
+      data.siteName || "Make Payment";
 
-      if (!customerName) {
-        alert("Please enter customer name.");
-        return;
-      }
+  } catch (error) {
 
-      if (!amount || Number(amount) <= 0) {
-        alert("Please enter a valid amount.");
-        return;
-      }
+    showMessage(
+      "Server से settings नहीं मिलीं",
+      false
+    );
 
-      if (!upiId) {
-        alert("Please enter UPI ID.");
-        return;
-      }
+  }
 
-      localStorage.setItem(
-        "customerName",
-        customerName
+}
+
+
+async function saveSettings() {
+
+  const customerName =
+    document.getElementById(
+      "customerName"
+    ).value.trim();
+
+
+  const defaultAmount =
+    document.getElementById(
+      "defaultAmount"
+    ).value;
+
+
+  const upiId =
+    document.getElementById(
+      "upiId"
+    ).value.trim();
+
+
+  const siteName =
+    document.getElementById(
+      "siteName"
+    ).value.trim();
+
+
+  if (!customerName) {
+    showMessage(
+      "Customer name डालें",
+      false
+    );
+    return;
+  }
+
+
+  if (
+    !defaultAmount ||
+    Number(defaultAmount) <= 0
+  ) {
+    showMessage(
+      "Valid amount डालें",
+      false
+    );
+    return;
+  }
+
+
+  if (!upiId) {
+    showMessage(
+      "UPI ID डालें",
+      false
+    );
+    return;
+  }
+
+
+  try {
+
+    const response =
+      await fetch("/api/settings", {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+          customerName,
+          defaultAmount,
+          upiId,
+          siteName
+
+        })
+
+      });
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      showMessage(
+        data.message || "Save failed",
+        false
       );
 
-      localStorage.setItem(
-        "defaultAmount",
-        amount
-      );
+      return;
 
-      localStorage.setItem(
-        "upiId",
-        upiId
-      );
-
-      localStorage.setItem(
-        "siteName",
-        siteName
-      );
-
-      document.getElementById("message")
-        .style.display = "block";
-
-      setTimeout(function() {
-        document.getElementById("message")
-          .style.display = "none";
-      }, 2500);
     }
 
-  </script>
+
+    showMessage(
+      "Settings Saved Successfully",
+      true
+    );
+
+
+  } catch (error) {
+
+    showMessage(
+      "Server से connection नहीं हुआ",
+      false
+    );
+
+  }
+
+}
+
+
+function showMessage(text, success) {
+
+  const message =
+    document.getElementById("message");
+
+
+  message.textContent = text;
+
+  message.className =
+    "message " +
+    (success ? "success" : "error");
+
+  message.style.display =
+    "block";
+
+
+  setTimeout(() => {
+
+    message.style.display =
+      "none";
+
+  }, 3000);
+
+}
+
+
+loadSettings();
+
+</script>
 
 </body>
 </html>
