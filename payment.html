@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>UPI Payment</title>
 
   <style>
@@ -23,13 +24,13 @@
       background: white;
       padding: 25px;
       border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+      box-shadow: 0 5px 20px rgba(0,0,0,.10);
       text-align: center;
     }
 
     h1 {
-      margin-bottom: 10px;
       color: #222;
+      margin-bottom: 10px;
     }
 
     .info-box {
@@ -63,10 +64,6 @@
       cursor: pointer;
     }
 
-    .btn:active {
-      transform: scale(0.98);
-    }
-
     .qr-box {
       display: none;
       margin-top: 25px;
@@ -93,14 +90,12 @@
     .timer {
       color: #c00000;
       font-weight: bold;
-      font-size: 17px;
     }
 
     .note {
       color: #666;
       font-size: 13px;
       line-height: 1.5;
-      margin-top: 15px;
     }
 
     .close-btn {
@@ -114,11 +109,16 @@
       border-radius: 10px;
       background: #f1f1f1;
       font-weight: bold;
-      line-height: 1.5;
     }
 
     .loading {
       color: #555;
+      margin-top: 20px;
+    }
+
+    .error {
+      color: #c62828;
+      font-weight: bold;
       margin-top: 20px;
     }
   </style>
@@ -159,8 +159,6 @@
   </button>
 
 
-  <!-- QR -->
-
   <div id="qrBox" class="qr-box">
 
     <h2>Scan & Pay</h2>
@@ -178,13 +176,12 @@
       class="upi">
     </div>
 
-    <p class="timer" id="timer">
+    <p id="timer" class="timer">
       QR Code will close automatically in 2:00
     </p>
 
     <p class="note">
-      QR Code को अपने UPI App से scan करके
-      payment करें।
+      QR Code को अपने UPI App से scan करके payment करें।
       Payment अपने UPI App में खुद approve करें।
       UPI PIN/OTP केवल अपने UPI App में ही डालें।
     </p>
@@ -209,97 +206,125 @@
 <script>
 
 let customerName = "";
-let siteName = "Make Payment";
-let upiId = "";
-let savedAmount = "";
+let amount = 0;
+let customerId = "";
 
 let qrTimer = null;
 let remainingSeconds = 120;
 
 
 /*
-  SERVER से SETTINGS लाना
+  अपनी PAYMENT UPI ID यहाँ डालें
 */
 
-async function loadSettings() {
+const UPI_ID = "YOUR_UPI_ID";
+
+
+/*
+  LINK से customer ID लेना
+  Example:
+
+  payment.html?id=xxxxxxxx
+*/
+
+const urlParams =
+  new URLSearchParams(
+    window.location.search
+  );
+
+customerId =
+  urlParams.get("id");
+
+
+/*
+  CUSTOMER DATA SERVER से लेना
+*/
+
+async function loadCustomer() {
+
+  if (!customerId) {
+
+    showError(
+      "Payment link में customer ID नहीं है।"
+    );
+
+    return;
+  }
+
 
   try {
 
     const response =
-      await fetch("/api/settings", {
-        cache: "no-store"
-      });
-
-
-    if (!response.ok) {
-      throw new Error("Settings not found");
-    }
+      await fetch(
+        "/api/customer-link/" +
+        encodeURIComponent(
+          customerId
+        ),
+        {
+          cache: "no-store"
+        }
+      );
 
 
     const data =
       await response.json();
 
 
+    if (!response.ok) {
+
+      throw new Error(
+        data.message ||
+        "Customer not found"
+      );
+
+    }
+
+
+    const customer =
+      data.customer;
+
+
     customerName =
-      data.customerName || "";
+      customer.name;
 
-    siteName =
-      data.siteName || "Make Payment";
 
-    upiId =
-      data.upiId || "";
-
-    savedAmount =
-      data.defaultAmount || "";
+    amount =
+      Number(customer.amount);
 
 
     /*
-      CUSTOMER
+      Customer name
     */
 
     document.getElementById(
       "customerName"
     ).textContent =
-      customerName || "Customer";
+      customerName;
 
 
     /*
-      SITE NAME
+      Amount
+    */
+
+    document.getElementById(
+      "amount"
+    ).textContent =
+      "₹" +
+      amount.toFixed(2);
+
+
+    /*
+      Site name
     */
 
     document.getElementById(
       "siteName"
     ).textContent =
-      siteName;
+      "Reliance finance";
 
 
     /*
-      AMOUNT
-    */
-
-    const amount =
-      Number(savedAmount);
-
-
-    if (amount > 0) {
-
-      document.getElementById(
-        "amount"
-      ).textContent =
-        "₹" + amount.toFixed(2);
-
-    } else {
-
-      document.getElementById(
-        "amount"
-      ).textContent =
-        "Amount not set";
-
-    }
-
-
-    /*
-      LOADING HIDE
+      Loading हटाना
     */
 
     document.getElementById(
@@ -309,42 +334,49 @@ async function loadSettings() {
 
 
     /*
-      BUTTON ENABLE
+      Button enable
     */
 
     if (
       customerName &&
-      amount > 0 &&
-      upiId
+      amount > 0
     ) {
 
       document.getElementById(
         "continueBtn"
-      ).disabled = false;
+      ).disabled =
+        false;
 
     }
 
 
   } catch (error) {
 
-    document.getElementById(
-      "loading"
-    ).textContent =
-      "Payment settings load नहीं हुईं।";
-
-
-    document.getElementById(
-      "customerName"
-    ).textContent =
-      "Not available";
-
-
-    document.getElementById(
-      "amount"
-    ).textContent =
-      "Not available";
+    showError(
+      "Customer payment details नहीं मिलीं।"
+    );
 
   }
+
+}
+
+
+/*
+  ERROR
+*/
+
+function showError(message) {
+
+  const loading =
+    document.getElementById(
+      "loading"
+    );
+
+  loading.textContent =
+    message;
+
+  loading.className =
+    "error";
 
 }
 
@@ -355,40 +387,49 @@ async function loadSettings() {
 
 function createUPILink() {
 
-  const amount =
-    Number(savedAmount);
+  if (
+    !UPI_ID ||
+    UPI_ID === "YOUR_UPI_ID"
+  ) {
 
-
-  if (!upiId) {
     return null;
+
   }
 
 
-  if (!amount || amount <= 0) {
+  if (
+    !amount ||
+    amount <= 0
+  ) {
+
     return null;
+
   }
 
 
   const transactionId =
-    "PAY" + Date.now();
+    "PAY" +
+    Date.now();
 
 
-  const upiLink =
+  return (
     "upi://pay" +
     "?pa=" +
-    encodeURIComponent(upiId) +
+    encodeURIComponent(UPI_ID) +
     "&pn=" +
-    encodeURIComponent(siteName) +
+    encodeURIComponent(
+      "Reliance finance"
+    ) +
     "&am=" +
     encodeURIComponent(
       amount.toFixed(2)
     ) +
     "&cu=INR" +
     "&tr=" +
-    encodeURIComponent(transactionId);
-
-
-  return upiLink;
+    encodeURIComponent(
+      transactionId
+    )
+  );
 
 }
 
@@ -399,43 +440,6 @@ function createUPILink() {
 
 function continuePayment() {
 
-  const amount =
-    Number(savedAmount);
-
-
-  if (!customerName) {
-
-    alert(
-      "Customer details are not available."
-    );
-
-    return;
-
-  }
-
-
-  if (!amount || amount <= 0) {
-
-    alert(
-      "Amount is not available."
-    );
-
-    return;
-
-  }
-
-
-  if (!upiId) {
-
-    alert(
-      "UPI ID is not available."
-    );
-
-    return;
-
-  }
-
-
   const upiLink =
     createUPILink();
 
@@ -443,7 +447,7 @@ function continuePayment() {
   if (!upiLink) {
 
     alert(
-      "Payment settings are not configured."
+      "UPI ID अभी payment.html में set नहीं है।"
     );
 
     return;
@@ -452,13 +456,15 @@ function continuePayment() {
 
 
   /*
-    QR CODE
+    QR Code
   */
 
   const qrUrl =
     "https://api.qrserver.com/v1/create-qr-code/" +
     "?size=300x300&data=" +
-    encodeURIComponent(upiLink);
+    encodeURIComponent(
+      upiLink
+    );
 
 
   document.getElementById(
@@ -470,13 +476,15 @@ function continuePayment() {
   document.getElementById(
     "upiText"
   ).textContent =
-    "UPI ID: " + upiId;
+    "UPI ID: " +
+    UPI_ID;
 
 
   document.getElementById(
     "amountText"
   ).textContent =
-    "Pay ₹" + amount.toFixed(2);
+    "Pay ₹" +
+    amount.toFixed(2);
 
 
   document.getElementById(
@@ -497,7 +505,7 @@ function continuePayment() {
 
 
 /*
-  TIMER START
+  TIMER
 */
 
 function startQRTimer() {
@@ -517,9 +525,13 @@ function startQRTimer() {
       updateTimer();
 
 
-      if (remainingSeconds <= 0) {
+      if (
+        remainingSeconds <= 0
+      ) {
 
-        clearInterval(qrTimer);
+        clearInterval(
+          qrTimer
+        );
 
         paymentFinished();
 
@@ -529,10 +541,6 @@ function startQRTimer() {
 
 }
 
-
-/*
-  TIMER UPDATE
-*/
 
 function updateTimer() {
 
@@ -552,7 +560,10 @@ function updateTimer() {
     "QR Code will close automatically in " +
     minutes +
     ":" +
-    String(seconds).padStart(2, "0");
+    String(seconds).padStart(
+      2,
+      "0"
+    );
 
 }
 
@@ -563,7 +574,9 @@ function updateTimer() {
 
 function paymentFinished() {
 
-  clearInterval(qrTimer);
+  clearInterval(
+    qrTimer
+  );
 
 
   document.getElementById(
@@ -589,10 +602,10 @@ function paymentFinished() {
 
 
 /*
-  PAGE LOAD
+  START
 */
 
-loadSettings();
+loadCustomer();
 
 </script>
 
