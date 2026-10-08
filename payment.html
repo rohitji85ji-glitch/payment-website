@@ -50,6 +50,13 @@
       font-size: 16px;
     }
 
+    /* Amount box edit नहीं होगा */
+    #amount {
+      background: #f1f1f1;
+      color: #333;
+      cursor: not-allowed;
+    }
+
     .btn {
       width: 100%;
       padding: 14px;
@@ -146,19 +153,18 @@
       placeholder="Your Name"
     >
 
+    <!-- Amount अब edit नहीं किया जा सकता -->
     <input
-      type="number"
+      type="text"
       id="amount"
       placeholder="Amount ₹"
-      min="1"
+      readonly
     >
 
     <button class="btn" onclick="showQR()">
       Continue Payment
     </button>
 
-
-    <!-- QR SECTION -->
     <div id="qrBox" class="qr-box">
 
       <h2>Scan & Pay</h2>
@@ -194,11 +200,9 @@
 
     </div>
 
-
     <div id="status" class="status"></div>
 
   </div>
-
 
   <script>
 
@@ -215,22 +219,20 @@
 
     let remainingSeconds = 120;
 
-
-    // WEBSITE NAME
     if (siteName) {
       document.getElementById("siteName")
         .textContent = siteName;
     }
 
-
-    // DEFAULT AMOUNT
+    /*
+      Admin Settings में जो Amount save होगा,
+      वही यहाँ दिखाई देगा।
+    */
     if (savedAmount) {
       document.getElementById("amount")
         .value = savedAmount;
     }
 
-
-    // CONTINUE PAYMENT
     function showQR() {
 
       const name =
@@ -243,18 +245,15 @@
             .value
         );
 
-
       if (!name) {
         alert("Please enter your name.");
         return;
       }
 
-
       if (!amount || amount <= 0) {
-        alert("Please enter a valid amount.");
+        alert("Valid amount is not set in Admin Settings.");
         return;
       }
-
 
       if (!upiId) {
         alert(
@@ -263,8 +262,6 @@
         return;
       }
 
-
-      // UPI PAYMENT LINK
       const upiLink =
         "upi://pay" +
         "?pa=" +
@@ -279,12 +276,9 @@
         ) +
         "&cu=INR";
 
-
-      // QR CODE
       const qrUrl =
         "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
         encodeURIComponent(upiLink);
-
 
       document.getElementById("qrCode")
         .src = qrUrl;
@@ -297,34 +291,28 @@
         .textContent =
         "Pay ₹" + amount.toFixed(2);
 
-
-      // SHOW QR
       document.getElementById("qrBox")
         .style.display = "block";
 
       document.getElementById("status")
         .style.display = "none";
 
-
-      // START TIMER
       startQRTimer();
 
-
-      // OPEN UPI APP ON MOBILE
+      /*
+        Mobile पर compatible UPI app खोलने की कोशिश।
+        Payment user खुद approve करेगा।
+      */
       if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
 
         setTimeout(function() {
-
           window.location.href = upiLink;
-
         }, 300);
 
       }
 
     }
 
-
-    // START 2 MINUTE TIMER
     function startQRTimer() {
 
       clearInterval(qrTimer);
@@ -333,13 +321,11 @@
 
       updateTimer();
 
-
       qrTimer = setInterval(function() {
 
         remainingSeconds--;
 
         updateTimer();
-
 
         if (remainingSeconds <= 0) {
 
@@ -353,8 +339,6 @@
 
     }
 
-
-    // UPDATE TIMER
     function updateTimer() {
 
       const minutes =
@@ -365,7 +349,6 @@
       const seconds =
         remainingSeconds % 60;
 
-
       document.getElementById("timer")
         .textContent =
         "QR Code will close automatically in " +
@@ -375,8 +358,6 @@
 
     }
 
-
-    // CLOSE QR
     function paymentFinished() {
 
       clearInterval(qrTimer);
@@ -384,10 +365,8 @@
       document.getElementById("qrBox")
         .style.display = "none";
 
-
       const status =
         document.getElementById("status");
-
 
       status.textContent =
         "QR Code has been closed. Payment status has not been automatically verified.";
