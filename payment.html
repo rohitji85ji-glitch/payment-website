@@ -76,6 +76,14 @@
       opacity: 0.9;
     }
 
+    .open-upi {
+      background: #1467d8;
+    }
+
+    .close-btn {
+      background: #555;
+    }
+
     .qr-box {
       display: none;
       margin-top: 25px;
@@ -117,6 +125,7 @@
       color: #666;
       font-size: 13px;
       margin-top: 15px;
+      line-height: 1.5;
     }
 
     .status {
@@ -126,14 +135,6 @@
       border-radius: 10px;
       background: #f1f1f1;
       font-weight: bold;
-    }
-
-    .open-upi {
-      background: #1467d8;
-    }
-
-    .close-btn {
-      background: #555;
     }
   </style>
 </head>
@@ -155,7 +156,7 @@
 
       <div class="info-row">
         <strong>Amount:</strong>
-        <span class="amount" id="amount"></span>
+        <span id="amount" class="amount"></span>
       </div>
 
     </div>
@@ -200,18 +201,16 @@
         Please complete your payment within 2 minutes.
       </p>
 
-      <p
-        id="timer"
-        class="timer"
-      >
+      <p id="timer" class="timer">
         QR Code will close automatically in 2:00
       </p>
 
       <p class="note">
-        Scan the QR code using your UPI app
-        or tap Open UPI App.
-        Approve the payment yourself in your UPI app.
+        अगर UPI App नहीं खुलता है, तो ऊपर दिए गए QR Code को
+        अपने UPI App से scan करके payment करें।
+        Payment अपने UPI App में खुद approve करें।
       </p>
+
 
       <button
         class="btn close-btn"
@@ -233,6 +232,10 @@
 
   <script>
 
+    /* =========================
+       ADMIN SETTINGS DATA
+    ========================= */
+
     const customerName =
       localStorage.getItem("customerName");
 
@@ -251,18 +254,18 @@
     let remainingSeconds = 120;
 
 
-    /*
-      Customer Name
-    */
+    /* =========================
+       CUSTOMER NAME
+    ========================= */
 
     document.getElementById("customerName")
       .textContent =
       customerName || "Customer";
 
 
-    /*
-      Site Name
-    */
+    /* =========================
+       SITE NAME
+    ========================= */
 
     if (siteName) {
 
@@ -272,9 +275,9 @@
     }
 
 
-    /*
-      Amount
-    */
+    /* =========================
+       AMOUNT
+    ========================= */
 
     if (savedAmount) {
 
@@ -292,9 +295,9 @@
     }
 
 
-    /*
-      UPI Link बनाना
-    */
+    /* =========================
+       CREATE UPI LINK
+    ========================= */
 
     function createUPILink() {
 
@@ -302,10 +305,13 @@
         Number(savedAmount);
 
 
-      if (!upiId || !amount || amount <= 0) {
-
+      if (!upiId) {
         return null;
+      }
 
+
+      if (!amount || amount <= 0) {
+        return null;
       }
 
 
@@ -329,9 +335,10 @@
     }
 
 
-    /*
-      Continue Payment
-    */
+    /* =========================
+       CONTINUE PAYMENT
+       सिर्फ QR दिखाएगा
+    ========================= */
 
     function continuePayment() {
 
@@ -372,13 +379,22 @@
       }
 
 
-      /*
-        QR तैयार करें
-      */
-
       const upiLink =
         createUPILink();
 
+
+      if (!upiLink) {
+
+        alert(
+          "Payment settings are not configured."
+        );
+
+        return;
+
+      }
+
+
+      /* QR Code */
 
       const qrUrl =
         "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
@@ -412,29 +428,13 @@
 
       startQRTimer();
 
-
-      /*
-        Mobile में इसी click के दौरान
-        UPI app खोलने की कोशिश।
-      */
-
-      if (
-        /Android|iPhone|iPad|iPod/i.test(
-          navigator.userAgent
-        )
-      ) {
-
-        window.location.href =
-          upiLink;
-
-      }
-
     }
 
 
-    /*
-      Open UPI App button
-    */
+    /* =========================
+       OPEN UPI APP
+       Android Intent
+    ========================= */
 
     function openUPIApp() {
 
@@ -453,15 +453,52 @@
       }
 
 
+      /*
+        Android Chrome के लिए intent URL
+      */
+
+      if (
+        /Android/i.test(
+          navigator.userAgent
+        )
+      ) {
+
+        const query =
+          upiLink.substring(
+            upiLink.indexOf("?") + 1
+          );
+
+
+        const intentUrl =
+          "intent://pay?" +
+          query +
+          "#Intent;" +
+          "scheme=upi;" +
+          "end";
+
+
+        window.location.href =
+          intentUrl;
+
+
+        return;
+
+      }
+
+
+      /*
+        iPhone / दूसरे devices
+      */
+
       window.location.href =
         upiLink;
 
     }
 
 
-    /*
-      QR Timer
-    */
+    /* =========================
+       TIMER
+    ========================= */
 
     function startQRTimer() {
 
@@ -493,9 +530,9 @@
     }
 
 
-    /*
-      Timer दिखाना
-    */
+    /* =========================
+       UPDATE TIMER
+    ========================= */
 
     function updateTimer() {
 
@@ -520,9 +557,9 @@
     }
 
 
-    /*
-      QR बंद करना
-    */
+    /* =========================
+       CLOSE QR
+    ========================= */
 
     function paymentFinished() {
 
