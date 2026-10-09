@@ -8,368 +8,272 @@
 
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;padding:12px 9px;font-family:Arial,sans-serif;
-  color:#101b45;background:linear-gradient(135deg,#eaf4ff,#dce8ff)
-}
-.card{
-  width:100%;max-width:650px;margin:8px auto;padding:24px 20px;
-  background:#fff;border-radius:28px;
-  box-shadow:0 12px 40px #244a781c;text-align:center
-}
+body{margin:0;padding:12px 9px;font-family:Arial,sans-serif;color:#101b45;background:linear-gradient(135deg,#eaf4ff,#dce8ff)}
+.card{width:100%;max-width:650px;margin:8px auto;padding:24px 20px;background:#fff;border-radius:28px;box-shadow:0 12px 40px #244a781c;text-align:center}
 h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
 .subtitle{font-size:21px;color:#64748b;margin-bottom:18px}
 .accent{width:90px;height:6px;margin:0 auto 22px;background:#08c879;border-radius:8px}
-.details{
-  padding:9px 16px;border:1px solid #d8e8ff;
-  border-radius:23px;background:#f5f9ff;text-align:left
-}
+.details{padding:9px 16px;border:1px solid #d8e8ff;border-radius:23px;background:#f5f9ff;text-align:left}
 .row{display:flex;align-items:center;gap:13px;padding:15px 0}
 .row+.row{border-top:1px solid #d7e4f5}
-.detail-icon{
-  width:54px;height:54px;flex-shrink:0;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  color:#087c51;background:#d9fbe9;font-size:27px;font-weight:bold
-}
+.detail-icon{width:54px;height:54px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#087c51;background:#d9fbe9;font-size:27px;font-weight:bold}
 .detail-text{flex:1;min-width:0}
 .label{display:block;color:#64748b;font-size:17px;margin-bottom:4px}
-.value{
-  display:block;font-size:clamp(18px,4.5vw,23px);font-weight:750;
-  overflow-wrap:anywhere;word-break:break-word
-}
+.value{display:block;font-size:clamp(18px,4.5vw,23px);font-weight:750;overflow-wrap:anywhere;word-break:break-word}
 .upi-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.copy-btn{
-  padding:9px 11px;border:1px solid #c6ddff;border-radius:13px;
-  background:#eaf3ff;color:#0752ad;font-size:13px;font-weight:bold
-}
-.qr-title{
-  display:flex;align-items:center;justify-content:center;gap:9px;
-  margin:27px 0 18px;font-size:clamp(21px,5.2vw,30px)
-}
-.qr-title:before,.qr-title:after{
-  content:"";width:26px;height:4px;flex-shrink:0;
-  border-radius:5px;background:#08c879
-}
-.qr-frame{
-  position:relative;width:100%;max-width:430px;margin:0 auto 20px;
-  padding:12px;border-radius:23px;background:#fff;
-  box-shadow:0 7px 25px #244a781c
-}
-.qr-frame:before{
-  content:"";position:absolute;inset:5px;border:4px solid #28c993;
-  border-radius:17px;pointer-events:none
-}
+.copy-btn{padding:9px 11px;border:1px solid #c6ddff;border-radius:13px;background:#eaf3ff;color:#0752ad;font-size:13px;font-weight:bold}
+.qr-title{display:flex;align-items:center;justify-content:center;gap:9px;margin:27px 0 18px;font-size:clamp(21px,5.2vw,30px)}
+.qr-title:before,.qr-title:after{content:"";width:26px;height:4px;flex-shrink:0;border-radius:5px;background:#08c879}
+.qr-frame{position:relative;width:100%;max-width:430px;margin:0 auto 20px;padding:12px;border-radius:23px;background:#fff;box-shadow:0 7px 25px #244a781c}
+.qr-frame:before{content:"";position:absolute;inset:5px;border:4px solid #28c993;border-radius:17px;pointer-events:none}
 #qrImage{position:relative;display:block;width:100%;height:auto}
 .qr-loading{padding:25px 5px;color:#64748b}
-.apps{
-  display:flex;justify-content:space-around;align-items:flex-start;
-  gap:8px;padding:16px 7px 13px;margin:18px 0;
-  background:#f1f6ff;border-radius:22px
-}
+.apps{display:flex;justify-content:space-around;align-items:flex-start;gap:8px;padding:16px 7px 13px;margin:18px 0;background:#f1f6ff;border-radius:22px}
 .app{flex:1;min-width:0;color:#52627f;font-size:12px}
-.logo{
-  width:47px;height:47px;margin:0 auto 7px;background:#fff;
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 13px #00000012
-}
-.logo svg{width:30px;height:30px;display:block}
-.app-name{white-space:normal}
-.timer-box{
-  display:flex;align-items:center;gap:12px;padding:18px 12px;
-  margin:20px 0;border-radius:22px;color:#0645a1;
-  background:linear-gradient(135deg,#e3f2ff,#d5eaff);text-align:left
-}
-.clock{
-  width:47px;height:47px;flex-shrink:0;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:#c4e0ff;font-size:25px
-}
+.logo{width:47px;height:47px;margin:0 auto 7px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 13px #00000012;font-weight:bold}
+.timer-box{display:flex;align-items:center;gap:12px;padding:18px 12px;margin:20px 0;border-radius:22px;color:#0645a1;background:linear-gradient(135deg,#e3f2ff,#d5eaff);text-align:left}
+.clock{width:47px;height:47px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#c4e0ff;font-size:25px}
 #timer{font-size:clamp(19px,4.8vw,28px);font-weight:800}
 .hint{font-size:15px;line-height:1.5;margin:8px 0 0}
 .warning{margin:19px 0;color:#64748b;font-size:14px;line-height:1.65}
-.pay-btn{
-  display:flex;align-items:center;justify-content:center;gap:15px;
-  width:100%;min-height:68px;padding:17px 12px;border:0;
-  border-radius:20px;background:linear-gradient(110deg,#10d987,#00a96a);
-  box-shadow:0 9px 22px #00be7040;color:white;
-  font-size:27px;font-weight:800;cursor:pointer
-}
+.pay-btn{display:flex;align-items:center;justify-content:center;gap:15px;width:100%;min-height:68px;padding:17px 12px;border:0;border-radius:20px;background:linear-gradient(110deg,#10d987,#00a96a);box-shadow:0 9px 22px #00be7040;color:white;font-size:27px;font-weight:800;cursor:pointer}
 .pay-btn:active{transform:scale(.98)}
 .pay-btn:disabled{opacity:.5;cursor:not-allowed}
-.message{
-  padding:15px;border-radius:14px;color:#684d00;
-  background:#fff2c9;line-height:1.6;overflow-wrap:anywhere
-}
+.message{padding:15px;border-radius:14px;color:#684d00;background:#fff2c9;line-height:1.6;overflow-wrap:anywhere}
 [hidden]{display:none!important}
 @media(max-width:420px){
-  .card{padding:20px 13px}
-  .details{padding:7px 10px}
-  .row{gap:10px}
-  .detail-icon{width:47px;height:47px;font-size:23px}
-  .copy-btn{padding:8px}
-  .qr-title{gap:6px}
-  .qr-title:before,.qr-title:after{width:19px}
-  .apps{gap:3px;padding-left:4px;padding-right:4px}
-  .logo{width:41px;height:41px}
-  .logo svg{width:27px;height:27px}
-  .app{font-size:11px}
-  .timer-box{gap:9px}
-  .clock{width:41px;height:41px;font-size:22px}
-  #timer{font-size:20px}
-  .hint{font-size:14px}
-  .pay-btn{font-size:25px}
+.card{padding:20px 13px}.details{padding:7px 10px}.row{gap:10px}.detail-icon{width:47px;height:47px;font-size:23px}.copy-btn{padding:8px}.qr-title{gap:6px}.qr-title:before,.qr-title:after{width:19px}.apps{gap:3px;padding-left:4px;padding-right:4px}.logo{width:41px;height:41px}.app{font-size:11px}.timer-box{gap:9px}.clock{width:41px;height:41px;font-size:22px}#timer{font-size:20px}.hint{font-size:14px}.pay-btn{font-size:25px}
 }
 </style>
 </head>
 
 <body>
 <main class="card">
-  <h1 id="siteName">Payment</h1>
-  <div class="subtitle">Make payment using UPI</div>
-  <div class="accent"></div>
+<h1 id="siteName">Payment</h1>
+<div class="subtitle">Make payment using UPI</div>
+<div class="accent"></div>
 
-  <div id="loading" class="message">Loading payment details...</div>
-  <div id="error" class="message" hidden></div>
+<div id="loading" class="message">Loading payment details...</div>
+<div id="error" class="message" hidden></div>
 
-  <section id="paymentContent" hidden>
-    <div class="details">
-      <div class="row">
-        <div class="detail-icon">👤</div>
-        <div class="detail-text">
-          <span class="label">Customer</span>
-          <strong class="value" id="customerName">-</strong>
-        </div>
-      </div>
+<section id="paymentContent" hidden>
+<div class="details">
+<div class="row">
+<div class="detail-icon">👤</div>
+<div class="detail-text"><span class="label">Customer</span><strong class="value" id="customerName">-</strong></div>
+</div>
+<div class="row">
+<div class="detail-icon">₹</div>
+<div class="detail-text"><span class="label">Amount</span><strong class="value">₹<span id="amount">0.00</span></strong></div>
+</div>
+<div class="row">
+<div class="detail-icon">➤</div>
+<div class="detail-text">
+<span class="label">UPI ID</span>
+<div class="upi-line"><strong class="value" id="upiId">-</strong><button id="copyBtn" class="copy-btn" type="button">▢ Copy</button></div>
+</div>
+</div>
+</div>
 
-      <div class="row">
-        <div class="detail-icon">₹</div>
-        <div class="detail-text">
-          <span class="label">Amount</span>
-          <strong class="value">₹<span id="amount">0.00</span></strong>
-        </div>
-      </div>
+<h2 class="qr-title">Scan QR Code to Pay</h2>
+<div class="qr-frame">
+<div id="qrLoading" class="qr-loading">Preparing QR Code...</div>
+<img id="qrImage" alt="UPI payment QR code" hidden>
+</div>
 
-      <div class="row">
-        <div class="detail-icon">➤</div>
-        <div class="detail-text">
-          <span class="label">UPI ID</span>
-          <div class="upi-line">
-            <strong class="value" id="upiId">-</strong>
-            <button id="copyBtn" class="copy-btn" type="button">▢ Copy</button>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="apps">
+<div class="app"><div class="logo">G</div><div>Google Pay</div></div>
+<div class="app"><div class="logo">पे</div><div>PhonePe</div></div>
+<div class="app"><div class="logo">P</div><div>Paytm</div></div>
+<div class="app"><div class="logo">▲</div><div>BHIM</div></div>
+<div class="app"><div class="logo">UPI</div><div>Other UPI</div></div>
+</div>
 
-    <h2 class="qr-title">Scan QR Code to Pay</h2>
+<div class="timer-box">
+<div class="clock">◷</div>
+<div>
+<div id="timer">Time Remaining: 02:00</div>
+<p class="hint" id="timerMessage">Please scan the QR code using your UPI app.</p>
+</div>
+</div>
 
-    <div class="qr-frame">
-      <div id="qrLoading" class="qr-loading">Preparing QR Code...</div>
-      <img id="qrImage" alt="UPI payment QR code" hidden>
-    </div>
+<p class="warning">Please check the recipient name and amount in your UPI app before confirming payment. The timer only hides the QR code; it does not verify payment.</p>
 
-    <div class="apps">
-      <div class="app"><div class="logo">G</div><div class="app-name">Google Pay</div></div>
-      <div class="app"><div class="logo">पे</div><div class="app-name">PhonePe</div></div>
-      <div class="app"><div class="logo">P</div><div class="app-name">Paytm</div></div>
-      <div class="app"><div class="logo">▲</div><div class="app-name">BHIM</div></div>
-      <div class="app"><div class="logo">UPI</div><div class="app-name">Other UPI</div></div>
-    </div>
-
-    <div class="timer-box">
-      <div class="clock">◷</div>
-      <div>
-        <div id="timer">Time Remaining: 02:00</div>
-        <p class="hint" id="timerMessage">Please scan the QR code using your UPI app.</p>
-      </div>
-    </div>
-
-    <p class="warning">
-      Please check the recipient name and amount in your UPI app before confirming payment.
-      The timer only hides the QR code; it does not verify payment.
-    </p>
-
-    <button class="pay-btn" id="payBtn" type="button">
-      <span>➤</span><span>Pay Now</span><span>›</span>
-    </button>
-  </section>
+<button class="pay-btn" id="payBtn" type="button">
+<span>➤</span><span>Pay Now</span><span>›</span>
+</button>
+</section>
 </main>
 
 <script>
-const loading = document.getElementById("loading");
-const errorBox = document.getElementById("error");
-const paymentContent = document.getElementById("paymentContent");
-const siteNameEl = document.getElementById("siteName");
-const customerNameEl = document.getElementById("customerName");
-const amountEl = document.getElementById("amount");
-const upiIdEl = document.getElementById("upiId");
-const qrImage = document.getElementById("qrImage");
-const qrLoading = document.getElementById("qrLoading");
-const timerEl = document.getElementById("timer");
-const timerMessage = document.getElementById("timerMessage");
-const copyBtn = document.getElementById("copyBtn");
-const payBtn = document.getElementById("payBtn");
+const loading=document.getElementById("loading");
+const errorBox=document.getElementById("error");
+const paymentContent=document.getElementById("paymentContent");
+const siteNameEl=document.getElementById("siteName");
+const customerNameEl=document.getElementById("customerName");
+const amountEl=document.getElementById("amount");
+const upiIdEl=document.getElementById("upiId");
+const qrImage=document.getElementById("qrImage");
+const qrLoading=document.getElementById("qrLoading");
+const timerEl=document.getElementById("timer");
+const timerMessage=document.getElementById("timerMessage");
+const copyBtn=document.getElementById("copyBtn");
+const payBtn=document.getElementById("payBtn");
 
-let upiUri = "";
-let timerInterval = null;
+let upiUri="";
+let timerInterval=null;
 
-function showError(message) {
-  clearInterval(timerInterval);
-  loading.hidden = true;
-  paymentContent.hidden = true;
-  errorBox.textContent = message;
-  errorBox.hidden = false;
+function showError(message){
+clearInterval(timerInterval);
+loading.hidden=true;
+paymentContent.hidden=true;
+errorBox.textContent=message;
+errorBox.hidden=false;
 }
 
-function startTimer() {
-  clearInterval(timerInterval);
-  let left = 120;
-  payBtn.disabled = false;
+function startTimer(){
+clearInterval(timerInterval);
+let left=120;
+payBtn.disabled=false;
 
-  function tick() {
-    const mm = String(Math.floor(left / 60)).padStart(2, "0");
-    const ss = String(left % 60).padStart(2, "0");
-    timerEl.textContent = "Time Remaining: " + mm + ":" + ss;
+function tick(){
+const mm=String(Math.floor(left/60)).padStart(2,"0");
+const ss=String(left%60).padStart(2,"0");
+timerEl.textContent="Time Remaining: "+mm+":"+ss;
 
-    if (left <= 0) {
-      clearInterval(timerInterval);
-      qrImage.hidden = true;
-      qrLoading.hidden = false;
-      qrLoading.textContent = "Time expired. Reopen the payment link for a new QR code.";
-      timerEl.textContent = "Time Expired";
-      timerMessage.textContent = "Please reopen the payment link to generate a new QR code.";
-      payBtn.disabled = true;
-      return;
-    }
-    left--;
-  }
-
-  tick();
-  timerInterval = setInterval(tick, 1000);
+if(left<=0){
+clearInterval(timerInterval);
+qrImage.hidden=true;
+qrLoading.hidden=false;
+qrLoading.textContent="Time expired. Reopen the payment link for a new QR code.";
+timerEl.textContent="Time Expired";
+timerMessage.textContent="Please reopen the payment link to generate a new QR code.";
+payBtn.disabled=true;
+return;
+}
+left--;
+}
+tick();
+timerInterval=setInterval(tick,1000);
 }
 
-function createQrUrl(data) {
-  const url = new URL("https://api.qrserver.com/v1/create-qr-code/");
-  url.searchParams.set("size", "600x600");
-  url.searchParams.set("margin", "12");
-  url.searchParams.set("data", data);
-  return url.toString();
+function createQrUrl(data){
+const url=new URL("https://api.qrserver.com/v1/create-qr-code/");
+url.searchParams.set("size","600x600");
+url.searchParams.set("margin","12");
+url.searchParams.set("data",data);
+return url.toString();
 }
 
-function loadQr(data) {
-  qrLoading.hidden = false;
-  qrLoading.textContent = "Preparing QR Code...";
-  qrImage.hidden = true;
+function loadQr(data){
+qrLoading.hidden=false;
+qrLoading.textContent="Preparing QR Code...";
+qrImage.hidden=true;
 
-  qrImage.onload = function() {
-    qrImage.hidden = false;
-    qrLoading.hidden = true;
-    loading.hidden = true;
-    paymentContent.hidden = false;
-    startTimer();
-  };
+qrImage.onload=function(){
+qrImage.hidden=false;
+qrLoading.hidden=true;
+loading.hidden=true;
+paymentContent.hidden=false;
+startTimer();
+};
 
-  qrImage.onerror = function() {
-    showError("QR Code could not load. Please check your internet connection and reopen the link.");
-  };
-
-  qrImage.src = createQrUrl(data);
+qrImage.onerror=function(){
+showError("QR Code could not load. Please check your internet connection and reopen the link.");
+};
+qrImage.src=createQrUrl(data);
 }
 
-async function loadPayment() {
-  const id = new URLSearchParams(location.search).get("id");
-
-  if (!id) {
-    showError("Customer ID is missing. Open the correct payment link from Admin Panel.");
-    return;
-  }
-
-  try {
-    const [customerResponse, settingsResponse] = await Promise.all([
-      fetch("/api/customer-link/" + encodeURIComponent(id)),
-      fetch("/api/settings")
-    ]);
-
-    if (!customerResponse.ok) {
-      throw new Error("Payment link not found. Please create a new link in Admin Panel.");
-    }
-
-    if (!settingsResponse.ok) {
-      throw new Error("Payment settings could not be loaded.");
-    }
-
-    const customerResult = await customerResponse.json();
-    const settingsResult = await settingsResponse.json();
-    const customer = customerResult.customer || customerResult;
-    const settings = settingsResult.settings || settingsResult;
-
-    const name = String(
-      customer.name || customer.customerName || customer.customer_name || ""
-    ).trim();
-
-    const amount = Number(customer.amount);
-    const upiId = String(settings.upiId || settings.upi_id || "").trim();
-    const siteName = String(
-      settings.siteName || settings.site_name || "Payment"
-    ).trim();
-
-    if (!name || !Number.isFinite(amount) || amount <= 0 || !upiId) {
-      throw new Error("Customer name, valid amount, or UPI ID is missing. Check Admin Settings.");
-    }
-
-    if (upiId.includes(" ") || !upiId.includes("@")) {
-      throw new Error("UPI ID format looks incorrect. Please check Admin Settings.");
-    }
-
-    siteNameEl.textContent = siteName;
-    document.title = siteName + " - Payment";
-    customerNameEl.textContent = name;
-    amountEl.textContent = amount.toFixed(2);
-    upiIdEl.textContent = upiId;
-
-    const params = new URLSearchParams();
-    params.set("pa", upiId);
-    params.set("pn", siteName);
-    params.set("am", amount.toFixed(2));
-    params.set("cu", "INR");
-    params.set("tn", "Customer Payment");
-
-    upiUri = "upi://pay?" + params.toString();
-
-    loading.hidden = true;
-    paymentContent.hidden = false;
-    loadQr(upiUri);
-
-  } catch (error) {
-    showError(error.message || "Payment page could not load.");
-  }
+async function loadPayment(){
+const id=new URLSearchParams(location.search).get("id");
+if(!id){
+showError("Customer ID is missing. Open the correct payment link from Admin Panel.");
+return;
 }
 
-copyBtn.addEventListener("click", async function() {
-  const value = upiIdEl.textContent;
+try{
+const [customerResponse,settingsResponse]=await Promise.all([
+fetch("/api/customer-link/"+encodeURIComponent(id)),
+fetch("/api/settings")
+]);
 
-  try {
-    await navigator.clipboard.writeText(value);
-    copyBtn.textContent = "Copied!";
-    setTimeout(() => copyBtn.textContent = "▢ Copy", 1600);
-  } catch {
-    window.prompt("Copy UPI ID:", value);
-  }
+if(!customerResponse.ok)throw new Error("Payment link not found. Please create a new link in Admin Panel.");
+if(!settingsResponse.ok)throw new Error("Payment settings could not be loaded.");
+
+const customerResult=await customerResponse.json();
+const settingsResult=await settingsResponse.json();
+const customer=customerResult.customer||customerResult;
+const settings=settingsResult.settings||settingsResult;
+
+const name=String(customer.name||customer.customerName||customer.customer_name||"").trim();
+const amount=Number(customer.amount);
+const upiId=String(settings.upiId||settings.upi_id||"").trim();
+const siteName=String(settings.siteName||settings.site_name||"Payment").trim();
+
+if(!name||!Number.isFinite(amount)||amount<=0||!upiId){
+throw new Error("Customer name, valid amount, or UPI ID is missing. Check Admin Settings.");
+}
+if(upiId.includes(" ")||!upiId.includes("@")){
+throw new Error("UPI ID format looks incorrect. Please check Admin Settings.");
+}
+
+siteNameEl.textContent=siteName;
+document.title=siteName+" - Payment";
+customerNameEl.textContent=name;
+amountEl.textContent=amount.toFixed(2);
+upiIdEl.textContent=upiId;
+
+const params=new URLSearchParams();
+params.set("pa",upiId);
+params.set("pn",siteName);
+params.set("am",amount.toFixed(2));
+params.set("cu","INR");
+params.set("tn","Customer Payment");
+upiUri="upi://pay?"+params.toString();
+
+loading.hidden=true;
+paymentContent.hidden=false;
+loadQr(upiUri);
+
+}catch(error){
+showError(error.message||"Payment page could not load.");
+}
+}
+
+copyBtn.addEventListener("click",async function(){
+const value=upiIdEl.textContent;
+try{
+await navigator.clipboard.writeText(value);
+copyBtn.textContent="Copied!";
+setTimeout(()=>copyBtn.textContent="▢ Copy",1600);
+}catch{
+window.prompt("Copy UPI ID:",value);
+}
 });
 
-/* Pay Now: open the UPI payment URI directly */
-payBtn.addEventListener("click", function() {
-  if (!upiUri) {
-    alert("Payment details are not ready. Please reload the page.");
-    return;
-  }
+/* Pay Now handler */
+payBtn.addEventListener("click",function(){
+if(!upiUri){
+alert("Payment details are not ready. Please reload the page.");
+return;
+}
+if(payBtn.disabled){
+alert("The payment QR has expired. Reopen the payment link.");
+return;
+}
 
-  if (payBtn.disabled) {
-    alert("The payment QR has expired. Reopen the payment link.");
-    return;
-  }
-
-  window.location.href = upiUri;
+try{
+const paymentUrl=new URL(upiUri);
+if(paymentUrl.protocol!=="upi:"||
+!paymentUrl.searchParams.get("pa")||
+!paymentUrl.searchParams.get("am")){
+alert("UPI ID or amount is missing. Check payment settings.");
+return;
+}
+window.location.assign(paymentUrl.href);
+}catch(error){
+alert("Unable to open UPI payment. Please check the UPI ID and amount.");
+}
 });
 
 loadPayment();
