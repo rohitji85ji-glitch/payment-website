@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#edf5fc">
   <title>Payment</title>
 
   <style>
@@ -12,110 +13,143 @@
 
     body {
       margin: 0;
-      padding: 20px;
+      padding: 20px 12px;
       font-family: Arial, sans-serif;
-      background: #eef2f8;
-      color: #222;
+      background: linear-gradient(135deg, #edf5fc, #e8edf7);
+      color: #101b3b;
     }
 
     .payment-card {
       width: 100%;
       max-width: 650px;
-      margin: 40px auto;
-      padding: 32px;
+      margin: 25px auto;
+      padding: 30px;
       background: #fff;
-      border-radius: 38px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+      border-radius: 32px;
+      box-shadow: 0 15px 45px rgba(30, 60, 100, 0.12);
       text-align: center;
     }
 
     h1 {
-      margin: 10px 0 25px;
-      font-size: 40px;
+      margin: 5px 0 10px;
+      font-size: clamp(30px, 7vw, 44px);
       overflow-wrap: anywhere;
     }
 
     .subtitle {
-      color: #666;
-      font-size: 25px;
-      margin-bottom: 35px;
+      margin-bottom: 25px;
+      color: #64748b;
+      font-size: 22px;
+    }
+
+    .subtitle::after {
+      content: "";
+      display: block;
+      width: 75px;
+      height: 5px;
+      margin: 18px auto 0;
+      background: #10b981;
+      border-radius: 10px;
     }
 
     .details {
-      background: #f4f4f4;
-      padding: 25px 12px;
-      border-radius: 25px;
+      padding: 20px;
       margin: 25px 0;
-      font-size: 23px;
-      line-height: 1.8;
-      overflow-wrap: anywhere;
+      text-align: left;
+      background: #f5f8fc;
+      border: 1px solid #e4ebf4;
+      border-radius: 25px;
     }
 
     .details p {
-      margin: 5px 0;
+      margin: 0;
+      padding: 17px 0;
+      font-size: 20px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .details p + p {
+      border-top: 1px solid #dce5ef;
+    }
+
+    .details strong {
+      color: #64748b;
     }
 
     .qr-section {
-      margin-top: 30px;
-      padding-top: 25px;
-      border-top: 1px solid #ddd;
+      padding-top: 20px;
+      border-top: 1px solid #dce5ef;
     }
 
     .qr-section h2 {
-      font-size: 30px;
+      margin: 15px 0 22px;
+      font-size: clamp(23px, 5.5vw, 32px);
+      color: #101b3b;
     }
 
     #qrImage {
       display: block;
       width: 100%;
-      max-width: 550px;
+      max-width: 430px;
       height: auto;
-      margin: 25px auto;
-      border-radius: 18px;
+      margin: 20px auto;
+      padding: 10px;
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 8px 30px rgba(20, 40, 70, 0.12);
     }
 
     .timer-box {
-      padding: 25px 15px;
-      background: #e6f3ff;
-      color: #234d70;
-      border-radius: 22px;
-      margin: 25px 0;
+      padding: 22px 14px;
+      margin: 22px 0;
+      color: #174a91;
+      background: linear-gradient(135deg, #e6f4ff, #dceeff);
+      border-radius: 23px;
     }
 
     #timer {
-      font-size: 30px;
-      font-weight: bold;
+      font-size: clamp(23px, 5vw, 31px);
+      font-weight: 700;
     }
 
     .hint {
-      font-size: 19px;
-      line-height: 1.6;
+      margin-bottom: 0;
+      font-size: 17px;
+      line-height: 1.7;
     }
 
     .warning {
-      color: #777;
+      margin: 22px 0;
+      color: #7b8493;
       font-size: 16px;
-      line-height: 1.6;
-      margin: 25px 0;
+      line-height: 1.7;
     }
 
     .close-btn {
       width: 100%;
-      padding: 22px 10px;
+      padding: 19px 12px;
       border: none;
-      border-radius: 18px;
-      background: #d92d32;
-      color: white;
-      font-size: 24px;
+      border-radius: 20px;
+      color: #fff;
+      background: linear-gradient(135deg, #ef3038, #d91f2b);
+      box-shadow: 0 8px 18px rgba(220, 30, 45, 0.2);
+      font-size: 23px;
+      font-weight: 600;
       cursor: pointer;
+    }
+
+    .close-btn:active {
+      transform: scale(0.98);
     }
 
     .message {
       padding: 16px;
+      border-radius: 14px;
       background: #fff3cd;
-      border-radius: 12px;
       color: #664d03;
       overflow-wrap: anywhere;
+      line-height: 1.6;
     }
 
     [hidden] {
@@ -128,33 +162,21 @@
       }
 
       .payment-card {
-        margin: 20px auto;
-        padding: 22px 18px;
-        border-radius: 28px;
-      }
-
-      h1 {
-        font-size: 34px;
-      }
-
-      .subtitle {
-        font-size: 21px;
+        margin: 12px auto;
+        padding: 22px 17px;
+        border-radius: 27px;
       }
 
       .details {
-        font-size: 20px;
+        padding: 15px;
       }
 
-      .qr-section h2 {
-        font-size: 25px;
+      .details p {
+        font-size: 18px;
       }
 
-      #timer {
-        font-size: 26px;
-      }
-
-      .hint {
-        font-size: 17px;
+      #qrImage {
+        max-width: 100%;
       }
     }
   </style>
@@ -192,7 +214,11 @@
       <section class="qr-section">
         <h2 id="qrHeading">Scan QR Code to Pay</h2>
 
-        <img id="qrImage" alt="UPI Payment QR Code" hidden>
+        <img
+          id="qrImage"
+          alt="UPI Payment QR Code"
+          hidden
+        >
 
         <div class="timer-box">
           <div id="timer">Time Remaining: 02:00</div>
@@ -205,12 +231,12 @@
 
         <p class="warning">
           यह टाइमर केवल QR Code को स्क्रीन पर दिखाने का समय नियंत्रित करता है।
-          यह भुगतान की पुष्टि नहीं करता। भुगतान से पहले UPI ऐप में
+          यह भुगतान की पुष्टि नहीं करता। भुगतान करने से पहले अपने UPI ऐप में
           प्राप्तकर्ता का नाम और रकम जाँच लें।
         </p>
 
         <button class="close-btn" id="closeBtn" type="button">
-          Close QR
+          ✕ Close QR
         </button>
       </section>
     </section>
@@ -220,10 +246,12 @@
     const loading = document.getElementById("loading");
     const errorBox = document.getElementById("error");
     const paymentContent = document.getElementById("paymentContent");
+
     const siteNameEl = document.getElementById("siteName");
     const customerNameEl = document.getElementById("customerName");
     const amountEl = document.getElementById("amount");
     const upiIdEl = document.getElementById("upiId");
+
     const qrImage = document.getElementById("qrImage");
     const timerEl = document.getElementById("timer");
     const timerMessage = document.getElementById("timerMessage");
@@ -234,6 +262,7 @@
     let qrClosed = false;
 
     function showError(message) {
+      clearInterval(timerInterval);
       loading.hidden = true;
       paymentContent.hidden = true;
       errorBox.textContent = message;
@@ -243,15 +272,19 @@
     function hideQR() {
       qrClosed = true;
       clearInterval(timerInterval);
+
       qrImage.hidden = true;
       qrHeading.textContent = "QR Code बंद है";
       timerEl.textContent = "Time समाप्त";
       timerMessage.textContent =
-        "QR Code छिपा दिया गया है। नया लिंक खोलकर दोबारा प्रयास करें।";
+        "QR Code छिपा दिया गया है। दोबारा खोलने के लिए Payment Link खोलें।";
+
       closeBtn.hidden = true;
     }
 
     function startTimer() {
+      clearInterval(timerInterval);
+
       let secondsLeft = 120;
       qrClosed = false;
 
@@ -284,7 +317,9 @@
       const id = params.get("id");
 
       if (!id) {
-        showError("Payment link में Customer ID नहीं है। Admin Panel से सही लिंक खोलें।");
+        showError(
+          "Payment Link में Customer ID नहीं है। Admin Panel से सही लिंक खोलें।"
+        );
         return;
       }
 
@@ -295,11 +330,13 @@
         ]);
 
         if (!customerResponse.ok) {
-          throw new Error("Customer link नहीं मिला। Admin Panel से नया लिंक बनाएँ।");
+          throw new Error(
+            "Customer Link नहीं मिला। Admin Panel से नया लिंक बनाएँ।"
+          );
         }
 
         if (!settingsResponse.ok) {
-          throw new Error("Website की payment settings लोड नहीं हुईं।");
+          throw new Error("Payment Settings लोड नहीं हुईं।");
         }
 
         const customerResult = await customerResponse.json();
@@ -343,11 +380,12 @@
 
         siteNameEl.textContent = siteName;
         document.title = siteName + " - Payment";
+
         customerNameEl.textContent = name;
         amountEl.textContent = amount.toFixed(2);
         upiIdEl.textContent = upiId;
 
-        // UPI भुगतान की जानकारी से QR तैयार करें।
+        // QR में ग्राहक की वास्तविक UPI ID और रकम रखी जाती है।
         const upiUri = new URL("upi://pay");
         upiUri.searchParams.set("pa", upiId);
         upiUri.searchParams.set("pn", name);
@@ -355,6 +393,7 @@
         upiUri.searchParams.set("cu", "INR");
         upiUri.searchParams.set("tn", "Customer Payment");
 
+        // QR इमेज ऑनलाइन सेवा से बनती है।
         const qrUrl = new URL(
           "https://api.qrserver.com/v1/create-qr-code/"
         );
@@ -368,12 +407,14 @@
           loading.hidden = true;
           errorBox.hidden = true;
           paymentContent.hidden = false;
+
+          // QR लोड होने पर टाइमर अपने आप शुरू होता है।
           startTimer();
         };
 
         qrImage.onerror = function () {
           showError(
-            "QR Code लोड नहीं हुआ। इंटरनेट कनेक्शन जाँचकर पेज दोबारा खोलें।"
+            "QR Code लोड नहीं हुआ। इंटरनेट जाँचकर पेज दोबारा खोलें।"
           );
         };
 
