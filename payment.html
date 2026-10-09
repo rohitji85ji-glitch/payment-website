@@ -395,10 +395,12 @@ copyBtn.addEventListener("click", async function() {
 });
 
 payBtn.addEventListener("click", function() {
-  if (!upiUri) {
-    alert("Payment details load nahi hui hain.");
-    return;
-  }
+  if (!upiUri) return;
+
+  const params = upiUri.replace(/^upi:\/\/pay\?/, "");
+  window.location.href = "intent://pay?" + params +
+    "#Intent;scheme=upi;end";
+});
 
   window.location.href = upiUri;
 });
