@@ -18,7 +18,7 @@ body{
   box-shadow:0 12px 40px #244a781c;text-align:center
 }
 h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
-.subtitle{font-size:21px;color:#64748b;margin-bottom:18px}
+.subtitle{font-size:18px;color:#64748b;margin-bottom:18px}
 .accent{width:90px;height:6px;margin:0 auto 22px;background:#08c879;border-radius:8px}
 .details{
   padding:9px 16px;border:1px solid #d8e8ff;
@@ -27,14 +27,14 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
 .row{display:flex;align-items:center;gap:13px;padding:15px 0}
 .row+.row{border-top:1px solid #d7e4f5}
 .detail-icon{
-  width:54px;height:54px;flex-shrink:0;border-radius:50%;
+  width:48px;height:48px;flex-shrink:0;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  color:#087c51;background:#d9fbe9;font-size:27px;font-weight:bold
+  color:#087c51;background:#d9fbe9;font-size:24px;font-weight:bold
 }
 .detail-text{flex:1;min-width:0}
-.label{display:block;color:#64748b;font-size:17px;margin-bottom:4px}
+.label{display:block;color:#64748b;font-size:15px;margin-bottom:5px}
 .value{
-  display:block;font-size:clamp(18px,4.5vw,23px);font-weight:750;
+  display:block;font-size:clamp(17px,4.5vw,22px);font-weight:750;
   overflow-wrap:anywhere;word-break:break-word
 }
 .upi-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -44,14 +44,14 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
 }
 .qr-title{
   display:flex;align-items:center;justify-content:center;gap:9px;
-  margin:27px 0 18px;font-size:clamp(21px,5.2vw,30px)
+  margin:27px 0 18px;font-size:clamp(21px,5.2vw,28px)
 }
 .qr-title:before,.qr-title:after{
-  content:"";width:26px;height:4px;flex-shrink:0;
+  content:"";width:23px;height:4px;flex-shrink:0;
   border-radius:5px;background:#08c879
 }
 .qr-frame{
-  position:relative;width:100%;max-width:430px;margin:0 auto 20px;
+  position:relative;width:100%;max-width:400px;margin:0 auto 20px;
   padding:12px;border-radius:23px;background:#fff;
   box-shadow:0 7px 25px #244a781c
 }
@@ -63,36 +63,36 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
 .qr-loading{padding:25px 5px;color:#64748b}
 .apps{
   display:flex;justify-content:space-around;align-items:flex-start;
-  gap:8px;padding:16px 7px 13px;margin:18px 0;
+  gap:8px;padding:16px 7px;margin:18px 0;
   background:#f1f6ff;border-radius:22px
 }
 .app{flex:1;min-width:0;color:#52627f;font-size:12px}
 .logo{
-  width:47px;height:47px;margin:0 auto 7px;background:#fff;
+  width:43px;height:43px;margin:0 auto 7px;background:#fff;
   border-radius:50%;display:flex;align-items:center;justify-content:center;
   box-shadow:0 4px 13px #00000012
 }
-.logo svg{width:30px;height:30px;display:block}
+.logo svg{width:28px;height:28px;display:block}
 .app-name{white-space:normal}
 .timer-box{
-  display:flex;align-items:center;gap:12px;padding:18px 12px;
+  display:flex;align-items:center;gap:12px;padding:17px 12px;
   margin:20px 0;border-radius:22px;color:#0645a1;
   background:linear-gradient(135deg,#e3f2ff,#d5eaff);text-align:left
 }
 .clock{
-  width:47px;height:47px;flex-shrink:0;border-radius:50%;
+  width:43px;height:43px;flex-shrink:0;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  background:#c4e0ff;font-size:25px
+  background:#c4e0ff;font-size:24px
 }
-#timer{font-size:clamp(19px,4.8vw,28px);font-weight:800}
-.hint{font-size:15px;line-height:1.5;margin:8px 0 0}
-.warning{margin:19px 0;color:#64748b;font-size:14px;line-height:1.65}
+#timer{font-size:clamp(18px,4.5vw,25px);font-weight:800}
+.hint{font-size:14px;line-height:1.5;margin:8px 0 0}
+.warning{margin:19px 0;color:#64748b;font-size:13px;line-height:1.65}
 .pay-btn{
   display:flex;align-items:center;justify-content:center;gap:15px;
-  width:100%;min-height:68px;padding:17px 12px;border:0;
+  width:100%;min-height:65px;padding:17px 12px;border:0;
   border-radius:20px;background:linear-gradient(110deg,#10d987,#00a96a);
   box-shadow:0 9px 22px #00be7040;color:white;
-  font-size:27px;font-weight:800;cursor:pointer
+  font-size:25px;font-weight:800;cursor:pointer
 }
 .pay-btn:active{transform:scale(.98)}
 .message{
@@ -104,19 +104,18 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
   .card{padding:20px 13px}
   .details{padding:7px 10px}
   .row{gap:10px}
-  .detail-icon{width:47px;height:47px;font-size:23px}
+  .detail-icon{width:43px;height:43px;font-size:21px}
   .copy-btn{padding:8px}
   .qr-title{gap:6px}
-  .qr-title:before,.qr-title:after{width:19px}
+  .qr-title:before,.qr-title:after{width:17px}
   .apps{gap:3px;padding-left:4px;padding-right:4px}
-  .logo{width:41px;height:41px}
-  .logo svg{width:27px;height:27px}
-  .app{font-size:11px}
+  .logo{width:38px;height:38px}
+  .logo svg{width:25px;height:25px}
+  .app{font-size:10px}
   .timer-box{gap:9px}
-  .clock{width:41px;height:41px;font-size:22px}
-  #timer{font-size:20px}
-  .hint{font-size:14px}
-  .pay-btn{font-size:25px}
+  .clock{width:39px;height:39px;font-size:21px}
+  #timer{font-size:18px}
+  .pay-btn{font-size:23px}
 }
 </style>
 </head>
@@ -167,10 +166,9 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
       <img id="qrImage" alt="UPI payment QR code" hidden>
     </div>
 
-    <!-- App-style vector icons; decorative only -->
     <div class="apps">
       <div class="app">
-        <div class="logo" aria-label="Google Pay icon">
+        <div class="logo">
           <svg viewBox="0 0 40 40" aria-hidden="true">
             <path d="M29 8a15 15 0 0 0-20 4l6 5a8 8 0 0 1 12-2z" fill="#4285F4"/>
             <path d="M9 12a15 15 0 0 0 0 16l6-5a8 8 0 0 1 0-6z" fill="#34A853"/>
@@ -178,49 +176,35 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
             <path d="M29 8l-6 7a8 8 0 0 1 0 10l6 7a15 15 0 0 0 0-24z" fill="#EA4335"/>
           </svg>
         </div>
-        <div class="app-name">Google Pay</div>
+        Google Pay
       </div>
-
       <div class="app">
-        <div class="logo" aria-label="PhonePe style icon">
+        <div class="logo">
           <svg viewBox="0 0 40 40" aria-hidden="true">
             <circle cx="20" cy="20" r="20" fill="#5F259F"/>
             <text x="20" y="28" text-anchor="middle" font-size="23" font-weight="bold" fill="#fff">पे</text>
           </svg>
         </div>
-        <div class="app-name">PhonePe</div>
+        PhonePe
       </div>
-
       <div class="app">
-        <div class="logo" aria-label="Paytm style icon">
+        <div class="logo">
           <svg viewBox="0 0 40 40" aria-hidden="true">
             <text x="20" y="25" text-anchor="middle" font-size="13" font-weight="bold" fill="#00A5E8">Paytm</text>
             <path d="M8 29h24" stroke="#203B87" stroke-width="3" stroke-linecap="round"/>
           </svg>
         </div>
-        <div class="app-name">Paytm</div>
+        Paytm
       </div>
-
       <div class="app">
-        <div class="logo" aria-label="BHIM style icon">
+        <div class="logo">
           <svg viewBox="0 0 40 40" aria-hidden="true">
             <path d="M20 5L34 31H6z" fill="#138808"/>
             <path d="M20 5L27 18H13z" fill="#FF9933"/>
             <path d="M17 22l-4 7h14l-4-7z" fill="#fff"/>
           </svg>
         </div>
-        <div class="app-name">BHIM</div>
-      </div>
-
-      <div class="app">
-        <div class="logo" aria-label="Other UPI apps">
-          <svg viewBox="0 0 40 40" aria-hidden="true">
-            <circle cx="20" cy="20" r="19" fill="#172B45"/>
-            <text x="20" y="24" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">UPI</text>
-            <path d="M25 27q4 2 7-1" fill="none" stroke="#F6A623" stroke-width="2"/>
-          </svg>
-        </div>
-        <div class="app-name">Other UPI</div>
+        BHIM
       </div>
     </div>
 
@@ -233,8 +217,8 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
     </div>
 
     <p class="warning">
-      Please check the recipient name and amount in your UPI app before confirming payment.
-      The timer only hides the QR code; it does not verify payment.
+      Before paying, verify the recipient name and amount in your UPI app.
+      The timer only hides the QR code. It does not verify payment.
     </p>
 
     <button class="pay-btn" id="payBtn" type="button">
@@ -246,6 +230,8 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
 </main>
 
 <script>
+"use strict";
+
 const loading = document.getElementById("loading");
 const errorBox = document.getElementById("error");
 const paymentContent = document.getElementById("paymentContent");
@@ -269,6 +255,14 @@ function showError(message) {
   paymentContent.hidden = true;
   errorBox.textContent = message;
   errorBox.hidden = false;
+}
+
+function createQrUrl(data) {
+  const url = new URL("https://api.qrserver.com/v1/create-qr-code/");
+  url.searchParams.set("size", "600x600");
+  url.searchParams.set("margin", "12");
+  url.searchParams.set("data", data);
+  return url.toString();
 }
 
 function startTimer() {
@@ -296,14 +290,6 @@ function startTimer() {
   timerInterval = setInterval(tick, 1000);
 }
 
-function createQrUrl(data) {
-  const url = new URL("https://api.qrserver.com/v1/create-qr-code/");
-  url.searchParams.set("size", "600x600");
-  url.searchParams.set("margin", "12");
-  url.searchParams.set("data", data);
-  return url.toString();
-}
-
 function loadQr(data) {
   qrLoading.hidden = false;
   qrLoading.textContent = "Preparing QR Code...";
@@ -318,14 +304,14 @@ function loadQr(data) {
   };
 
   qrImage.onerror = function() {
-    showError("QR Code could not load. Please check your internet connection and reopen the link.");
+    showError("QR Code could not load. Check your internet connection and reopen the payment link.");
   };
 
   qrImage.src = createQrUrl(data);
 }
 
 async function loadPayment() {
-  const id = new URLSearchParams(location.search).get("id");
+  const id = new URLSearchParams(window.location.search).get("id");
 
   if (!id) {
     showError("Customer ID is missing. Open the correct payment link from Admin Panel.");
@@ -350,7 +336,10 @@ async function loadPayment() {
     const settings = await settingsResponse.json();
     const customer = customerResult.customer || customerResult;
 
-    const name = String(customer.name || customer.customerName || customer.customer_name || "").trim();
+    const name = String(
+      customer.name || customer.customerName || customer.customer_name || ""
+    ).trim();
+
     const amount = Number(customer.amount);
     const upiId = String(settings.upiId || settings.upi_id || "").trim();
     const siteName = String(settings.siteName || settings.site_name || "Payment").trim();
@@ -385,17 +374,26 @@ async function loadPayment() {
 
 copyBtn.addEventListener("click", async function() {
   const value = upiIdEl.textContent;
+
   try {
     await navigator.clipboard.writeText(value);
     copyBtn.textContent = "Copied!";
-    setTimeout(() => copyBtn.textContent = "▢ Copy", 1600);
+    setTimeout(() => {
+      copyBtn.textContent = "▢ Copy";
+    }, 1600);
   } catch {
     window.prompt("Copy UPI ID:", value);
   }
 });
 
 payBtn.addEventListener("click", function() {
-  if (upiUri) window.location.href = upiUri;
+  if (!upiUri) {
+    alert("Payment details are not ready.");
+    return;
+  }
+
+  // Mobile browser UPI handoff. Actual available apps depend on the device.
+  window.location.href = upiUri;
 });
 
 loadPayment();
