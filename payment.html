@@ -167,10 +167,9 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
       <img id="qrImage" alt="UPI payment QR code" hidden>
     </div>
 
-    <!-- App-style vector icons; decorative only -->
     <div class="apps">
       <div class="app">
-        <div class="logo" aria-label="Google Pay icon">
+        <div class="logo">
           <svg viewBox="0 0 40 40" aria-hidden="true">
             <path d="M29 8a15 15 0 0 0-20 4l6 5a8 8 0 0 1 12-2z" fill="#4285F4"/>
             <path d="M9 12a15 15 0 0 0 0 16l6-5a8 8 0 0 1 0-6z" fill="#34A853"/>
@@ -182,7 +181,7 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
       </div>
 
       <div class="app">
-        <div class="logo" aria-label="PhonePe style icon">
+        <div class="logo">
           <svg viewBox="0 0 40 40" aria-hidden="true">
             <circle cx="20" cy="20" r="20" fill="#5F259F"/>
             <text x="20" y="28" text-anchor="middle" font-size="23" font-weight="bold" fill="#fff">पे</text>
@@ -192,7 +191,7 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
       </div>
 
       <div class="app">
-        <div class="logo" aria-label="Paytm style icon">
+        <div class="logo">
           <svg viewBox="0 0 40 40" aria-hidden="true">
             <text x="20" y="25" text-anchor="middle" font-size="13" font-weight="bold" fill="#00A5E8">Paytm</text>
             <path d="M8 29h24" stroke="#203B87" stroke-width="3" stroke-linecap="round"/>
@@ -202,7 +201,7 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
       </div>
 
       <div class="app">
-        <div class="logo" aria-label="BHIM style icon">
+        <div class="logo">
           <svg viewBox="0 0 40 40" aria-hidden="true">
             <path d="M20 5L34 31H6z" fill="#138808"/>
             <path d="M20 5L27 18H13z" fill="#FF9933"/>
@@ -213,11 +212,10 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
       </div>
 
       <div class="app">
-        <div class="logo" aria-label="Other UPI apps">
+        <div class="logo">
           <svg viewBox="0 0 40 40" aria-hidden="true">
             <circle cx="20" cy="20" r="19" fill="#172B45"/>
             <text x="20" y="24" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">UPI</text>
-            <path d="M25 27q4 2 7-1" fill="none" stroke="#F6A623" stroke-width="2"/>
           </svg>
         </div>
         <div class="app-name">Other UPI</div>
@@ -287,6 +285,7 @@ function startTimer() {
       qrLoading.textContent = "Time expired. Reopen the payment link for a new QR code.";
       timerEl.textContent = "Time Expired";
       timerMessage.textContent = "Please reopen the payment link to generate a new QR code.";
+      payBtn.disabled = true;
       return;
     }
     left--;
@@ -394,8 +393,25 @@ copyBtn.addEventListener("click", async function() {
   }
 });
 
+/* Changed only Pay Now handler */
 payBtn.addEventListener("click", function() {
-  if (upiUri) window.location.href = upiUri;
+  if (!upiUri) {
+    alert("Payment details are not ready. Please reload the page.");
+    return;
+  }
+
+  const params = new URL(upiUri).search;
+  const fallback = encodeURIComponent(window.location.href);
+
+  const intentUrl =
+    "intent://pay" + params +
+    "#Intent;scheme=upi;" +
+    "action=android.intent.action.VIEW;" +
+    "category=android.intent.category.BROWSABLE;" +
+    "S.browser_fallback_url=" + fallback + ";" +
+    "end";
+
+  window.location.href = intentUrl;
 });
 
 loadPayment();
