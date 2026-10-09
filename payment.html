@@ -395,7 +395,12 @@ copyBtn.addEventListener("click", async function() {
 });
 
 payBtn.addEventListener("click", function() {
-  if (upiUri) window.location.href = upiUri;
+  if (!upiUri) {
+    alert("Payment details load nahi hui hain.");
+    return;
+  }
+
+  window.location.href = upiUri;
 });
 
 loadPayment();
