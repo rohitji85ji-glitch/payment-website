@@ -213,6 +213,7 @@ const siteName=String(settings.siteName||settings.site_name||"Payment").trim();
 if(!name||!Number.isFinite(amount)||amount<=0||!upiId){
 throw new Error("Customer name, valid amount, or UPI ID is missing. Check Admin Settings.");
 }
+
 if(upiId.includes(" ")||!upiId.includes("@")){
 throw new Error("UPI ID format looks incorrect. Please check Admin Settings.");
 }
@@ -229,6 +230,7 @@ params.set("pn",siteName);
 params.set("am",amount.toFixed(2));
 params.set("cu","INR");
 params.set("tn","Customer Payment");
+
 upiUri="upi://pay?"+params.toString();
 
 loading.hidden=true;
@@ -251,28 +253,38 @@ window.prompt("Copy UPI ID:",value);
 }
 });
 
-/* Pay Now handler */
 payBtn.addEventListener("click",function(){
 if(!upiUri){
 alert("Payment details are not ready. Please reload the page.");
 return;
 }
+
 if(payBtn.disabled){
-alert("The payment QR has expired. Reopen the payment link.");
+alert("Payment session expired. Please reopen the payment link.");
 return;
 }
 
 try{
-const paymentUrl=new URL(upiUri);
-if(paymentUrl.protocol!=="upi:"||
-!paymentUrl.searchParams.get("pa")||
-!paymentUrl.searchParams.get("am")){
-alert("UPI ID or amount is missing. Check payment settings.");
+const payment=new URL(upiUri);
+const pa=payment.searchParams.get("pa");
+const am=payment.searchParams.get("am");
+
+if(payment.protocol!=="upi:"||!pa||!am||Number(am)<=0){
+alert("Please check the UPI ID and payment amount.");
 return;
 }
-window.location.assign(paymentUrl.href);
+
+/* Try Android's UPI intent handler first */
+const intentUrl=
+"intent://pay?"+payment.search.substring(1)+
+"#Intent;scheme=upi;"+
+"action=android.intent.action.VIEW;"+
+"category=android.intent.category.BROWSABLE;end";
+
+window.location.href=intentUrl;
 }catch(error){
-alert("Unable to open UPI payment. Please check the UPI ID and amount.");
+/* Fallback to the standard UPI URI */
+window.location.href=upiUri;
 }
 });
 
