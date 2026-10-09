@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,6 +38,7 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
   overflow-wrap:anywhere;word-break:break-word
 }
 .upi-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+button{cursor:pointer}
 .copy-btn{
   padding:9px 11px;border:1px solid #c6ddff;border-radius:13px;
   background:#eaf3ff;color:#0752ad;font-size:13px;font-weight:bold
@@ -92,13 +93,14 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
   width:100%;min-height:68px;padding:17px 12px;border:0;
   border-radius:20px;background:linear-gradient(110deg,#10d987,#00a96a);
   box-shadow:0 9px 22px #00be7040;color:white;
-  font-size:27px;font-weight:800;cursor:pointer
+  font-size:27px;font-weight:800
 }
 .pay-btn:active{transform:scale(.98)}
 .message{
   padding:15px;border-radius:14px;color:#684d00;
   background:#fff2c9;line-height:1.6;overflow-wrap:anywhere
 }
+.error-message{background:#ffebee;color:#a61b1b}
 [hidden]{display:none!important}
 @media(max-width:420px){
   .card{padding:20px 13px}
@@ -128,12 +130,12 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
   <div class="accent"></div>
 
   <div id="loading" class="message">Loading payment details...</div>
-  <div id="error" class="message" hidden></div>
+  <div id="error" class="message error-message" role="alert" hidden></div>
 
   <section id="paymentContent" hidden>
     <div class="details">
       <div class="row">
-        <div class="detail-icon" aria-hidden="true">👤</div>
+        <div class="detail-icon">👤</div>
         <div class="detail-text">
           <span class="label">Customer</span>
           <strong class="value" id="customerName">-</strong>
@@ -141,7 +143,7 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
       </div>
 
       <div class="row">
-        <div class="detail-icon" aria-hidden="true">₹</div>
+        <div class="detail-icon">₹</div>
         <div class="detail-text">
           <span class="label">Amount</span>
           <strong class="value">₹<span id="amount">0.00</span></strong>
@@ -149,7 +151,7 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
       </div>
 
       <div class="row">
-        <div class="detail-icon" aria-hidden="true">➤</div>
+        <div class="detail-icon">➤</div>
         <div class="detail-text">
           <span class="label">UPI ID</span>
           <div class="upi-line">
@@ -161,71 +163,21 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
     </div>
 
     <h2 class="qr-title">Scan QR Code to Pay</h2>
-
     <div class="qr-frame">
       <div id="qrLoading" class="qr-loading">Preparing QR Code...</div>
       <img id="qrImage" alt="UPI payment QR code" hidden>
     </div>
 
-    <!-- App-style vector icons; decorative only -->
     <div class="apps">
-      <div class="app">
-        <div class="logo" aria-label="Google Pay icon">
-          <svg viewBox="0 0 40 40" aria-hidden="true">
-            <path d="M29 8a15 15 0 0 0-20 4l6 5a8 8 0 0 1 12-2z" fill="#4285F4"/>
-            <path d="M9 12a15 15 0 0 0 0 16l6-5a8 8 0 0 1 0-6z" fill="#34A853"/>
-            <path d="M9 28a15 15 0 0 0 20 4l-6-5a8 8 0 0 1-12-2z" fill="#FBBC05"/>
-            <path d="M29 8l-6 7a8 8 0 0 1 0 10l6 7a15 15 0 0 0 0-24z" fill="#EA4335"/>
-          </svg>
-        </div>
-        <div class="app-name">Google Pay</div>
-      </div>
-
-      <div class="app">
-        <div class="logo" aria-label="PhonePe style icon">
-          <svg viewBox="0 0 40 40" aria-hidden="true">
-            <circle cx="20" cy="20" r="20" fill="#5F259F"/>
-            <text x="20" y="28" text-anchor="middle" font-size="23" font-weight="bold" fill="#fff">पे</text>
-          </svg>
-        </div>
-        <div class="app-name">PhonePe</div>
-      </div>
-
-      <div class="app">
-        <div class="logo" aria-label="Paytm style icon">
-          <svg viewBox="0 0 40 40" aria-hidden="true">
-            <text x="20" y="25" text-anchor="middle" font-size="13" font-weight="bold" fill="#00A5E8">Paytm</text>
-            <path d="M8 29h24" stroke="#203B87" stroke-width="3" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="app-name">Paytm</div>
-      </div>
-
-      <div class="app">
-        <div class="logo" aria-label="BHIM style icon">
-          <svg viewBox="0 0 40 40" aria-hidden="true">
-            <path d="M20 5L34 31H6z" fill="#138808"/>
-            <path d="M20 5L27 18H13z" fill="#FF9933"/>
-            <path d="M17 22l-4 7h14l-4-7z" fill="#fff"/>
-          </svg>
-        </div>
-        <div class="app-name">BHIM</div>
-      </div>
-
-      <div class="app">
-        <div class="logo" aria-label="Other UPI apps">
-          <svg viewBox="0 0 40 40" aria-hidden="true">
-            <circle cx="20" cy="20" r="19" fill="#172B45"/>
-            <text x="20" y="24" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">UPI</text>
-            <path d="M25 27q4 2 7-1" fill="none" stroke="#F6A623" stroke-width="2"/>
-          </svg>
-        </div>
-        <div class="app-name">Other UPI</div>
-      </div>
+      <div class="app"><div class="logo">🌐</div><div class="app-name">Google Pay</div></div>
+      <div class="app"><div class="logo">🟣</div><div class="app-name">PhonePe</div></div>
+      <div class="app"><div class="logo">🔵</div><div class="app-name">Paytm</div></div>
+      <div class="app"><div class="logo">🔺</div><div class="app-name">BHIM</div></div>
+      <div class="app"><div class="logo">UPI</div><div class="app-name">Other UPI</div></div>
     </div>
 
     <div class="timer-box">
-      <div class="clock" aria-hidden="true">◷</div>
+      <div class="clock">◷</div>
       <div>
         <div id="timer">Time Remaining: 02:00</div>
         <p class="hint" id="timerMessage">Please scan the QR code using your UPI app.</p>
@@ -233,42 +185,46 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
     </div>
 
     <p class="warning">
-      Please check the recipient name and amount in your UPI app before confirming payment.
-      The timer only hides the QR code; it does not verify payment.
+      भुगतान करने से पहले UPI ऐप में प्राप्तकर्ता और रकम जाँचें।
+      यह टाइमर भुगतान की पुष्टि नहीं करता।
     </p>
 
     <button class="pay-btn" id="payBtn" type="button">
-      <span aria-hidden="true">➤</span>
-      <span>Pay Now</span>
-      <span aria-hidden="true">›</span>
+      ➤ &nbsp; Pay Now &nbsp; ›
     </button>
+    <p id="payMessage" class="hint" role="status"></p>
   </section>
 </main>
 
 <script>
-const loading = document.getElementById("loading");
-const errorBox = document.getElementById("error");
-const paymentContent = document.getElementById("paymentContent");
-const siteNameEl = document.getElementById("siteName");
-const customerNameEl = document.getElementById("customerName");
-const amountEl = document.getElementById("amount");
-const upiIdEl = document.getElementById("upiId");
-const qrImage = document.getElementById("qrImage");
-const qrLoading = document.getElementById("qrLoading");
-const timerEl = document.getElementById("timer");
-const timerMessage = document.getElementById("timerMessage");
-const copyBtn = document.getElementById("copyBtn");
-const payBtn = document.getElementById("payBtn");
+"use strict";
+
+const $ = id => document.getElementById(id);
+const loading = $("loading");
+const errorBox = $("error");
+const paymentContent = $("paymentContent");
+const qrImage = $("qrImage");
+const qrLoading = $("qrLoading");
 
 let upiUri = "";
 let timerInterval = null;
+let qrTimeout = null;
 
 function showError(message) {
   clearInterval(timerInterval);
+  clearTimeout(qrTimeout);
   loading.hidden = true;
   paymentContent.hidden = true;
   errorBox.textContent = message;
   errorBox.hidden = false;
+}
+
+function createQrUrl(data) {
+  const url = new URL("https://api.qrserver.com/v1/create-qr-code/");
+  url.searchParams.set("size", "500x500");
+  url.searchParams.set("margin", "12");
+  url.searchParams.set("data", data);
+  return url.toString();
 }
 
 function startTimer() {
@@ -278,15 +234,15 @@ function startTimer() {
   function tick() {
     const mm = String(Math.floor(left / 60)).padStart(2, "0");
     const ss = String(left % 60).padStart(2, "0");
-    timerEl.textContent = "Time Remaining: " + mm + ":" + ss;
+    $("timer").textContent =
+      left > 0 ? Time Remaining: ${mm}:${ss} : "Time Expired";
 
     if (left <= 0) {
       clearInterval(timerInterval);
       qrImage.hidden = true;
       qrLoading.hidden = false;
-      qrLoading.textContent = "Time expired. Reopen the payment link for a new QR code.";
-      timerEl.textContent = "Time Expired";
-      timerMessage.textContent = "Please reopen the payment link to generate a new QR code.";
+      qrLoading.textContent = "Time expired. Reload the page to show QR again.";
+      $("timerMessage").textContent = "The timer does not verify payment.";
       return;
     }
     left--;
@@ -296,20 +252,13 @@ function startTimer() {
   timerInterval = setInterval(tick, 1000);
 }
 
-function createQrUrl(data) {
-  const url = new URL("https://api.qrserver.com/v1/create-qr-code/");
-  url.searchParams.set("size", "600x600");
-  url.searchParams.set("margin", "12");
-  url.searchParams.set("data", data);
-  return url.toString();
-}
-
 function loadQr(data) {
   qrLoading.hidden = false;
   qrLoading.textContent = "Preparing QR Code...";
   qrImage.hidden = true;
 
-  qrImage.onload = function() {
+  qrImage.onload = () => {
+    clearTimeout(qrTimeout);
     qrImage.hidden = false;
     qrLoading.hidden = true;
     loading.hidden = true;
@@ -317,91 +266,137 @@ function loadQr(data) {
     startTimer();
   };
 
-  qrImage.onerror = function() {
-    showError("QR Code could not load. Please check your internet connection and reopen the link.");
+  qrImage.onerror = () => {
+    clearTimeout(qrTimeout);
+    qrLoading.hidden = false;
+    qrLoading.textContent = "QR could not load. You can still use Pay Now.";
+    loading.hidden = true;
+    paymentContent.hidden = false;
   };
 
+  qrTimeout = setTimeout(() => {
+    if (qrImage.hidden) {
+      qrLoading.hidden = false;
+      qrLoading.textContent = "QR is taking too long. You can still use Pay Now.";
+      loading.hidden = true;
+      paymentContent.hidden = false;
+    }
+  }, 10000);
+
   qrImage.src = createQrUrl(data);
+}
+
+async function fetchJson(url) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 12000);
+
+  try {
+    const response = await fetch(url, {
+      cache: "no-store",
+      signal: controller.signal
+    });
+
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("Server returned an invalid response.");
+    }
+
+    if (!response.ok) {
+      throw new Error(data.message || Server error (${response.status}));
+    }
+
+    return data;
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 async function loadPayment() {
   const id = new URLSearchParams(location.search).get("id");
 
-  if (!id) {
-    showError("Customer ID is missing. Open the correct payment link from Admin Panel.");
+  if (!id || !id.trim()) {
+    showError("Customer ID नहीं मिली। Admin Panel से पूरा Payment Link खोलें।");
     return;
   }
 
   try {
-    const [customerResponse, settingsResponse] = await Promise.all([
-      fetch("/api/customer-link/" + encodeURIComponent(id)),
-      fetch("/api/settings")
+    const [customerResult, settings] = await Promise.all([
+      fetchJson("/api/customer-link/" + encodeURIComponent(id)),
+      fetchJson("/api/settings")
     ]);
 
-    if (!customerResponse.ok) {
-      throw new Error("Payment link not found. Please create a new link in Admin Panel.");
+    if (customerResult.success === false) {
+      throw new Error(customerResult.message || "Customer details could not load.");
     }
 
-    if (!settingsResponse.ok) {
-      throw new Error("Payment settings could not be loaded.");
-    }
-
-    const customerResult = await customerResponse.json();
-    const settings = await settingsResponse.json();
     const customer = customerResult.customer || customerResult;
-
-    const name = String(customer.name || customer.customerName || customer.customer_name || "").trim();
+    const name = String(
+      customer.name || customer.customerName || customer.customer_name || ""
+    ).trim();
     const amount = Number(customer.amount);
     const upiId = String(settings.upiId || settings.upi_id || "").trim();
     const siteName = String(settings.siteName || settings.site_name || "Payment").trim();
 
-    if (!name || !Number.isFinite(amount) || amount <= 0 || !upiId) {
-      throw new Error("Customer name, valid amount, or UPI ID is missing. Check Admin Settings.");
+    if (!name) throw new Error("Customer name is missing.");
+    if (!Number.isFinite(amount) || amount <= 0) {
+      throw new Error("Customer amount is invalid.");
+    }
+    if (!upiId || !upiId.includes("@")) {
+      throw new Error("Admin Settings में सही UPI ID सेव करें।");
     }
 
-    siteNameEl.textContent = siteName;
+    $("siteName").textContent = siteName;
     document.title = siteName + " - Payment";
-    customerNameEl.textContent = name;
-    amountEl.textContent = amount.toFixed(2);
-    upiIdEl.textContent = upiId;
+    $("customerName").textContent = name;
+    $("amount").textContent = amount.toFixed(2);
+    $("upiId").textContent = upiId;
 
-    const intent = new URL("upi://pay");
-    intent.searchParams.set("pa", upiId);
-    intent.searchParams.set("pn", name);
-    intent.searchParams.set("am", amount.toFixed(2));
-    intent.searchParams.set("cu", "INR");
-    intent.searchParams.set("tn", "Customer Payment");
+    const params = new URLSearchParams({
+      pa: upiId,
+      pn: name,
+      am: amount.toFixed(2),
+      cu: "INR",
+      tn: "Customer Payment"
+    });
 
-    upiUri = intent.toString();
+    upiUri = "upi://pay?" + params.toString();
 
     loading.hidden = true;
     paymentContent.hidden = false;
     loadQr(upiUri);
 
   } catch (error) {
-    showError(error.message || "Payment page could not load.");
+    console.error("Payment page error:", error);
+    const message = error.name === "AbortError"
+      ? "Server response देर से आ रहा है। फिर से खोलें।"
+      : (error.message || "Payment page could not load.");
+    showError(message);
   }
 }
 
-copyBtn.addEventListener("click", async function() {
-  const value = upiIdEl.textContent;
+$("copyBtn").addEventListener("click", async () => {
+  const value = $("upiId").textContent;
   try {
     await navigator.clipboard.writeText(value);
-    copyBtn.textContent = "Copied!";
-    setTimeout(() => copyBtn.textContent = "▢ Copy", 1600);
+    $("copyBtn").textContent = "Copied!";
+    setTimeout(() => $("copyBtn").textContent = "▢ Copy", 1500);
   } catch {
-    window.prompt("Copy UPI ID:", value);
+    window.prompt("UPI ID कॉपी करें:", value);
   }
 });
 
-payBtn.addEventListener("click", function() {
-  if (!upiUri) return;
+$("payBtn").addEventListener("click", () => {
+  if (!upiUri) {
+    $("payMessage").textContent = "Payment details अभी तैयार नहीं हैं।";
+    return;
+  }
 
-  const params = upiUri.replace(/^upi:\/\/pay\?/, "");
-  window.location.href = "intent://pay?" + params +
-    "#Intent;scheme=upi;end";
-});
+  $("payMessage").textContent =
+    "UPI ऐप खोलने की कोशिश हो रही है। ऐप में नाम और रकम जाँचें।";
 
+  // Standard UPI link: Android may show installed UPI apps.
   window.location.href = upiUri;
 });
 
