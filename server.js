@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 const express = require("express");
-const path = require("path");
 const { createClient } = require("@supabase/supabase-js");
 
 const app = express();
@@ -12,7 +11,7 @@ const SUPABASE_SERVICE_ROLE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-  console.error("ERROR: Supabase environment variables missing.");
+  console.error("Supabase environment variables missing.");
   process.exit(1);
 }
 
@@ -23,8 +22,6 @@ const supabase = createClient(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Static files
 app.use(express.static(__dirname));
 
 // TEST API
@@ -152,19 +149,21 @@ app.post("/api/customer-link", async (req, res) => {
     if (error) throw error;
 
     if (!data || data.id === undefined || data.id === null) {
-      throw new Error("Customer record ID was not returned");
+      throw new Error("Customer ID was not returned by database");
     }
 
-    // Link includes the ID returned by the database.
+    // FIXED: Create the URL without a broken template string.
     const paymentUrl =
-      ${req.protocol}://${req.get("host")}/payment.html?id= +
+      req.protocol + "://" +
+      req.get("host") +
+      "/payment.html?id=" +
       encodeURIComponent(String(data.id));
 
     res.status(201).json({
       success: true,
       message: "Payment link created",
       customer: data,
-      paymentUrl,
+      paymentUrl: paymentUrl,
       paymentLink: paymentUrl
     });
   } catch (error) {
@@ -187,10 +186,7 @@ app.get("/api/customer-links", async (req, res) => {
 
     if (error) throw error;
 
-    res.json({
-      success: true,
-      customers: data || []
-    });
+    res.json(data || []);
   } catch (error) {
     console.error("Customer list:", error.message);
 
@@ -206,10 +202,10 @@ app.get("/api/customer-link/:id", async (req, res) => {
   try {
     const id = String(req.params.id || "").trim();
 
-    if (!id || id.length > 200) {
+    if (!id) {
       return res.status(400).json({
         success: false,
-        message: "Valid customer ID required"
+        message: "Customer ID required"
       });
     }
 
@@ -287,7 +283,7 @@ app.delete("/api/customer-link/:id", async (req, res) => {
 
 // START SERVER
 app.listen(PORT, () => {
-  console.log("================================");
+  console.log("==============================");
   console.log("SERVER STARTED ON PORT " + PORT);
-  console.log("================================");
+  console.log("==============================");
 });
