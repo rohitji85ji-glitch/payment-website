@@ -1,10 +1,63 @@
-<!DOCTYPE html>
+[8:00 am, 9/10/2026] Mrk: <!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Admin Panel</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f5f7;
+    }
+
+    .container {
+      width: 94%;
+      max-width: 700px;
+      margin: 30px auto;
+    }
+
+    .box {
+      background: white;
+      padding: 22px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.10);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weigh…
+[8:14 am, 9/10/2026] Mrk: Hi
+[9:36 am, 9/10/2026] Mrk: <!DOCTYPE html>
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#087f23">
-  <title>Reliance Finance - Payment</title>
+  <title>Payment Page</title>
 
   <style>
     * {
@@ -13,526 +66,344 @@
 
     body {
       margin: 0;
-      padding: 24px 12px;
+      padding: 20px;
       font-family: Arial, sans-serif;
-      background: #f0f3f8;
+      background: #eef2f8;
       color: #222;
     }
 
-    .container {
+    .payment-card {
       width: 100%;
-      max-width: 560px;
-      margin: 20px auto;
-      padding: 28px 20px;
+      max-width: 650px;
+      margin: 40px auto;
+      padding: 32px;
       background: #fff;
-      border-radius: 24px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      border-radius: 38px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
       text-align: center;
     }
 
     h1 {
-      margin: 0 0 14px;
-      font-size: 30px;
+      margin: 10px 0 25px;
+      font-size: 40px;
       overflow-wrap: anywhere;
     }
 
     .subtitle {
-      margin: 0 0 26px;
       color: #666;
-      font-size: 20px;
-    }
-
-    .notice {
-      margin: 20px 0;
-      padding: 16px;
-      border-radius: 12px;
-      background: #fff5d9;
-      color: #6c5724;
-      line-height: 1.7;
+      font-size: 25px;
+      margin-bottom: 40px;
     }
 
     .details {
-      margin: 22px 0;
-      padding: 20px 12px;
-      background: #f5f5f5;
-      border-radius: 16px;
+      background: #f4f4f4;
+      padding: 30px 12px;
+      border-radius: 25px;
+      margin: 25px 0;
+      font-size: 23px;
+      line-height: 1.8;
       overflow-wrap: anywhere;
     }
 
     .details p {
-      margin: 10px 0;
-      font-size: 18px;
-      line-height: 1.5;
-    }
-
-    button {
-      display: block;
-      width: 100%;
-      padding: 15px;
-      margin-top: 18px;
-      border: none;
-      border-radius: 10px;
-      background: #087f23;
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      background: #999;
-      cursor: not-allowed;
+      margin: 5px 0;
     }
 
     .qr-section {
-      display: none;
-      margin-top: 28px;
-      padding-top: 20px;
+      margin-top: 30px;
+      padding-top: 30px;
       border-top: 1px solid #ddd;
     }
 
     .qr-section h2 {
-      font-size: 24px;
-      margin-bottom: 20px;
+      font-size: 30px;
     }
 
-    #qrCode {
+    #qrImage {
       display: block;
       width: 100%;
-      max-width: 330px;
+      max-width: 550px;
       height: auto;
-      margin: 20px auto;
-      border: 8px solid white;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+      margin: 25px auto;
+      border-radius: 18px;
     }
 
     .timer-box {
-      margin: 18px auto;
-      padding: 16px;
+      padding: 25px 15px;
+      background: #e6f3ff;
+      color: #234d70;
+      border-radius: 22px;
+      margin: 25px 0;
+    }
+
+    #timer {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .hint {
+      font-size: 20px;
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
+    .warning {
+      color: #777;
+      font-size: 17px;
+      line-height: 1.6;
+      margin: 25px 0;
+    }
+
+    .close-btn {
+      width: 100%;
+      padding: 23px 10px;
+      border: none;
+      border-radius: 18px;
+      background: #d92d32;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .message {
+      padding: 15px;
+      background: #fff3cd;
       border-radius: 12px;
-      background: #e8f4ff;
-      color: #17456b;
+      color: #664d03;
+      overflow-wrap: anywhere;
     }
 
-    .timer-box h3 {
-      margin: 0 0 10px;
-      font-size: 22px;
-    }
-
-    .timer-box p {
-      margin: 0;
-      line-height: 1.7;
-      font-size: 15px;
-    }
-
-    .expired {
-      background: #ffebee;
-      color: #b71c1c;
-    }
-
-    .error {
-      padding: 14px;
-      margin: 18px 0;
-      border-radius: 10px;
-      background: #ffebee;
-      color: #b71c1c;
-      line-height: 1.6;
-    }
-
-    .success {
-      padding: 14px;
-      margin: 18px 0;
-      border-radius: 10px;
-      background: #e8f5e9;
-      color: #1b5e20;
-      line-height: 1.6;
-    }
-
-    .hidden {
+    [hidden] {
       display: none !important;
     }
 
-    .small-note {
-      margin-top: 14px;
-      color: #666;
-      font-size: 13px;
-      line-height: 1.6;
-    }
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
 
-    @media (max-width: 400px) {
-      .container {
-        padding: 22px 14px;
+      .payment-card {
+        margin: 20px auto;
+        padding: 22px 18px;
+        border-radius: 28px;
       }
 
       h1 {
-        font-size: 26px;
+        font-size: 34px;
       }
 
       .subtitle {
-        font-size: 18px;
+        font-size: 21px;
+      }
+
+      .details {
+        font-size: 20px;
+      }
+
+      .qr-section h2 {
+        font-size: 25px;
+      }
+
+      #timer {
+        font-size: 27px;
+      }
+
+      .hint {
+        font-size: 17px;
       }
     }
   </style>
 </head>
 
 <body>
-  <main class="container">
-    <h1 id="siteTitle">Reliance Finance</h1>
-    <p class="subtitle">Make payment using UPI</p>
 
-    <div id="errorBox" class="error hidden"></div>
+  <main class="payment-card">
+    <h1 id="siteName">Payment</h1>
+    <div class="subtitle">Make payment using UPI</div>
 
-    <div id="paymentContent" class="hidden">
-      <div class="notice">
-        Pay Now दबाकर QR Code खोलें। इसे Google Pay, PhonePe
-        या किसी supported UPI app से scan करें।
-        भुगतान करने से पहले UPI ID और रकम जाँच लें।
+    <div id="loading" class="message">Payment details लोड हो रहे हैं...</div>
+    <div id="error" class="message" hidden></div>
+
+    <section id="paymentContent" hidden>
+      <div class="details">
+        <p><strong>Customer:</strong> <span id="customerName">-</span></p>
+        <p><strong>Amount:</strong> ₹<span id="amount">0.00</span></p>
+        <p><strong>UPI ID:</strong> <span id="upiId">-</span></p>
       </div>
 
-      <section class="details">
-        <p><strong>Customer:</strong>
-          <span id="customerName"></span>
-        </p>
+      <section class="qr-section" id="qrSection">
+        <h2 id="qrHeading">Scan QR Code to Pay</h2>
 
-        <p><strong>Amount:</strong> ₹<span id="amount"></span></p>
+        <img id="qrImage" alt="UPI Payment QR Code">
 
-        <p><strong>UPI ID:</strong>
-          <span id="upiId">लोड हो रही है...</span>
-        </p>
-      </section>
-
-      <button id="payNowButton" type="button">
-        Pay Now - Show QR
-      </button>
-
-      <section id="qrSection" class="qr-section">
-        <h2>Scan QR Code to Pay</h2>
-
-        <img id="qrCode" alt="UPI Payment QR Code" class="hidden">
-
-        <div id="qrLoading" class="small-note">
-          QR Code लोड हो रहा है...
-        </div>
-
-        <div id="timerBox" class="timer-box">
-          <h3>
-            Time Remaining:
-            <span id="timer">02:00</span>
-          </h3>
-
-          <p>
+        <div class="timer-box">
+          <div id="timer">Time Remaining: 02:00</div>
+          <p class="hint" id="timerMessage">
             कृपया 2 मिनट के अंदर QR Code scan करें।
-            समय समाप्त होने पर QR छिप जाएगा।
           </p>
         </div>
 
-        <p class="small-note">
-          यह टाइमर केवल QR को स्क्रीन पर दिखाने का समय नियंत्रित
-          करता है। यह भुगतान की सफलता की पुष्टि नहीं करता।
-          भुगतान करने से पहले अपने UPI ऐप में नाम और रकम जाँचें।
+        <p class="warning">
+          यह टाइमर केवल QR को स्क्रीन पर दिखाने का समय नियंत्रित करता है।
+          यह भुगतान की सफलता की पुष्टि नहीं करता।
+          भुगतान करने से पहले UPI ऐप में नाम और रकम जाँच लें।
         </p>
 
-        <button id="reopenButton" class="hidden" type="button">
-          नया QR Code दिखाएँ
-        </button>
-
-        <button id="closeQrButton" type="button"
-          style="background:#d32f2f">
+        <button class="close-btn" id="closeBtn" type="button">
           Close QR
         </button>
       </section>
-    </div>
+    </section>
   </main>
 
   <script>
-    (() => {
-      "use strict";
+    const loading = document.getElementById("loading");
+    const errorBox = document.getElementById("error");
+    const paymentContent = document.getElementById("paymentContent");
+    const siteNameEl = document.getElementById("siteName");
+    const customerNameEl = document.getElementById("customerName");
+    const amountEl = document.getElementById("amount");
+    const upiIdEl = document.getElementById("upiId");
+    const qrImage = document.getElementById("qrImage");
+    const timerEl = document.getElementById("timer");
+    const timerMessage = document.getElementById("timerMessage");
+    const qrHeading = document.getElementById("qrHeading");
+    const closeBtn = document.getElementById("closeBtn");
 
-      const API_BASE = window.location.origin;
-      const params = new URLSearchParams(window.location.search);
-      const customerId = params.get("id");
+    let timerInterval = null;
 
-      const el = {
-        siteTitle: document.getElementById("siteTitle"),
-        errorBox: document.getElementById("errorBox"),
-        paymentContent: document.getElementById("paymentContent"),
-        customerName: document.getElementById("customerName"),
-        amount: document.getElementById("amount"),
-        upiId: document.getElementById("upiId"),
-        payNowButton: document.getElementById("payNowButton"),
-        qrSection: document.getElementById("qrSection"),
-        qrCode: document.getElementById("qrCode"),
-        qrLoading: document.getElementById("qrLoading"),
-        timer: document.getElementById("timer"),
-        timerBox: document.getElementById("timerBox"),
-        reopenButton: document.getElementById("reopenButton"),
-        closeQrButton: document.getElementById("closeQrButton")
-      };
+    function showError(message) {
+      loading.hidden = true;
+      paymentContent.hidden = true;
+      errorBox.textContent = message;
+      errorBox.hidden = false;
+    }
 
-      let currentCustomer = null;
-      let countdownInterval = null;
-      let remainingSeconds = 120;
-      let qrRequestNumber = 0;
+    function hideQR() {
+      clearInterval(timerInterval);
+      qrImage.hidden = true;
+      qrHeading.textContent = "QR Code बंद है";
+      timerEl.textContent = "Time समाप्त";
+      timerMessage.textContent = "QR Code अब दिखाई नहीं दे रहा है।";
+      closeBtn.hidden = true;
+    }
 
-      function showError(message) {
-        el.errorBox.textContent = message;
-        el.errorBox.classList.remove("hidden");
-      }
+    function startTimer() {
+      let secondsLeft = 120;
 
-      function hideError() {
-        el.errorBox.textContent = "";
-        el.errorBox.classList.add("hidden");
-      }
+      qrImage.hidden = false;
+      closeBtn.hidden = false;
 
-      function stopTimer() {
-        if (countdownInterval !== null) {
-          clearInterval(countdownInterval);
-          countdownInterval = null;
-        }
-      }
+      function updateTimer() {
+        const minutes = Math.floor(secondsLeft / 60);
+        const seconds = secondsLeft % 60;
 
-      function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const remainder = seconds % 60;
+        timerEl.textContent =
+          "Time Remaining: " +
+          String(minutes).padStart(2, "0") + ":" +
+          String(seconds).padStart(2, "0");
 
-        return String(minutes).padStart(2, "0") + ":" +
-          String(remainder).padStart(2, "0");
-      }
-
-      function hideQrAsExpired() {
-        stopTimer();
-
-        el.qrCode.classList.add("hidden");
-        el.qrLoading.classList.add("hidden");
-        el.timer.textContent = "समय समाप्त";
-        el.timerBox.classList.add("expired");
-        el.reopenButton.classList.remove("hidden");
-      }
-
-      function startTimer() {
-        stopTimer();
-
-        remainingSeconds = 120;
-        el.timer.textContent = "02:00";
-        el.timerBox.classList.remove("expired");
-        el.reopenButton.classList.add("hidden");
-
-        countdownInterval = setInterval(() => {
-          remainingSeconds -= 1;
-          el.timer.textContent = formatTime(remainingSeconds);
-
-          if (remainingSeconds <= 0) {
-            hideQrAsExpired();
-          }
-        }, 1000);
-      }
-
-      function buildUpiUri() {
-        if (!currentCustomer) {
-          throw new Error("Customer की जानकारी लोड नहीं हुई।");
-        }
-
-        const upiId = String(currentCustomer.upiId || "").trim();
-        const amount = Number(currentCustomer.amount);
-
-        if (!upiId || !upiId.includes("@")) {
-          throw new Error(
-            "UPI ID नहीं मिली। Admin Settings में सही UPI ID सेव करें।"
-          );
-        }
-
-        if (!Number.isFinite(amount) || amount <= 0) {
-          throw new Error("Payment amount सही नहीं है।");
-        }
-
-        const uri = new URLSearchParams({
-          pa: upiId,
-          pn: String(currentCustomer.siteName || "Payment"),
-          am: amount.toFixed(2),
-          cu: "INR",
-          tn: "Payment for " +
-            String(currentCustomer.name || "Customer")
-        });
-
-        return "upi://pay?" + uri.toString();
-      }
-
-      function showQr() {
-        hideError();
-
-        let upiUri;
-
-        try {
-          upiUri = buildUpiUri();
-        } catch (error) {
-          showError(error.message);
+        if (secondsLeft <= 0) {
+          hideQR();
           return;
         }
 
-        stopTimer();
+        secondsLeft--;
+      }
 
-        const requestNumber = ++qrRequestNumber;
+      updateTimer();
+      timerInterval = setInterval(updateTimer, 1000);
+    }
 
-        el.qrSection.style.display = "block";
-        el.qrCode.classList.add("hidden");
-        el.qrLoading.textContent = "QR Code लोड हो रहा है...";
-        el.qrLoading.classList.remove("hidden");
-        el.timer.textContent = "02:00";
-        el.timerBox.classList.remove("expired");
-        el.reopenButton.classList.add("hidden");
+    async function loadPayment() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
 
-        el.qrCode.onload = () => {
-          if (requestNumber !== qrRequestNumber) return;
+      if (!id) {
+        showError("यह Customer Payment Link अधूरा है। सही लिंक खोलें।");
+        return;
+      }
 
-          el.qrLoading.classList.add("hidden");
-          el.qrCode.classList.remove("hidden");
+      try {
+        const [customerResponse, settingsResponse] = await Promise.all([
+          fetch("/api/customer-link/" + encodeURIComponent(id)),
+          fetch("/api/settings")
+        ]);
+
+        if (!customerResponse.ok) {
+          throw new Error("Customer details नहीं मिले।");
+        }
+
+        if (!settingsResponse.ok) {
+          throw new Error("Payment settings लोड नहीं हुईं।");
+        }
+
+        const customer = await customerResponse.json();
+        const settings = await settingsResponse.json();
+
+        const name =
+          customer.name ||
+          customer.customerName ||
+          customer.customer_name;
+
+        const amount = Number(customer.amount);
+
+        const upiId =
+          settings.upiId ||
+          settings.upi_id;
+
+        const siteName =
+          settings.siteName ||
+          settings.site_name ||
+          "Payment";
+
+        if (!name || !Number.isFinite(amount) || amount <= 0 || !upiId) {
+          throw new Error("Customer name, सही amount या UPI ID उपलब्ध नहीं है।");
+        }
+
+        siteNameEl.textContent = siteName;
+        document.title = siteName + " - Payment";
+        customerNameEl.textContent = name;
+        amountEl.textContent = amount.toFixed(2);
+        upiIdEl.textContent = upiId;
+
+        const upiUri = new URL("upi://pay");
+        upiUri.searchParams.set("pa", upiId);
+        upiUri.searchParams.set("pn", name);
+        upiUri.searchParams.set("am", amount.toFixed(2));
+        upiUri.searchParams.set("cu", "INR");
+        upiUri.searchParams.set("tn", "Customer Payment");
+
+        // QR लिंक खुलते ही अपने आप बनेगा।
+        const qrUrl = new URL(
+          "https://api.qrserver.com/v1/create-qr-code/"
+        );
+
+        qrUrl.searchParams.set("size", "500x500");
+        qrUrl.searchParams.set("data", upiUri.toString());
+
+        qrImage.onload = function () {
+          loading.hidden = true;
+          errorBox.hidden = true;
+          paymentContent.hidden = false;
           startTimer();
         };
 
-        el.qrCode.onerror = () => {
-          if (requestNumber !== qrRequestNumber) return;
-
-          stopTimer();
-          el.qrCode.classList.add("hidden");
-          el.qrLoading.textContent =
-            "QR Code लोड नहीं हुआ। Internet जाँचें और फिर कोशिश करें।";
-          el.qrLoading.classList.remove("hidden");
-          showError(
-            "QR सेवा उपलब्ध नहीं है। Internet connection जाँचकर दोबारा कोशिश करें।"
-          );
+        qrImage.onerror = function () {
+          showError("QR Code लोड नहीं हुआ। इंटरनेट कनेक्शन जाँचकर दोबारा खोलें।");
         };
 
-        // QR बनाने के लिए इंटरनेट आधारित QR सेवा इस्तेमाल होती है।
-        el.qrCode.src =
-          "https://api.qrserver.com/v1/create-qr-code/" +
-          "?size=320x320&data=" +
-          encodeURIComponent(upiUri) +
-          "&t=" + Date.now();
+        qrImage.src = qrUrl.toString();
 
-        el.qrSection.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
+      } catch (error) {
+        showError(error.message || "Payment Page लोड नहीं हुआ।");
       }
+    }
 
-      async function loadPayment() {
-        if (!customerId) {
-          showError(
-            "Payment link में customer ID नहीं है। Admin Panel से बनाया गया पूरा link खोलें।"
-          );
-          return;
-        }
+    closeBtn.addEventListener("click", hideQR);
 
-        el.payNowButton.disabled = true;
-        el.payNowButton.textContent = "Loading...";
-
-        try {
-          // ग्राहक का नाम और रकम उसके payment link से प्राप्त करें।
-          const customerResponse = await fetch(
-            API_BASE + "/api/customer-link/" +
-            encodeURIComponent(customerId)
-          );
-
-          const customerData = await customerResponse.json();
-
-          if (
-            !customerResponse.ok ||
-            !customerData.success ||
-            !customerData.customer
-          ) {
-            throw new Error(
-              customerData.message || "Payment link नहीं मिला।"
-            );
-          }
-
-          // UPI ID और वेबसाइट का नाम Admin Settings से प्राप्त करें।
-          const settingsResponse = await fetch(
-            API_BASE + "/api/settings"
-          );
-
-          const settingsData = await settingsResponse.json();
-
-          if (!settingsResponse.ok || !settingsData.success) {
-            throw new Error("Admin Settings लोड नहीं हुई।");
-          }
-
-          const customer = customerData.customer;
-
-          const upiId = String(
-            settingsData.upiId ||
-            settingsData.upi_id ||
-            settingsData.upiID ||
-            ""
-          ).trim();
-
-          const siteName = String(
-            settingsData.siteName ||
-            settingsData.site_name ||
-            "Reliance Finance"
-          ).trim();
-
-          currentCustomer = {
-            id: customer.id,
-            name: customer.name,
-            amount: customer.amount,
-            upiId: upiId,
-            siteName: siteName || "Reliance Finance"
-          };
-
-          el.customerName.textContent =
-            currentCustomer.name || "Customer";
-
-          el.amount.textContent =
-            Number(currentCustomer.amount).toFixed(2);
-
-          el.upiId.textContent =
-            currentCustomer.upiId || "Admin Settings में UPI ID सेट करें";
-
-          el.siteTitle.textContent = currentCustomer.siteName;
-          document.title = currentCustomer.siteName + " - Payment";
-
-          el.paymentContent.classList.remove("hidden");
-
-          if (!currentCustomer.upiId) {
-            showError(
-              "Admin Settings से UPI ID खाली मिली है। सही UPI ID सेव करें और पेज को refresh करें।"
-            );
-          }
-        } catch (error) {
-          showError(
-            error.message ||
-            "Server से connection नहीं हुआ। कृपया दोबारा कोशिश करें।"
-          );
-        } finally {
-          el.payNowButton.disabled = false;
-          el.payNowButton.textContent = "Pay Now - Show QR";
-        }
-      }
-
-      function closeQr() {
-        stopTimer();
-        qrRequestNumber++;
-
-        el.qrSection.style.display = "none";
-        el.qrCode.onload = null;
-        el.qrCode.onerror = null;
-        el.qrCode.removeAttribute("src");
-        el.qrCode.classList.add("hidden");
-        el.qrLoading.classList.remove("hidden");
-        el.qrLoading.textContent = "QR Code लोड हो रहा है...";
-        el.timerBox.classList.remove("expired");
-        el.reopenButton.classList.add("hidden");
-        el.timer.textContent = "02:00";
-      }
-
-      el.payNowButton.addEventListener("click", showQr);
-      el.reopenButton.addEventListener("click", showQr);
-      el.closeQrButton.addEventListener("click", closeQr);
-
-      loadPayment();
-
-      window.addEventListener("pagehide", stopTimer);
-    })();
+    loadPayment();
   </script>
+
 </body>
 </html>
