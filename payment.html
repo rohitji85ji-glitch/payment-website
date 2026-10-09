@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,55 +14,110 @@ body{
 }
 .card{
   width:100%;max-width:650px;margin:8px auto;padding:24px 20px;
-  background:#fff;border-radius:25px;
+  background:#fff;border-radius:28px;
   box-shadow:0 12px 40px #244a781c;text-align:center
 }
-h1{font-size:clamp(28px,7vw,42px);overflow-wrap:anywhere}
-.subtitle{font-size:18px;color:#64748b}
-.accent{width:80px;height:5px;margin:20px auto;background:#08c879;border-radius:8px}
+h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
+.subtitle{font-size:21px;color:#64748b;margin-bottom:18px}
+.accent{width:90px;height:6px;margin:0 auto 22px;background:#08c879;border-radius:8px}
 .details{
-  padding:12px;border:1px solid #d8e8ff;
-  border-radius:18px;background:#f5f9ff;text-align:left
+  padding:9px 16px;border:1px solid #d8e8ff;
+  border-radius:23px;background:#f5f9ff;text-align:left
 }
-.row{display:flex;align-items:center;gap:12px;padding:13px 0}
+.row{display:flex;align-items:center;gap:13px;padding:15px 0}
 .row+.row{border-top:1px solid #d7e4f5}
 .detail-icon{
-  width:45px;height:45px;flex-shrink:0;border-radius:50%;
+  width:54px;height:54px;flex-shrink:0;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  color:#087c51;background:#d9fbe9;font-size:23px
+  color:#087c51;background:#d9fbe9;font-size:27px;font-weight:bold
 }
 .detail-text{flex:1;min-width:0}
-.label{display:block;color:#64748b;font-size:14px;margin-bottom:5px}
-.value{font-size:19px;font-weight:bold;overflow-wrap:anywhere}
+.label{display:block;color:#64748b;font-size:17px;margin-bottom:4px}
+.value{
+  display:block;font-size:clamp(18px,4.5vw,23px);font-weight:750;
+  overflow-wrap:anywhere;word-break:break-word
+}
 .upi-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-button{
-  border:0;border-radius:12px;padding:14px;
-  font-size:16px;font-weight:bold;cursor:pointer
+.copy-btn{
+  padding:9px 11px;border:1px solid #c6ddff;border-radius:13px;
+  background:#eaf3ff;color:#0752ad;font-size:13px;font-weight:bold
 }
-button:disabled{opacity:.6;cursor:not-allowed}
-.copy-btn{padding:9px;background:#eaf3ff;color:#0752ad}
-.qr-title{margin:25px 0 15px;font-size:23px}
+.qr-title{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  margin:27px 0 18px;font-size:clamp(21px,5.2vw,30px)
+}
+.qr-title:before,.qr-title:after{
+  content:"";width:26px;height:4px;flex-shrink:0;
+  border-radius:5px;background:#08c879
+}
 .qr-frame{
-  width:100%;max-width:350px;margin:auto;padding:12px;
-  border:3px solid #28c993;border-radius:18px;background:#fff
+  position:relative;width:100%;max-width:430px;margin:0 auto 20px;
+  padding:12px;border-radius:23px;background:#fff;
+  box-shadow:0 7px 25px #244a781c
 }
-#qrImage{width:100%;height:auto;display:block}
-#qrLoading{padding:20px;color:#64748b}
-.apps{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
-.app-btn{color:#fff;min-height:55px}
-.gpay{background:#1769e0}
-.phonepe{background:#5f259f}
-.other{background:#087c51;grid-column:1/-1}
+.qr-frame:before{
+  content:"";position:absolute;inset:5px;border:4px solid #28c993;
+  border-radius:17px;pointer-events:none
+}
+#qrImage{position:relative;display:block;width:100%;height:auto}
+.qr-loading{padding:25px 5px;color:#64748b}
+.apps{
+  display:flex;justify-content:space-around;align-items:flex-start;
+  gap:8px;padding:16px 7px 13px;margin:18px 0;
+  background:#f1f6ff;border-radius:22px
+}
+.app{flex:1;min-width:0;color:#52627f;font-size:12px}
+.logo{
+  width:47px;height:47px;margin:0 auto 7px;background:#fff;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 13px #00000012
+}
+.logo svg{width:30px;height:30px;display:block}
+.app-name{white-space:normal}
+.timer-box{
+  display:flex;align-items:center;gap:12px;padding:18px 12px;
+  margin:20px 0;border-radius:22px;color:#0645a1;
+  background:linear-gradient(135deg,#e3f2ff,#d5eaff);text-align:left
+}
+.clock{
+  width:47px;height:47px;flex-shrink:0;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:#c4e0ff;font-size:25px
+}
+#timer{font-size:clamp(19px,4.8vw,28px);font-weight:800}
+.hint{font-size:15px;line-height:1.5;margin:8px 0 0}
+.warning{margin:19px 0;color:#64748b;font-size:14px;line-height:1.65}
 .pay-btn{
-  width:100%;background:linear-gradient(110deg,#10d987,#00a96a);
-  color:white;font-size:23px;min-height:60px
+  display:flex;align-items:center;justify-content:center;gap:15px;
+  width:100%;min-height:68px;padding:17px 12px;border:0;
+  border-radius:20px;background:linear-gradient(110deg,#10d987,#00a96a);
+  box-shadow:0 9px 22px #00be7040;color:white;
+  font-size:27px;font-weight:800;cursor:pointer
 }
-.timer-box{padding:16px;margin:20px 0;border-radius:15px;background:#e3f2ff;color:#0645a1}
-#timer{font-size:21px;font-weight:bold}
-.hint,.warning{font-size:13px;line-height:1.6;color:#64748b}
-.message{padding:14px;border-radius:12px;background:#fff2c9;line-height:1.6;overflow-wrap:anywhere}
-.error-message{background:#ffebee;color:#a61b1b}
+.pay-btn:active{transform:scale(.98)}
+.message{
+  padding:15px;border-radius:14px;color:#684d00;
+  background:#fff2c9;line-height:1.6;overflow-wrap:anywhere
+}
 [hidden]{display:none!important}
+@media(max-width:420px){
+  .card{padding:20px 13px}
+  .details{padding:7px 10px}
+  .row{gap:10px}
+  .detail-icon{width:47px;height:47px;font-size:23px}
+  .copy-btn{padding:8px}
+  .qr-title{gap:6px}
+  .qr-title:before,.qr-title:after{width:19px}
+  .apps{gap:3px;padding-left:4px;padding-right:4px}
+  .logo{width:41px;height:41px}
+  .logo svg{width:27px;height:27px}
+  .app{font-size:11px}
+  .timer-box{gap:9px}
+  .clock{width:41px;height:41px;font-size:22px}
+  #timer{font-size:20px}
+  .hint{font-size:14px}
+  .pay-btn{font-size:25px}
+}
 </style>
 </head>
 
@@ -73,12 +128,12 @@ button:disabled{opacity:.6;cursor:not-allowed}
   <div class="accent"></div>
 
   <div id="loading" class="message">Loading payment details...</div>
-  <div id="error" class="message error-message" role="alert" hidden></div>
+  <div id="error" class="message" hidden></div>
 
   <section id="paymentContent" hidden>
     <div class="details">
       <div class="row">
-        <div class="detail-icon">👤</div>
+        <div class="detail-icon" aria-hidden="true">👤</div>
         <div class="detail-text">
           <span class="label">Customer</span>
           <strong class="value" id="customerName">-</strong>
@@ -86,7 +141,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
       </div>
 
       <div class="row">
-        <div class="detail-icon">₹</div>
+        <div class="detail-icon" aria-hidden="true">₹</div>
         <div class="detail-text">
           <span class="label">Amount</span>
           <strong class="value">₹<span id="amount">0.00</span></strong>
@@ -94,61 +149,119 @@ button:disabled{opacity:.6;cursor:not-allowed}
       </div>
 
       <div class="row">
-        <div class="detail-icon">➤</div>
+        <div class="detail-icon" aria-hidden="true">➤</div>
         <div class="detail-text">
           <span class="label">UPI ID</span>
           <div class="upi-line">
             <strong class="value" id="upiId">-</strong>
-            <button id="copyBtn" class="copy-btn" type="button">Copy</button>
+            <button id="copyBtn" class="copy-btn" type="button">▢ Copy</button>
           </div>
         </div>
       </div>
     </div>
 
     <h2 class="qr-title">Scan QR Code to Pay</h2>
+
     <div class="qr-frame">
-      <div id="qrLoading">Preparing QR Code...</div>
+      <div id="qrLoading" class="qr-loading">Preparing QR Code...</div>
       <img id="qrImage" alt="UPI payment QR code" hidden>
     </div>
 
-    <h2 class="qr-title">Choose UPI App</h2>
+    <!-- App-style vector icons; decorative only -->
     <div class="apps">
-      <button type="button" class="app-btn gpay" id="gpayBtn">Google Pay</button>
-      <button type="button" class="app-btn phonepe" id="phonepeBtn">PhonePe</button>
-      <button type="button" class="app-btn other" id="otherBtn">Other UPI App</button>
+      <div class="app">
+        <div class="logo" aria-label="Google Pay icon">
+          <svg viewBox="0 0 40 40" aria-hidden="true">
+            <path d="M29 8a15 15 0 0 0-20 4l6 5a8 8 0 0 1 12-2z" fill="#4285F4"/>
+            <path d="M9 12a15 15 0 0 0 0 16l6-5a8 8 0 0 1 0-6z" fill="#34A853"/>
+            <path d="M9 28a15 15 0 0 0 20 4l-6-5a8 8 0 0 1-12-2z" fill="#FBBC05"/>
+            <path d="M29 8l-6 7a8 8 0 0 1 0 10l6 7a15 15 0 0 0 0-24z" fill="#EA4335"/>
+          </svg>
+        </div>
+        <div class="app-name">Google Pay</div>
+      </div>
+
+      <div class="app">
+        <div class="logo" aria-label="PhonePe style icon">
+          <svg viewBox="0 0 40 40" aria-hidden="true">
+            <circle cx="20" cy="20" r="20" fill="#5F259F"/>
+            <text x="20" y="28" text-anchor="middle" font-size="23" font-weight="bold" fill="#fff">पे</text>
+          </svg>
+        </div>
+        <div class="app-name">PhonePe</div>
+      </div>
+
+      <div class="app">
+        <div class="logo" aria-label="Paytm style icon">
+          <svg viewBox="0 0 40 40" aria-hidden="true">
+            <text x="20" y="25" text-anchor="middle" font-size="13" font-weight="bold" fill="#00A5E8">Paytm</text>
+            <path d="M8 29h24" stroke="#203B87" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="app-name">Paytm</div>
+      </div>
+
+      <div class="app">
+        <div class="logo" aria-label="BHIM style icon">
+          <svg viewBox="0 0 40 40" aria-hidden="true">
+            <path d="M20 5L34 31H6z" fill="#138808"/>
+            <path d="M20 5L27 18H13z" fill="#FF9933"/>
+            <path d="M17 22l-4 7h14l-4-7z" fill="#fff"/>
+          </svg>
+        </div>
+        <div class="app-name">BHIM</div>
+      </div>
+
+      <div class="app">
+        <div class="logo" aria-label="Other UPI apps">
+          <svg viewBox="0 0 40 40" aria-hidden="true">
+            <circle cx="20" cy="20" r="19" fill="#172B45"/>
+            <text x="20" y="24" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">UPI</text>
+            <path d="M25 27q4 2 7-1" fill="none" stroke="#F6A623" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="app-name">Other UPI</div>
+      </div>
     </div>
 
     <div class="timer-box">
-      <div id="timer">Time Remaining: 02:00</div>
-      <p class="hint" id="timerMessage">
-        Please scan the QR code using your UPI app.
-      </p>
+      <div class="clock" aria-hidden="true">◷</div>
+      <div>
+        <div id="timer">Time Remaining: 02:00</div>
+        <p class="hint" id="timerMessage">Please scan the QR code using your UPI app.</p>
+      </div>
     </div>
 
     <p class="warning">
-      भुगतान से पहले प्राप्तकर्ता की UPI ID और रकम जाँचें।
-      ऐप खुलने या QR दिखने से भुगतान सफल होने की पुष्टि नहीं होती।
+      Please check the recipient name and amount in your UPI app before confirming payment.
+      The timer only hides the QR code; it does not verify payment.
     </p>
 
-    <button class="pay-btn" id="payBtn" type="button">Pay Now →</button>
-    <p id="payMessage" class="hint" role="status"></p>
+    <button class="pay-btn" id="payBtn" type="button">
+      <span aria-hidden="true">➤</span>
+      <span>Pay Now</span>
+      <span aria-hidden="true">›</span>
+    </button>
   </section>
 </main>
 
 <script>
-"use strict";
-
-const $ = id => document.getElementById(id);
-
-const loading = $("loading");
-const errorBox = $("error");
-const paymentContent = $("paymentContent");
-const qrImage = $("qrImage");
-const qrLoading = $("qrLoading");
+const loading = document.getElementById("loading");
+const errorBox = document.getElementById("error");
+const paymentContent = document.getElementById("paymentContent");
+const siteNameEl = document.getElementById("siteName");
+const customerNameEl = document.getElementById("customerName");
+const amountEl = document.getElementById("amount");
+const upiIdEl = document.getElementById("upiId");
+const qrImage = document.getElementById("qrImage");
+const qrLoading = document.getElementById("qrLoading");
+const timerEl = document.getElementById("timer");
+const timerMessage = document.getElementById("timerMessage");
+const copyBtn = document.getElementById("copyBtn");
+const payBtn = document.getElementById("payBtn");
 
 let upiUri = "";
 let timerInterval = null;
-let qrRequestNumber = 0;
 
 function showError(message) {
   clearInterval(timerInterval);
@@ -158,14 +271,6 @@ function showError(message) {
   errorBox.hidden = false;
 }
 
-function createQrUrl(data) {
-  const url = new URL("https://api.qrserver.com/v1/create-qr-code/");
-  url.searchParams.set("size", "400x400");
-  url.searchParams.set("margin", "10");
-  url.searchParams.set("data", data);
-  return url.toString();
-}
-
 function startTimer() {
   clearInterval(timerInterval);
   let left = 120;
@@ -173,18 +278,15 @@ function startTimer() {
   function tick() {
     const mm = String(Math.floor(left / 60)).padStart(2, "0");
     const ss = String(left % 60).padStart(2, "0");
-
-    $("timer").textContent =
-      left > 0 ? Time Remaining: ${mm}:${ss} : "Time Expired";
+    timerEl.textContent = "Time Remaining: " + mm + ":" + ss;
 
     if (left <= 0) {
       clearInterval(timerInterval);
       qrImage.hidden = true;
       qrLoading.hidden = false;
-      qrLoading.textContent =
-        "Timer expired. Reload the page to display the QR code again.";
-      $("timerMessage").textContent =
-        "The timer does not verify payment.";
+      qrLoading.textContent = "Time expired. Reopen the payment link for a new QR code.";
+      timerEl.textContent = "Time Expired";
+      timerMessage.textContent = "Please reopen the payment link to generate a new QR code.";
       return;
     }
     left--;
@@ -194,16 +296,20 @@ function startTimer() {
   timerInterval = setInterval(tick, 1000);
 }
 
-function loadQr(data) {
-  const requestNumber = ++qrRequestNumber;
+function createQrUrl(data) {
+  const url = new URL("https://api.qrserver.com/v1/create-qr-code/");
+  url.searchParams.set("size", "600x600");
+  url.searchParams.set("margin", "12");
+  url.searchParams.set("data", data);
+  return url.toString();
+}
 
+function loadQr(data) {
   qrLoading.hidden = false;
   qrLoading.textContent = "Preparing QR Code...";
   qrImage.hidden = true;
 
-  qrImage.onload = () => {
-    if (requestNumber !== qrRequestNumber) return;
-
+  qrImage.onload = function() {
     qrImage.hidden = false;
     qrLoading.hidden = true;
     loading.hidden = true;
@@ -211,173 +317,85 @@ function loadQr(data) {
     startTimer();
   };
 
-  qrImage.onerror = () => {
-    if (requestNumber !== qrRequestNumber) return;
-
-    qrLoading.hidden = false;
-    qrLoading.textContent =
-      "QR code could not load. Check your internet or use a UPI app button.";
-    loading.hidden = true;
-    paymentContent.hidden = false;
+  qrImage.onerror = function() {
+    showError("QR Code could not load. Please check your internet connection and reopen the link.");
   };
 
   qrImage.src = createQrUrl(data);
 }
 
-async function fetchJson(url) {
-  const response = await fetch(url, { cache: "no-store" });
-
-  let data;
-  try {
-    data = await response.json();
-  } catch {
-    throw new Error("Server ने सही JSON जवाब नहीं दिया: " + url);
-  }
-
-  if (!response.ok) {
-    throw new Error(
-      data.message || Server error (${response.status}): ${url}
-    );
-  }
-
-  return data;
-}
-
 async function loadPayment() {
   const id = new URLSearchParams(location.search).get("id");
 
-  if (!id || !id.trim()) {
-    showError(
-      "Customer ID नहीं मिली। Admin Panel में Customers से Copy दबाकर पूरा Payment Link खोलें।"
-    );
+  if (!id) {
+    showError("Customer ID is missing. Open the correct payment link from Admin Panel.");
     return;
   }
 
   try {
-    const customerUrl =
-      "/api/customer-link/" + encodeURIComponent(id);
-
-    const [customerResult, settings] = await Promise.all([
-      fetchJson(customerUrl),
-      fetchJson("/api/settings")
+    const [customerResponse, settingsResponse] = await Promise.all([
+      fetch("/api/customer-link/" + encodeURIComponent(id)),
+      fetch("/api/settings")
     ]);
 
-    if (customerResult.success === false) {
-      throw new Error(
-        customerResult.message || "Customer details could not be loaded."
-      );
+    if (!customerResponse.ok) {
+      throw new Error("Payment link not found. Please create a new link in Admin Panel.");
     }
 
+    if (!settingsResponse.ok) {
+      throw new Error("Payment settings could not be loaded.");
+    }
+
+    const customerResult = await customerResponse.json();
+    const settings = await settingsResponse.json();
     const customer = customerResult.customer || customerResult;
 
-    const name = String(
-      customer.name ||
-      customer.customerName ||
-      customer.customer_name ||
-      ""
-    ).trim();
-
+    const name = String(customer.name || customer.customerName || customer.customer_name || "").trim();
     const amount = Number(customer.amount);
+    const upiId = String(settings.upiId || settings.upi_id || "").trim();
+    const siteName = String(settings.siteName || settings.site_name || "Payment").trim();
 
-    const upiId = String(
-      settings.upiId || settings.upi_id || ""
-    ).trim();
-
-    const siteName = String(
-      settings.siteName || settings.site_name || "Payment"
-    ).trim();
-
-    if (!name) {
-      throw new Error("Customer name नहीं मिला। Admin Panel में रिकॉर्ड जाँचें।");
+    if (!name || !Number.isFinite(amount) || amount <= 0 || !upiId) {
+      throw new Error("Customer name, valid amount, or UPI ID is missing. Check Admin Settings.");
     }
 
-    if (!Number.isFinite(amount) || amount <= 0) {
-      throw new Error("Customer की रकम सही नहीं है। Admin Panel में जाँचें।");
-    }
-
-    if (!upiId || !upiId.includes("@")) {
-      throw new Error("Valid UPI ID नहीं मिली। Admin Settings में जाँचें।");
-    }
-
-    $("siteName").textContent = siteName;
+    siteNameEl.textContent = siteName;
     document.title = siteName + " - Payment";
-    $("customerName").textContent = name;
-    $("amount").textContent = amount.toFixed(2);
-    $("upiId").textContent = upiId;
+    customerNameEl.textContent = name;
+    amountEl.textContent = amount.toFixed(2);
+    upiIdEl.textContent = upiId;
 
-    const params = new URLSearchParams({
-      pa: upiId,
-      pn: name,
-      am: amount.toFixed(2),
-      cu: "INR",
-      tn: "Customer Payment"
-    });
+    const intent = new URL("upi://pay");
+    intent.searchParams.set("pa", upiId);
+    intent.searchParams.set("pn", name);
+    intent.searchParams.set("am", amount.toFixed(2));
+    intent.searchParams.set("cu", "INR");
+    intent.searchParams.set("tn", "Customer Payment");
 
-    upiUri = "upi://pay?" + params.toString();
+    upiUri = intent.toString();
 
     loading.hidden = true;
-    errorBox.hidden = true;
     paymentContent.hidden = false;
-
     loadQr(upiUri);
 
   } catch (error) {
-    console.error("Payment page error:", error);
     showError(error.message || "Payment page could not load.");
   }
 }
 
-function openUpiApp(packageName) {
-  if (!upiUri) {
-    $("payMessage").textContent =
-      "Payment details अभी तैयार नहीं हैं।";
-    return;
-  }
-
-  $("payMessage").textContent =
-    "UPI app खोलने की कोशिश की जा रही है। भुगतान करने से पहले नाम और रकम जाँचें।";
-
-  if (!packageName) {
-    window.location.href = upiUri;
-    return;
-  }
-
-  const query = upiUri.substring("upi://".length);
-
-  const intentUrl =
-    "intent://" + query +
-    "#Intent;scheme=upi;package=" +
-    packageName + ";end";
-
-  window.location.href = intentUrl;
-}
-
-$("gpayBtn").addEventListener("click", () => {
-  openUpiApp("com.google.android.apps.nbu.paisa.user");
-});
-
-$("phonepeBtn").addEventListener("click", () => {
-  openUpiApp("com.phonepe.app");
-});
-
-$("otherBtn").addEventListener("click", () => {
-  openUpiApp("");
-});
-
-$("payBtn").addEventListener("click", () => {
-  openUpiApp("");
-});
-
-$("copyBtn").addEventListener("click", async () => {
-  const value = $("upiId").textContent;
-
+copyBtn.addEventListener("click", async function() {
+  const value = upiIdEl.textContent;
   try {
     await navigator.clipboard.writeText(value);
-    $("copyBtn").textContent = "Copied!";
-    setTimeout(() => $("copyBtn").textContent = "Copy", 1500);
+    copyBtn.textContent = "Copied!";
+    setTimeout(() => copyBtn.textContent = "▢ Copy", 1600);
   } catch {
-    window.prompt("UPI ID कॉपी करें:", value);
+    window.prompt("Copy UPI ID:", value);
   }
+});
+
+payBtn.addEventListener("click", function() {
+  if (upiUri) window.location.href = upiUri;
 });
 
 loadPayment();
