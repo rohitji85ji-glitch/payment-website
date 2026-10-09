@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Payment Page</title>
+  <title>Payment</title>
 
   <style>
     * {
@@ -25,7 +25,7 @@
       padding: 32px;
       background: #fff;
       border-radius: 38px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
       text-align: center;
     }
 
@@ -38,12 +38,12 @@
     .subtitle {
       color: #666;
       font-size: 25px;
-      margin-bottom: 40px;
+      margin-bottom: 35px;
     }
 
     .details {
       background: #f4f4f4;
-      padding: 30px 12px;
+      padding: 25px 12px;
       border-radius: 25px;
       margin: 25px 0;
       font-size: 23px;
@@ -57,7 +57,7 @@
 
     .qr-section {
       margin-top: 30px;
-      padding-top: 30px;
+      padding-top: 25px;
       border-top: 1px solid #ddd;
     }
 
@@ -83,36 +83,35 @@
     }
 
     #timer {
-      font-size: 32px;
+      font-size: 30px;
       font-weight: bold;
     }
 
     .hint {
-      font-size: 20px;
+      font-size: 19px;
       line-height: 1.6;
-      margin-bottom: 0;
     }
 
     .warning {
       color: #777;
-      font-size: 17px;
+      font-size: 16px;
       line-height: 1.6;
       margin: 25px 0;
     }
 
     .close-btn {
       width: 100%;
-      padding: 23px 10px;
+      padding: 22px 10px;
       border: none;
       border-radius: 18px;
       background: #d92d32;
-      color: #fff;
+      color: white;
       font-size: 24px;
       cursor: pointer;
     }
 
     .message {
-      padding: 15px;
+      padding: 16px;
       background: #fff3cd;
       border-radius: 12px;
       color: #664d03;
@@ -151,7 +150,7 @@
       }
 
       #timer {
-        font-size: 27px;
+        font-size: 26px;
       }
 
       .hint {
@@ -162,37 +161,52 @@
 </head>
 
 <body>
-
   <main class="payment-card">
     <h1 id="siteName">Payment</h1>
     <div class="subtitle">Make payment using UPI</div>
 
-    <div id="loading" class="message">Payment details लोड हो रहे हैं...</div>
+    <div id="loading" class="message">
+      Payment details लोड हो रहे हैं...
+    </div>
+
     <div id="error" class="message" hidden></div>
 
     <section id="paymentContent" hidden>
       <div class="details">
-        <p><strong>Customer:</strong> <span id="customerName">-</span></p>
-        <p><strong>Amount:</strong> ₹<span id="amount">0.00</span></p>
-        <p><strong>UPI ID:</strong> <span id="upiId">-</span></p>
+        <p>
+          <strong>Customer:</strong>
+          <span id="customerName">-</span>
+        </p>
+
+        <p>
+          <strong>Amount:</strong>
+          ₹<span id="amount">0.00</span>
+        </p>
+
+        <p>
+          <strong>UPI ID:</strong>
+          <span id="upiId">-</span>
+        </p>
       </div>
 
-      <section class="qr-section" id="qrSection">
+      <section class="qr-section">
         <h2 id="qrHeading">Scan QR Code to Pay</h2>
 
-        <img id="qrImage" alt="UPI Payment QR Code">
+        <img id="qrImage" alt="UPI Payment QR Code" hidden>
 
         <div class="timer-box">
           <div id="timer">Time Remaining: 02:00</div>
+
           <p class="hint" id="timerMessage">
             कृपया 2 मिनट के अंदर QR Code scan करें।
+            समय समाप्त होने पर QR छिप जाएगा।
           </p>
         </div>
 
         <p class="warning">
-          यह टाइमर केवल QR को स्क्रीन पर दिखाने का समय नियंत्रित करता है।
-          यह भुगतान की सफलता की पुष्टि नहीं करता।
-          भुगतान करने से पहले UPI ऐप में नाम और रकम जाँच लें।
+          यह टाइमर केवल QR Code को स्क्रीन पर दिखाने का समय नियंत्रित करता है।
+          यह भुगतान की पुष्टि नहीं करता। भुगतान से पहले UPI ऐप में
+          प्राप्तकर्ता का नाम और रकम जाँच लें।
         </p>
 
         <button class="close-btn" id="closeBtn" type="button">
@@ -217,6 +231,7 @@
     const closeBtn = document.getElementById("closeBtn");
 
     let timerInterval = null;
+    let qrClosed = false;
 
     function showError(message) {
       loading.hidden = true;
@@ -226,16 +241,19 @@
     }
 
     function hideQR() {
+      qrClosed = true;
       clearInterval(timerInterval);
       qrImage.hidden = true;
       qrHeading.textContent = "QR Code बंद है";
       timerEl.textContent = "Time समाप्त";
-      timerMessage.textContent = "QR Code अब दिखाई नहीं दे रहा है।";
+      timerMessage.textContent =
+        "QR Code छिपा दिया गया है। नया लिंक खोलकर दोबारा प्रयास करें।";
       closeBtn.hidden = true;
     }
 
     function startTimer() {
       let secondsLeft = 120;
+      qrClosed = false;
 
       qrImage.hidden = false;
       closeBtn.hidden = false;
@@ -266,7 +284,7 @@
       const id = params.get("id");
 
       if (!id) {
-        showError("यह Customer Payment Link अधूरा है। सही लिंक खोलें।");
+        showError("Payment link में Customer ID नहीं है। Admin Panel से सही लिंक खोलें।");
         return;
       }
 
@@ -277,34 +295,50 @@
         ]);
 
         if (!customerResponse.ok) {
-          throw new Error("Customer details नहीं मिले।");
+          throw new Error("Customer link नहीं मिला। Admin Panel से नया लिंक बनाएँ।");
         }
 
         if (!settingsResponse.ok) {
-          throw new Error("Payment settings लोड नहीं हुईं।");
+          throw new Error("Website की payment settings लोड नहीं हुईं।");
         }
 
-        const customer = await customerResponse.json();
-        const settings = await settingsResponse.json();
+        const customerResult = await customerResponse.json();
+        const settingsResult = await settingsResponse.json();
 
-        const name =
-          customer.name ||
-          customer.customerName ||
-          customer.customer_name;
+        // server.js ग्राहक का डेटा customer के अंदर भेजता है।
+        const customerData =
+          customerResult.customer || customerResult;
 
-        const amount = Number(customer.amount);
+        const name = String(
+          customerData.name ||
+          customerData.customerName ||
+          customerData.customer_name ||
+          ""
+        ).trim();
 
-        const upiId =
-          settings.upiId ||
-          settings.upi_id;
+        const amount = Number(customerData.amount);
 
-        const siteName =
-          settings.siteName ||
-          settings.site_name ||
-          "Payment";
+        const upiId = String(
+          settingsResult.upiId ||
+          settingsResult.upi_id ||
+          ""
+        ).trim();
 
-        if (!name || !Number.isFinite(amount) || amount <= 0 || !upiId) {
-          throw new Error("Customer name, सही amount या UPI ID उपलब्ध नहीं है।");
+        const siteName = String(
+          settingsResult.siteName ||
+          settingsResult.site_name ||
+          "Payment"
+        ).trim();
+
+        if (
+          !name ||
+          !Number.isFinite(amount) ||
+          amount <= 0 ||
+          !upiId
+        ) {
+          throw new Error(
+            "Customer name, सही amount या UPI ID उपलब्ध नहीं है। Settings और Customer Link जाँचें।"
+          );
         }
 
         siteNameEl.textContent = siteName;
@@ -313,6 +347,7 @@
         amountEl.textContent = amount.toFixed(2);
         upiIdEl.textContent = upiId;
 
+        // UPI भुगतान की जानकारी से QR तैयार करें।
         const upiUri = new URL("upi://pay");
         upiUri.searchParams.set("pa", upiId);
         upiUri.searchParams.set("pn", name);
@@ -320,7 +355,6 @@
         upiUri.searchParams.set("cu", "INR");
         upiUri.searchParams.set("tn", "Customer Payment");
 
-        // QR लिंक खुलते ही अपने आप बनेगा।
         const qrUrl = new URL(
           "https://api.qrserver.com/v1/create-qr-code/"
         );
@@ -329,6 +363,8 @@
         qrUrl.searchParams.set("data", upiUri.toString());
 
         qrImage.onload = function () {
+          if (qrClosed) return;
+
           loading.hidden = true;
           errorBox.hidden = true;
           paymentContent.hidden = false;
@@ -336,13 +372,17 @@
         };
 
         qrImage.onerror = function () {
-          showError("QR Code लोड नहीं हुआ। इंटरनेट कनेक्शन जाँचकर दोबारा खोलें।");
+          showError(
+            "QR Code लोड नहीं हुआ। इंटरनेट कनेक्शन जाँचकर पेज दोबारा खोलें।"
+          );
         };
 
         qrImage.src = qrUrl.toString();
 
       } catch (error) {
-        showError(error.message || "Payment Page लोड नहीं हुआ।");
+        showError(
+          error.message || "Payment Page लोड नहीं हुआ।"
+        );
       }
     }
 
@@ -350,6 +390,5 @@
 
     loadPayment();
   </script>
-
 </body>
 </html>
