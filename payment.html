@@ -13,25 +13,25 @@
 
     body {
       margin: 0;
-      padding: 20px 12px;
+      padding: 16px 10px;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #edf5fc, #e8edf7);
       color: #101b3b;
+      background: linear-gradient(135deg, #edf5fc, #e8edf7);
     }
 
     .payment-card {
       width: 100%;
       max-width: 650px;
-      margin: 25px auto;
-      padding: 30px;
+      margin: 12px auto;
+      padding: 28px;
       background: #fff;
-      border-radius: 32px;
+      border-radius: 30px;
       box-shadow: 0 15px 45px rgba(30, 60, 100, 0.12);
       text-align: center;
     }
 
     h1 {
-      margin: 5px 0 10px;
+      margin: 4px 0 10px;
       font-size: clamp(30px, 7vw, 44px);
       overflow-wrap: anywhere;
     }
@@ -47,34 +47,64 @@
       display: block;
       width: 75px;
       height: 5px;
-      margin: 18px auto 0;
-      background: #10b981;
+      margin: 17px auto 0;
       border-radius: 10px;
+      background: #10b981;
     }
 
     .details {
-      padding: 20px;
+      padding: 12px 20px;
       margin: 25px 0;
       text-align: left;
       background: #f5f8fc;
       border: 1px solid #e4ebf4;
-      border-radius: 25px;
+      border-radius: 24px;
     }
 
-    .details p {
-      margin: 0;
-      padding: 17px 0;
-      font-size: 20px;
-      line-height: 1.5;
-      overflow-wrap: anywhere;
+    .detail-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 15px 0;
     }
 
-    .details p + p {
+    .detail-row + .detail-row {
       border-top: 1px solid #dce5ef;
     }
 
-    .details strong {
+    .detail-icon {
+      width: 62px;
+      height: 62px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #087443;
+      background: #d9f5e8;
+      font-size: 29px;
+      font-weight: bold;
+    }
+
+    .detail-text {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      overflow-wrap: anywhere;
+    }
+
+    .detail-label {
       color: #64748b;
+      font-size: 18px;
+    }
+
+    .detail-value {
+      color: #101b3b;
+      font-size: 22px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
 
     .qr-section {
@@ -82,10 +112,23 @@
       border-top: 1px solid #dce5ef;
     }
 
-    .qr-section h2 {
+    .qr-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
       margin: 15px 0 22px;
-      font-size: clamp(23px, 5.5vw, 32px);
-      color: #101b3b;
+      font-size: clamp(22px, 5.5vw, 31px);
+    }
+
+    .qr-title::before,
+    .qr-title::after {
+      content: "";
+      width: 35px;
+      height: 4px;
+      flex-shrink: 0;
+      border-radius: 10px;
+      background: #10b981;
     }
 
     #qrImage {
@@ -96,12 +139,13 @@
       margin: 20px auto;
       padding: 10px;
       background: #fff;
-      border-radius: 22px;
+      border-radius: 20px;
       box-shadow: 0 8px 30px rgba(20, 40, 70, 0.12);
+      image-rendering: pixelated;
     }
 
     .timer-box {
-      padding: 22px 14px;
+      padding: 23px 14px;
       margin: 22px 0;
       color: #174a91;
       background: linear-gradient(135deg, #e6f4ff, #dceeff);
@@ -114,7 +158,7 @@
     }
 
     .hint {
-      margin-bottom: 0;
+      margin: 12px 0 0;
       font-size: 17px;
       line-height: 1.7;
     }
@@ -128,14 +172,14 @@
 
     .close-btn {
       width: 100%;
-      padding: 19px 12px;
+      padding: 20px 12px;
       border: none;
       border-radius: 20px;
-      color: #fff;
+      color: white;
       background: linear-gradient(135deg, #ef3038, #d91f2b);
       box-shadow: 0 8px 18px rgba(220, 30, 45, 0.2);
       font-size: 23px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
     }
 
@@ -148,8 +192,8 @@
       border-radius: 14px;
       background: #fff3cd;
       color: #664d03;
-      overflow-wrap: anywhere;
       line-height: 1.6;
+      overflow-wrap: anywhere;
     }
 
     [hidden] {
@@ -158,25 +202,56 @@
 
     @media (max-width: 480px) {
       body {
-        padding: 10px;
+        padding: 8px;
       }
 
       .payment-card {
-        margin: 12px auto;
-        padding: 22px 17px;
-        border-radius: 27px;
+        margin: 8px auto;
+        padding: 22px 16px;
+        border-radius: 26px;
       }
 
       .details {
-        padding: 15px;
+        padding: 10px 13px;
       }
 
-      .details p {
-        font-size: 18px;
+      .detail-row {
+        gap: 12px;
+      }
+
+      .detail-icon {
+        width: 52px;
+        height: 52px;
+        font-size: 25px;
+      }
+
+      .detail-label {
+        font-size: 17px;
+      }
+
+      .detail-value {
+        font-size: 19px;
+      }
+
+      .qr-title {
+        gap: 8px;
+      }
+
+      .qr-title::before,
+      .qr-title::after {
+        width: 20px;
       }
 
       #qrImage {
         max-width: 100%;
+      }
+
+      .hint {
+        font-size: 16px;
+      }
+
+      .warning {
+        font-size: 15px;
       }
     }
   </style>
@@ -195,34 +270,42 @@
 
     <section id="paymentContent" hidden>
       <div class="details">
-        <p>
-          <strong>Customer:</strong>
-          <span id="customerName">-</span>
-        </p>
+        <div class="detail-row">
+          <div class="detail-icon" aria-hidden="true">👤</div>
+          <div class="detail-text">
+            <span class="detail-label">Customer:</span>
+            <strong class="detail-value" id="customerName">-</strong>
+          </div>
+        </div>
 
-        <p>
-          <strong>Amount:</strong>
-          ₹<span id="amount">0.00</span>
-        </p>
+        <div class="detail-row">
+          <div class="detail-icon" aria-hidden="true">₹</div>
+          <div class="detail-text">
+            <span class="detail-label">Amount:</span>
+            <strong class="detail-value">₹<span id="amount">0.00</span></strong>
+          </div>
+        </div>
 
-        <p>
-          <strong>UPI ID:</strong>
-          <span id="upiId">-</span>
-        </p>
+        <div class="detail-row">
+          <div class="detail-icon" aria-hidden="true">➤</div>
+          <div class="detail-text">
+            <span class="detail-label">UPI ID:</span>
+            <strong class="detail-value" id="upiId">-</strong>
+          </div>
+        </div>
       </div>
 
       <section class="qr-section">
-        <h2 id="qrHeading">Scan QR Code to Pay</h2>
+        <h2 class="qr-title" id="qrHeading">Scan QR Code to Pay</h2>
 
         <img
           id="qrImage"
-          alt="UPI Payment QR Code"
+          alt="UPI payment QR code"
           hidden
         >
 
         <div class="timer-box">
           <div id="timer">Time Remaining: 02:00</div>
-
           <p class="hint" id="timerMessage">
             कृपया 2 मिनट के अंदर QR Code scan करें।
             समय समाप्त होने पर QR छिप जाएगा।
@@ -277,14 +360,13 @@
       qrHeading.textContent = "QR Code बंद है";
       timerEl.textContent = "Time समाप्त";
       timerMessage.textContent =
-        "QR Code छिपा दिया गया है। दोबारा खोलने के लिए Payment Link खोलें।";
+        "QR Code छिपा दिया गया है। दोबारा देखने के लिए Payment Link फिर खोलें।";
 
       closeBtn.hidden = true;
     }
 
     function startTimer() {
       clearInterval(timerInterval);
-
       let secondsLeft = 120;
       qrClosed = false;
 
@@ -385,7 +467,7 @@
         amountEl.textContent = amount.toFixed(2);
         upiIdEl.textContent = upiId;
 
-        // QR में ग्राहक की वास्तविक UPI ID और रकम रखी जाती है।
+        // असली UPI ID और ग्राहक की रकम से QR payload बनाएँ।
         const upiUri = new URL("upi://pay");
         upiUri.searchParams.set("pa", upiId);
         upiUri.searchParams.set("pn", name);
@@ -393,7 +475,7 @@
         upiUri.searchParams.set("cu", "INR");
         upiUri.searchParams.set("tn", "Customer Payment");
 
-        // QR इमेज ऑनलाइन सेवा से बनती है।
+        // QR इमेज ऑनलाइन सेवा से बनाई जाती है।
         const qrUrl = new URL(
           "https://api.qrserver.com/v1/create-qr-code/"
         );
@@ -407,28 +489,23 @@
           loading.hidden = true;
           errorBox.hidden = true;
           paymentContent.hidden = false;
-
-          // QR लोड होने पर टाइमर अपने आप शुरू होता है।
           startTimer();
         };
 
         qrImage.onerror = function () {
           showError(
-            "QR Code लोड नहीं हुआ। इंटरनेट जाँचकर पेज दोबारा खोलें।"
+            "QR Code लोड नहीं हुआ। इंटरनेट कनेक्शन जाँचकर पेज दोबारा खोलें।"
           );
         };
 
         qrImage.src = qrUrl.toString();
 
       } catch (error) {
-        showError(
-          error.message || "Payment Page लोड नहीं हुआ।"
-        );
+        showError(error.message || "Payment Page लोड नहीं हुआ।");
       }
     }
 
     closeBtn.addEventListener("click", hideQR);
-
     loadPayment();
   </script>
 </body>
