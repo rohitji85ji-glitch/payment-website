@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,10 +20,7 @@ body{
 h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
 .subtitle{font-size:21px;color:#64748b;margin-bottom:18px}
 .accent{width:90px;height:6px;margin:0 auto 22px;background:#08c879;border-radius:8px}
-.details{
-  padding:9px 16px;border:1px solid #d8e8ff;
-  border-radius:23px;background:#f5f9ff;text-align:left
-}
+.details{padding:9px 16px;border:1px solid #d8e8ff;border-radius:23px;background:#f5f9ff;text-align:left}
 .row{display:flex;align-items:center;gap:13px;padding:15px 0}
 .row+.row{border-top:1px solid #d7e4f5}
 .detail-icon{
@@ -33,58 +30,21 @@ h1{font-size:clamp(30px,7vw,45px);margin:3px 0 8px;overflow-wrap:anywhere}
 }
 .detail-text{flex:1;min-width:0}
 .label{display:block;color:#64748b;font-size:17px;margin-bottom:4px}
-.value{
-  display:block;font-size:clamp(18px,4.5vw,23px);font-weight:750;
-  overflow-wrap:anywhere;word-break:break-word
-}
+.value{display:block;font-size:clamp(18px,4.5vw,23px);font-weight:750;overflow-wrap:anywhere;word-break:break-word}
 .upi-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-button{cursor:pointer}
-.copy-btn{
-  padding:9px 11px;border:1px solid #c6ddff;border-radius:13px;
-  background:#eaf3ff;color:#0752ad;font-size:13px;font-weight:bold
-}
-.qr-title{
-  display:flex;align-items:center;justify-content:center;gap:9px;
-  margin:27px 0 18px;font-size:clamp(21px,5.2vw,30px)
-}
-.qr-title:before,.qr-title:after{
-  content:"";width:26px;height:4px;flex-shrink:0;
-  border-radius:5px;background:#08c879
-}
-.qr-frame{
-  position:relative;width:100%;max-width:430px;margin:0 auto 20px;
-  padding:12px;border-radius:23px;background:#fff;
-  box-shadow:0 7px 25px #244a781c
-}
-.qr-frame:before{
-  content:"";position:absolute;inset:5px;border:4px solid #28c993;
-  border-radius:17px;pointer-events:none
-}
+.copy-btn{padding:9px 11px;border:1px solid #c6ddff;border-radius:13px;background:#eaf3ff;color:#0752ad;font-size:13px;font-weight:bold}
+.qr-title{display:flex;align-items:center;justify-content:center;gap:9px;margin:27px 0 18px;font-size:clamp(21px,5.2vw,30px)}
+.qr-title:before,.qr-title:after{content:"";width:26px;height:4px;flex-shrink:0;border-radius:5px;background:#08c879}
+.qr-frame{position:relative;width:100%;max-width:430px;margin:0 auto 20px;padding:12px;border-radius:23px;background:#fff;box-shadow:0 7px 25px #244a781c}
+.qr-frame:before{content:"";position:absolute;inset:5px;border:4px solid #28c993;border-radius:17px;pointer-events:none}
 #qrImage{position:relative;display:block;width:100%;height:auto}
 .qr-loading{padding:25px 5px;color:#64748b}
-.apps{
-  display:flex;justify-content:space-around;align-items:flex-start;
-  gap:8px;padding:16px 7px 13px;margin:18px 0;
-  background:#f1f6ff;border-radius:22px
-}
+.apps{display:flex;justify-content:space-around;align-items:flex-start;gap:8px;padding:16px 7px 13px;margin:18px 0;background:#f1f6ff;border-radius:22px}
 .app{flex:1;min-width:0;color:#52627f;font-size:12px}
-.logo{
-  width:47px;height:47px;margin:0 auto 7px;background:#fff;
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 13px #00000012
-}
+.logo{width:47px;height:47px;margin:0 auto 7px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 13px #00000012}
 .logo svg{width:30px;height:30px;display:block}
-.app-name{white-space:normal}
-.timer-box{
-  display:flex;align-items:center;gap:12px;padding:18px 12px;
-  margin:20px 0;border-radius:22px;color:#0645a1;
-  background:linear-gradient(135deg,#e3f2ff,#d5eaff);text-align:left
-}
-.clock{
-  width:47px;height:47px;flex-shrink:0;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:#c4e0ff;font-size:25px
-}
+.timer-box{display:flex;align-items:center;gap:12px;padding:18px 12px;margin:20px 0;border-radius:22px;color:#0645a1;background:linear-gradient(135deg,#e3f2ff,#d5eaff);text-align:left}
+.clock{width:47px;height:47px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#c4e0ff;font-size:25px}
 #timer{font-size:clamp(19px,4.8vw,28px);font-weight:800}
 .hint{font-size:15px;line-height:1.5;margin:8px 0 0}
 .warning{margin:19px 0;color:#64748b;font-size:14px;line-height:1.65}
@@ -92,33 +52,19 @@ button{cursor:pointer}
   display:flex;align-items:center;justify-content:center;gap:15px;
   width:100%;min-height:68px;padding:17px 12px;border:0;
   border-radius:20px;background:linear-gradient(110deg,#10d987,#00a96a);
-  box-shadow:0 9px 22px #00be7040;color:white;
-  font-size:27px;font-weight:800
+  box-shadow:0 9px 22px #00be7040;color:white;font-size:27px;font-weight:800;cursor:pointer
 }
-.pay-btn:active{transform:scale(.98)}
-.message{
-  padding:15px;border-radius:14px;color:#684d00;
-  background:#fff2c9;line-height:1.6;overflow-wrap:anywhere
-}
-.error-message{background:#ffebee;color:#a61b1b}
+.message{padding:15px;border-radius:14px;color:#684d00;background:#fff2c9;line-height:1.6;overflow-wrap:anywhere}
 [hidden]{display:none!important}
 @media(max-width:420px){
-  .card{padding:20px 13px}
-  .details{padding:7px 10px}
-  .row{gap:10px}
-  .detail-icon{width:47px;height:47px;font-size:23px}
-  .copy-btn{padding:8px}
-  .qr-title{gap:6px}
-  .qr-title:before,.qr-title:after{width:19px}
+  .card{padding:20px 13px}.details{padding:7px 10px}.row{gap:10px}
+  .detail-icon{width:47px;height:47px;font-size:23px}.copy-btn{padding:8px}
+  .qr-title{gap:6px}.qr-title:before,.qr-title:after{width:19px}
   .apps{gap:3px;padding-left:4px;padding-right:4px}
-  .logo{width:41px;height:41px}
-  .logo svg{width:27px;height:27px}
-  .app{font-size:11px}
-  .timer-box{gap:9px}
-  .clock{width:41px;height:41px;font-size:22px}
-  #timer{font-size:20px}
-  .hint{font-size:14px}
-  .pay-btn{font-size:25px}
+  .logo{width:41px;height:41px}.logo svg{width:27px;height:27px}
+  .app{font-size:11px}.timer-box{gap:9px}
+  .clock{width:41px;height:41px;font-size:22px}#timer{font-size:20px}
+  .hint{font-size:14px}.pay-btn{font-size:25px}
 }
 </style>
 </head>
@@ -130,7 +76,7 @@ button{cursor:pointer}
   <div class="accent"></div>
 
   <div id="loading" class="message">Loading payment details...</div>
-  <div id="error" class="message error-message" role="alert" hidden></div>
+  <div id="error" class="message" hidden></div>
 
   <section id="paymentContent" hidden>
     <div class="details">
@@ -141,7 +87,6 @@ button{cursor:pointer}
           <strong class="value" id="customerName">-</strong>
         </div>
       </div>
-
       <div class="row">
         <div class="detail-icon">₹</div>
         <div class="detail-text">
@@ -149,14 +94,13 @@ button{cursor:pointer}
           <strong class="value">₹<span id="amount">0.00</span></strong>
         </div>
       </div>
-
       <div class="row">
         <div class="detail-icon">➤</div>
         <div class="detail-text">
           <span class="label">UPI ID</span>
           <div class="upi-line">
             <strong class="value" id="upiId">-</strong>
-            <button id="copyBtn" class="copy-btn" type="button">▢ Copy</button>
+            <button id="copyBtn" class="copy-btn" type="button">Copy</button>
           </div>
         </div>
       </div>
@@ -169,30 +113,26 @@ button{cursor:pointer}
     </div>
 
     <div class="apps">
-      <div class="app"><div class="logo">🌐</div><div class="app-name">Google Pay</div></div>
-      <div class="app"><div class="logo">🟣</div><div class="app-name">PhonePe</div></div>
-      <div class="app"><div class="logo">🔵</div><div class="app-name">Paytm</div></div>
-      <div class="app"><div class="logo">🔺</div><div class="app-name">BHIM</div></div>
-      <div class="app"><div class="logo">UPI</div><div class="app-name">Other UPI</div></div>
+      <div class="app"><div class="logo">🔵</div>Google Pay</div>
+      <div class="app"><div class="logo">🟣</div>PhonePe</div>
+      <div class="app"><div class="logo">🔷</div>Paytm</div>
+      <div class="app"><div class="logo">🟢</div>BHIM</div>
     </div>
 
     <div class="timer-box">
       <div class="clock">◷</div>
       <div>
         <div id="timer">Time Remaining: 02:00</div>
-        <p class="hint" id="timerMessage">Please scan the QR code using your UPI app.</p>
+        <p class="hint" id="timerMessage">Scan the QR code using your UPI app.</p>
       </div>
     </div>
 
     <p class="warning">
-      भुगतान करने से पहले UPI ऐप में प्राप्तकर्ता और रकम जाँचें।
-      यह टाइमर भुगतान की पुष्टि नहीं करता।
+      Confirm the recipient and amount in your UPI app before paying.
+      This page does not verify whether payment succeeded.
     </p>
 
-    <button class="pay-btn" id="payBtn" type="button">
-      ➤ &nbsp; Pay Now &nbsp; ›
-    </button>
-    <p id="payMessage" class="hint" role="status"></p>
+    <button class="pay-btn" id="payBtn" type="button">➤ Pay Now ›</button>
   </section>
 </main>
 
@@ -208,11 +148,9 @@ const qrLoading = $("qrLoading");
 
 let upiUri = "";
 let timerInterval = null;
-let qrTimeout = null;
 
 function showError(message) {
   clearInterval(timerInterval);
-  clearTimeout(qrTimeout);
   loading.hidden = true;
   paymentContent.hidden = true;
   errorBox.textContent = message;
@@ -221,10 +159,10 @@ function showError(message) {
 
 function createQrUrl(data) {
   const url = new URL("https://api.qrserver.com/v1/create-qr-code/");
-  url.searchParams.set("size", "500x500");
+  url.searchParams.set("size", "600x600");
   url.searchParams.set("margin", "12");
   url.searchParams.set("data", data);
-  return url.toString();
+  return url.href;
 }
 
 function startTimer() {
@@ -234,15 +172,16 @@ function startTimer() {
   function tick() {
     const mm = String(Math.floor(left / 60)).padStart(2, "0");
     const ss = String(left % 60).padStart(2, "0");
-    $("timer").textContent =
-      left > 0 ? Time Remaining: ${mm}:${ss} : "Time Expired";
+    $("timer").textContent = left > 0
+      ? Time Remaining: ${mm}:${ss}
+      : "Time Expired";
 
     if (left <= 0) {
       clearInterval(timerInterval);
       qrImage.hidden = true;
       qrLoading.hidden = false;
-      qrLoading.textContent = "Time expired. Reload the page to show QR again.";
-      $("timerMessage").textContent = "The timer does not verify payment.";
+      qrLoading.textContent = "Time expired. Reload the payment link.";
+      $("timerMessage").textContent = "Reload the payment link for a new QR code.";
       return;
     }
     left--;
@@ -252,99 +191,67 @@ function startTimer() {
   timerInterval = setInterval(tick, 1000);
 }
 
-function loadQr(data) {
+function loadQr() {
   qrLoading.hidden = false;
   qrLoading.textContent = "Preparing QR Code...";
   qrImage.hidden = true;
 
   qrImage.onload = () => {
-    clearTimeout(qrTimeout);
-    qrImage.hidden = false;
     qrLoading.hidden = true;
+    qrImage.hidden = false;
     loading.hidden = true;
     paymentContent.hidden = false;
     startTimer();
   };
 
   qrImage.onerror = () => {
-    clearTimeout(qrTimeout);
-    qrLoading.hidden = false;
-    qrLoading.textContent = "QR could not load. You can still use Pay Now.";
-    loading.hidden = true;
-    paymentContent.hidden = false;
+    showError("QR code could not load. Check your internet and reload this page.");
   };
 
-  qrTimeout = setTimeout(() => {
-    if (qrImage.hidden) {
-      qrLoading.hidden = false;
-      qrLoading.textContent = "QR is taking too long. You can still use Pay Now.";
-      loading.hidden = true;
-      paymentContent.hidden = false;
-    }
-  }, 10000);
-
-  qrImage.src = createQrUrl(data);
-}
-
-async function fetchJson(url) {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 12000);
-
-  try {
-    const response = await fetch(url, {
-      cache: "no-store",
-      signal: controller.signal
-    });
-
-    let data;
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error("Server returned an invalid response.");
-    }
-
-    if (!response.ok) {
-      throw new Error(data.message || Server error (${response.status}));
-    }
-
-    return data;
-  } finally {
-    clearTimeout(timeout);
-  }
+  qrImage.src = createQrUrl(upiUri);
 }
 
 async function loadPayment() {
   const id = new URLSearchParams(location.search).get("id");
 
-  if (!id || !id.trim()) {
-    showError("Customer ID नहीं मिली। Admin Panel से पूरा Payment Link खोलें।");
+  if (!id) {
+    showError("Customer ID is missing. Open the payment link from Admin Panel.");
     return;
   }
 
+  // Avoid leaving the page on Loading forever.
+  const timeout = setTimeout(() => {
+    showError("Server response took too long. Reload the page and try again.");
+  }, 15000);
+
   try {
-    const [customerResult, settings] = await Promise.all([
-      fetchJson("/api/customer-link/" + encodeURIComponent(id)),
-      fetchJson("/api/settings")
+    const [customerResponse, settingsResponse] = await Promise.all([
+      fetch("/api/customer-link/" + encodeURIComponent(id)),
+      fetch("/api/settings")
     ]);
 
-    if (customerResult.success === false) {
-      throw new Error(customerResult.message || "Customer details could not load.");
+    if (!customerResponse.ok) {
+      throw new Error("Customer link not found. Create a new link in Admin Panel.");
+    }
+    if (!settingsResponse.ok) {
+      throw new Error("Payment settings could not be loaded.");
+    }
+
+    const customerResult = await customerResponse.json();
+    const settings = await settingsResponse.json();
+
+    if (customerResult.success === false || settings.success === false) {
+      throw new Error(customerResult.message || settings.message || "Could not load payment details.");
     }
 
     const customer = customerResult.customer || customerResult;
-    const name = String(
-      customer.name || customer.customerName || customer.customer_name || ""
-    ).trim();
+    const name = String(customer.name || customer.customerName || customer.customer_name || "").trim();
     const amount = Number(customer.amount);
     const upiId = String(settings.upiId || settings.upi_id || "").trim();
     const siteName = String(settings.siteName || settings.site_name || "Payment").trim();
 
-    if (!name) throw new Error("Customer name is missing.");
-    if (!Number.isFinite(amount) || amount <= 0) {
-      throw new Error("Customer amount is invalid.");
-    }
-    if (!upiId || !upiId.includes("@")) {
-      throw new Error("Admin Settings में सही UPI ID सेव करें।");
+    if (!name || !Number.isFinite(amount) || amount <= 0 || !upiId.includes("@")) {
+      throw new Error("Check customer name, amount and UPI ID in Admin Settings.");
     }
 
     $("siteName").textContent = siteName;
@@ -360,19 +267,16 @@ async function loadPayment() {
       cu: "INR",
       tn: "Customer Payment"
     });
-
     upiUri = "upi://pay?" + params.toString();
 
+    clearTimeout(timeout);
     loading.hidden = true;
     paymentContent.hidden = false;
-    loadQr(upiUri);
+    loadQr();
 
   } catch (error) {
-    console.error("Payment page error:", error);
-    const message = error.name === "AbortError"
-      ? "Server response देर से आ रहा है। फिर से खोलें।"
-      : (error.message || "Payment page could not load.");
-    showError(message);
+    clearTimeout(timeout);
+    showError(error.message || "Payment page could not load.");
   }
 }
 
@@ -381,23 +285,20 @@ $("copyBtn").addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(value);
     $("copyBtn").textContent = "Copied!";
-    setTimeout(() => $("copyBtn").textContent = "▢ Copy", 1500);
+    setTimeout(() => $("copyBtn").textContent = "Copy", 1500);
   } catch {
-    window.prompt("UPI ID कॉपी करें:", value);
+    window.prompt("Copy UPI ID:", value);
   }
 });
 
 $("payBtn").addEventListener("click", () => {
   if (!upiUri) {
-    $("payMessage").textContent = "Payment details अभी तैयार नहीं हैं।";
+    showError("Payment details are not ready. Reload the page.");
     return;
   }
 
-  $("payMessage").textContent =
-    "UPI ऐप खोलने की कोशिश हो रही है। ऐप में नाम और रकम जाँचें।";
-
-  // Standard UPI link: Android may show installed UPI apps.
-window.location.href = upiUri;  
+  // Open the standard UPI payment link; Android chooses an installed app.
+  window.location.href = upiUri;
 });
 
 loadPayment();
